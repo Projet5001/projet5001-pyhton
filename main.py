@@ -8,21 +8,27 @@ import userInput
 
 class Game(object):
 
-    def main(self,screen):
+    def main(self, screen):
         self.tilemap = tmx.load('example.tmx', screen.get_size())
         self.config = cfg.Config(self.tilemap, screen)
         self.clock = pygame.time.Clock()
         self.players = tmx.SpriteLayer()
         self.perso = actors.Actor(screen, "perso.png", self.players)
-        self.userInput = userInput.Keyboard(self.config, self.perso, self.tilemap)
+        self.userInput = userInput.Keyboard(self.config, self.perso)
         self.tilemap.layers.append(self.players)
-        # add an enemy for each "enemy" trigger in the map
 
         while True:
             dt = self.clock.tick(30)
+
+            self.userInput.updateKey()
+
+            #ces  5 lignes sont recquises pour passer les events au gestionaire d'event de pygame
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    return
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    return
+
 
             self.tilemap.update(dt, self)
             screen.fill((0,0,0))
