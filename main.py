@@ -33,49 +33,51 @@ class UserInput:
             self.perso.position['y'] -= self.config.scrollstepy
         if pressedkeys[pygame.K_DOWN]:
             self.perso.position['y'] += self.config.scrollstepy
-        self.tilemap.set_focus(self.perso.position['x'], self.perso.position['y'])
+
 
 class Perso(pygame.sprite.Sprite):
-    def __init__(self, screen, image):
-        super(Perso, self).__init__()
+    def __init__(self, screen, image, *groups):
+        super(Perso, self).__init__(*groups)
         self.screen = screen
         self.image = pygame.image.load(image)
-        self.position = {'x': 320, 'y': 240}
+        self.position = (0, 0)
+        self.px,self.py = self.position
+        self.rect = pygame.rect.Rect((0,0), self.image.get_size())
+
+    def update(self, dt, game):
+        game.tilemap.set_focus(self.px, self.py)
 
 
-    def update(self):
-        self.screen.blit(self.image, (self.position['x'], self.position['y']))
+
+class Game(object):
+
+    def main(self,screen):
+        self.tilemap = tmx.load('example.tmx', screen.get_size())
+        self.config = Config(self.tilemap, screen)
+        self.clock = pygame.time.Clock()
+        self.players = tmx.SpriteLayer()
+        self.perso = Perso(screen, "perso.png", self.players)
+        self.userInput = UserInput(self.config, self.perso, self.tilemap)
+        self.tilemap.layers.append(self.players)
+        # add an enemy for each "enemy" trigger in the map
 
 
-def main():
-    pygame.init()
-    screensize = (640, 480)
-    screen = pygame.display.set_mode(screensize)
-    tilemap = tmx.load('example.tmx', screen.get_size())
-    tilemap.set_focus(0, 0)
-    config = Config(tilemap, screen)
-    clock = pygame.time.Clock()
-    dt = clock.tick(30)
-    perso = Perso(screen, "perso.png")
-    userInput = UserInput(config, perso, tilemap)
 
+        while True:
+            dt = self.clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
+            self.tilemap.update(dt, self)
+            screen.fill((0,0,0))
 
-        tilemap.update(dt)
-        black = (0,0,0)
-        screen.fill(black)
-        # Draw all layers of the tilemap to the screen.
-        tilemap.draw(screen)
-        userInput.update()
-        perso.update()
-        # Refresh the display window.
-        pygame.display.flip()
+            self.tilemap.draw(screen)
+            pygame.display.flip()
 
 
 
 if __name__ == '__main__':
-    main()
+    pygame.init()
+    screen = pygame.display.set_mode((640, 480))
+    Game().main(screen)
