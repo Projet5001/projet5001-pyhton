@@ -8,8 +8,10 @@ class Actor(pygame.sprite.Sprite):
         self.screen = screen
         self.image = pygame.image.load(image)
         self.position = (0, 0)
-        self.px,self.py = self.position
-        self.rect = pygame.rect.Rect((0,0), self.image.get_size())
+        self.rect = pygame.rect.Rect(self.position, self.image.get_size())
+
+    def update_position(self):
+        pass
 
     def update(self, dt, game):
-        game.tilemap.set_focus(self.px, self.py)
+        game.tilemap.set_focus(self.rect.x, self.rect.y)
