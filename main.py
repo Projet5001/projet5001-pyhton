@@ -13,9 +13,16 @@ class Game(object):
         self.config = cfg.Config(self.tilemap, screen)
         self.clock = pygame.time.Clock()
         self.players = tmx.SpriteLayer()
-        self.perso = actors.Actor(screen, "perso.png", self.players)
+
+
+        start_cell = self.tilemap.layers['objet'].find('player')[0]
+        print start_cell
+
+
+        self.perso = actors.Actor(screen, "perso.png", (start_cell.px, start_cell.py), self.players)
         self.userInput = userInput.Keyboard(self.config, self.perso)
         self.tilemap.layers.append(self.players)
+
 
         while True:
             dt = self.clock.tick(30)
