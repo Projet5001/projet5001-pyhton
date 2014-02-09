@@ -3,12 +3,11 @@
 import pygame
 
 class Actor(pygame.sprite.Sprite):
-    def __init__(self, screen, image, *groups):
+    def __init__(self, screen, image, position, *groups ):
         super(Actor, self).__init__(*groups)
         self.screen = screen
         self.image = pygame.image.load(image)
-        self.position = (0, 0)
-        self.rect = pygame.rect.Rect(self.position, self.image.get_size())
+        self.rect = pygame.rect.Rect(position, self.image.get_size())
 
     def update_position(self):
         pass
