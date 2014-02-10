@@ -5,14 +5,41 @@ class Keyboard():
     def __init__(self, config, perso):
         self.config = config
         self.perso = perso
+        self.speed = perso.speed
+        self.accel = perso.accel
 
-    def updateKey(self):
+    def move_left(self):
+        self.perso.saveLastPos()
+        self.perso.rect.x -= (self.speed * self.accel)
+
+    def move_right(self):
+        self.perso.saveLastPos()
+        self.perso.rect.x += (self.speed * self.accel)
+
+    def move_up(self):
+        self.perso.saveLastPos()
+        self.perso.rect.y -= (self.speed * self.accel)
+
+    def move_down(self):
+        self.perso.saveLastPos()
+        self.perso.rect.y += (self.speed * self.accel)
+
+    def jump(self):
+        pass
+
+    def updateKey(self, dt):
         pressedkeys = pygame.key.get_pressed()
         if pressedkeys[pygame.K_LEFT]:
-           self.perso.rect.x -= 10
+            self.move_left()
+
         if pressedkeys[pygame.K_RIGHT]:
-            self.perso.rect.x += 10
+            self.move_right()
+
         if pressedkeys[pygame.K_UP]:
-            self.perso.rect.y -= 10
+            self.move_up()
+
         if pressedkeys[pygame.K_DOWN]:
-           self.perso.rect.y += 10
+            self.move_down()
+        if pressedkeys[pygame.K_SPACE]:
+            self.jump()
+
