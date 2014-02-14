@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pygame
-import tmx
+
 import cfg
 import actors
+from lib import tmx
 import userInput
 
 
@@ -25,7 +26,7 @@ class Game(object):
         #find player start position, fot now this in only as an example
         start_cell = self.tilemap.layers['objet'].find('player')[0]
 
-        self.perso = actors.Actor("perso.png", (start_cell.px, start_cell.py), self.players)
+        self.perso = actors.Actor("sprite/perso.png", (start_cell.px, start_cell.py), self.players)
 
         self.userInput = userInput.Keyboard(self.config, self.perso)
 
