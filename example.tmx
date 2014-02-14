@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="30" tileheight="30">
+ <tileset firstgid="1" source="Woodland_ground.tsx"/>
+ <tileset firstgid="257" source="Woodland_village.tsx"/>
+ <objectgroup name="objet" width="0" height="0" visible="0">
+  <object name="player" x="129" y="134" width="64" height="52">
+   <properties>
+    <property name="player" value="yes"/>
+   </properties>
+  </object>
+  <object name="trou" x="214" y="122" width="230" height="71">
+   <properties>
+    <property name="block" value="isBlock"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="ground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0TEOglAUAMHHEbiUUqmVUoEVUgH3r3wX+A0x8ROmmH6TbSOiBYAfuqRrQVdB39k806ugr6DvbKb0KZgr6APgOG5NxD09mv+3EDHkhzG9/ajCkh/WtPkBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7PQFbKmhhg==
+  </data>
+ </layer>
+ <layer name="layer2" width="100" height="100">
+  <properties>
+   <property name="block" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1bEOwVAUgOHbd8aLmQwMxGrBaLIKngC3CdFKSBrUkX5fctJY9KR/bm4vpdS7zjDPLM+8xaGu7NBP9xbLPKs86y/P4Pqkrnouyhbb367TedOkRSSjpEUkZQ8t4hj9egFq9Ijlkz0mH/yvrmrS41CkdKrMufjaWp3VpMeueP2b97k/YnE+YmnSY5+//6Yyx4ce7vP3PeuxaHULbtwfsbTdY9zy+/6N8xGLHrHoEYseAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwM0FsZ5Wwg==
+  </data>
+ </layer>
+</map>
