@@ -7,6 +7,7 @@
 import sys
 import struct
 import pygame
+import os.path
 from pygame.locals import *
 from pygame import Rect
 from xml.etree import ElementTree
@@ -57,13 +58,18 @@ class Tileset(object):
         self.firstgid = firstgid
         self.tiles = []
         self.properties = {}
+        self.basepath = None
 
     @classmethod
     def fromxml(cls, tag, firstgid=None):
         if 'source' in tag.attrib:
             firstgid = int(tag.attrib['firstgid'])
-            with open(tag.attrib['source']) as f:
+
+            basepath = os.path.dirname(__file__)
+            filepath = os.path.abspath(os.path.join(basepath, tag.attrib['source']))
+            with open(filepath) as f:
                 tileset = ElementTree.fromstring(f.read())
+                cls.basepath = os.path.dirname(filepath)
             return cls.fromxml(tileset, firstgid)
 
         name = tag.attrib['name']
@@ -77,7 +83,7 @@ class Tileset(object):
         for c in tag.getchildren():
             if c.tag == "image":
                 # create a tileset
-                tileset.add_image(c.attrib['source'])
+                tileset.add_image(os.path.join(cls.basepath, c.attrib['source']))
             elif c.tag == 'tile':
                 gid = tileset.firstgid + int(c.attrib['id'])
                 tileset.get_tile(gid).loadxml(c)
