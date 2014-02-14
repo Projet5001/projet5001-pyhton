@@ -9,16 +9,16 @@ class Keyboard():
         self.accel = perso.accel
 
     def move_left(self):
-        self.perso.rect.x -= (self.speed * self.accel)
+        self.perso.move(-(self.speed * self.accel), 0)
 
     def move_right(self):
-        self.perso.rect.x += (self.speed * self.accel)
+        self.perso.move((self.speed * self.accel), 0)
 
     def move_up(self):
-        self.perso.rect.y -= (self.speed * self.accel)
+        self.perso.move(0, -(self.speed * self.accel))
 
     def move_down(self):
-        self.perso.rect.y += (self.speed * self.accel)
+        self.perso.move(0, (self.speed * self.accel))
 
     def jump(self):
         pass
