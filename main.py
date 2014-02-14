@@ -68,20 +68,29 @@ class Game(object):
 
         #vérifie si il y a collision entre rect et un objet qui a a la propriété block
         # retourne un rect
-        for cell in self.tilemap.layers['objet'].collide(perso.rect,'block'):
+        for cell in self.tilemap.layers['objet'].collide(perso.collision_rect,'block'):
             stackEvents.append(cell)
+
+        r = self.tilemap.layers['layer2'].collideLayer(perso.collision_rect)
+        if r:
+            stackEvents.extend(r)
 
     # systeme qui pop les event et les gere  (cest un médiateur entre acteur tilemap)
     def manageCollisionEvents(self, perso, tilemap, stackEvents):
         while len(stackEvents) > 0:
             e = stackEvents.pop()
 
-            if e['block']:
-                print "event"
-                if perso.isDoing == "noBlock":
-                    pass
-                else:
-                    perso.resetPos()
+            try:
+                if e['block']:
+                    print "event"
+                    if perso.isDoing == "noBlock":
+                        pass
+                    else:
+                        perso.resetPos()
+            except KeyError:
+                # pas de clé block ici (e.g. pour un layer, où on ne peut pas mettre
+                # de propriété à la cellule... :(
+                perso.resetPos()
 
 
 
