@@ -310,6 +310,16 @@ class Layer(object):
                     r.append(cell)
         return r
 
+    def collideLayer(self, rect):
+        '''Find all cells the rect is touching
+        '''
+        r = []
+        for cell in self.get_in_region(rect.left, rect.top, rect.right,
+                rect.bottom):
+            if cell.intersects(rect):
+                r.append(cell)
+        return r
+
     def collide(self, rect, propname):
         '''Find all cells the rect is touching that have the indicated property
         name set.
