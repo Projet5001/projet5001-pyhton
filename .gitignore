@@ -1,4 +1,7 @@
 *.png
 *.tar
+*.tar.gz
 .idea
 *.pyc
+tileset/
+sprite/
