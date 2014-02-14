@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
 <map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="30" tileheight="30">
- <tileset firstgid="1" source="tileset/Woodland_ground.tsx"/>
- <tileset firstgid="257" source="tileset/Woodland_village.tsx"/>
+ <tileset firstgid="1" source="../assets/tilesets/Woodland_ground.tsx"/>
+ <tileset firstgid="257" source="../assets/tilesets/Woodland_village.tsx"/>
  <objectgroup name="objet">
   <object name="player" x="129" y="134" width="64" height="52">
    <properties>

@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 import pygame
 
+import os
 import cfg
 import actors
 from lib import tmx
 import userInput
 
+rep_assets = os.path.relpath("assets")
+rep_sprites = os.path.join(rep_assets, "sprites")
+rep_tilesets = os.path.join(rep_assets, "tilesets")
 
 class Game(object):
 
     def main(self, screen):
-        self.tilemap = tmx.load('example.tmx', screen.get_size())
+        self.tilemap = tmx.load(os.path.join(rep_assets, "example.tmx"), screen.get_size())
 
         #still in use ?
         self.config = cfg.Config(self.tilemap, screen)
@@ -26,7 +30,7 @@ class Game(object):
         #find player start position, fot now this in only as an example
         start_cell = self.tilemap.layers['objet'].find('player')[0]
 
-        self.perso = actors.Actor("sprite/perso.png", (start_cell.px, start_cell.py), self.players)
+        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"), (start_cell.px, start_cell.py), self.players)
 
         self.userInput = userInput.Keyboard(self.config, self.perso)
 
