@@ -3,5 +3,4 @@
 *.tar.gz
 .idea
 *.pyc
-tileset/
-sprite/
+assets/
