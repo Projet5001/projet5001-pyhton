@@ -14,7 +14,7 @@ rep_tilesets = os.path.join(rep_assets, "tilesets")
 class Game(object):
 
     def main(self, screen):
-        self.tilemap = tmx.load(os.path.join(rep_assets, "example.tmx"), screen.get_size())
+        self.tilemap = tmx.load(os.path.join(rep_assets, "ageei.tmx"), screen.get_size())
 
         #still in use ?
         self.config = cfg.Config(self.tilemap, screen)
@@ -28,7 +28,7 @@ class Game(object):
         self.stackEvents = []
 
         #find player start position, fot now this in only as an example
-        start_cell = self.tilemap.layers['objet'].find('player')[0]
+        start_cell = self.tilemap.layers['pnjs'].find('player')[0]
 
         self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"), (start_cell.px, start_cell.py), self.players)
 
@@ -70,15 +70,13 @@ class Game(object):
 
     # system un peu plus pres du MVC qui stack tous les event du monde
     def stackCollisionEvents(self, perso, stackEvents):
-
+        pass
         #vérifie si il y a collision entre rect et un objet qui a a la propriété block
         # retourne un rect
-        for cell in self.tilemap.layers['objet'].collide(perso.collision_rect,'block'):
+        for cell in self.tilemap.layers['boundaries'].collide(perso.collision_rect,'boundary'):
             stackEvents.append(cell)
-
-        r = self.tilemap.layers['layer2'].collideLayer(perso.collision_rect)
-        if r:
-            stackEvents.extend(r)
+        for cell in self.tilemap.layers['walls'].collide(perso.collision_rect,'wall'):
+            stackEvents.append(cell)
 
     # systeme qui pop les event et les gere  (cest un médiateur entre acteur tilemap)
     def manageCollisionEvents(self, perso, tilemap, stackEvents):
