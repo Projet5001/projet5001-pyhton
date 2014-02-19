@@ -2,8 +2,7 @@ import pygame
 
 
 class Keyboard():
-    def __init__(self, config, perso):
-        self.config = config
+    def __init__(self, perso):
         self.perso = perso
         self.speed = perso.speed
         self.accel = perso.accel
