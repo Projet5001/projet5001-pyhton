@@ -2,7 +2,6 @@
 import pygame
 
 import os
-import cfg
 import actors
 from lib import tmx
 import userInput
@@ -15,9 +14,6 @@ class Game(object):
 
     def main(self, screen):
         self.tilemap = tmx.load(os.path.join(rep_assets, "ageei.tmx"), screen.get_size())
-
-        #still in use ?
-        self.config = cfg.Config(self.tilemap, screen)
 
         self.clock = pygame.time.Clock()
 
@@ -32,7 +28,7 @@ class Game(object):
 
         self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"), (start_cell.px, start_cell.py), self.players)
 
-        self.userInput = userInput.Keyboard(self.config, self.perso)
+        self.userInput = userInput.Keyboard(self.perso)
 
         #add players container to tilemap
         self.tilemap.layers.append(self.players)
