@@ -10,6 +10,7 @@ rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
 rep_tilesets = os.path.join(rep_assets, "tilesets")
 
+
 class Game(object):
 
     def main(self, screen):
@@ -24,11 +25,13 @@ class Game(object):
 
         while True:
             dt = self.clock.tick(30)
-            #ces  5 lignes sont recquises pour passer les events au gestionaire d'event de pygame
+            # ces  5 lignes sont recquises pour passer les events
+            # au gestionaire d'event de pygame
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if event.type == pygame.KEYDOWN \
+                        and event.key == pygame.K_ESCAPE:
                     return
 
             # doit etre executé dans cette ordre
@@ -45,7 +48,6 @@ class Game(object):
             #TODO: trouver un façon d'appeller cette méthode
             pygame.display.flip()
 
-
     # system un peu plus pres du MVC qui stack tous les event du monde
     def stackCollisionEvents(self, perso, stackEvents):
         pass
@@ -56,7 +58,8 @@ class Game(object):
         for cell in self.tilemap.layers['walls'].collide(perso.collision_rect,'wall'):
             stackEvents.append(cell)
 
-    # systeme qui pop les event et les gere  (cest un médiateur entre acteur tilemap)
+    # systeme qui pop les event et les gere
+    # (cest un médiateur entre acteur tilemap)
     def manageCollisionEvents(self, perso, tilemap, stackEvents):
         while len(stackEvents) > 0:
             e = stackEvents.pop()
@@ -65,11 +68,9 @@ class Game(object):
                 if e['wall'] or e['boundary']:
                     perso.resetPos()
             except KeyError:
-                # pas de clé block ici (e.g. pour un layer, où on ne peut pas mettre
-                # de propriété à la cellule... :(
+                # pas de clé block ici (e.g. pour un layer, où on ne peut pas
+                # mettre de propriété à la cellule... :(
                 perso.resetPos()
-
-
 
 if __name__ == '__main__':
     pygame.init()
