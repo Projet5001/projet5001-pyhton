@@ -40,4 +40,3 @@ class Keyboard():
 
         if pressedkeys[pygame.K_SPACE]:
             self.jump()
-

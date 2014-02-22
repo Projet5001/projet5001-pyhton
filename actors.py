@@ -2,6 +2,7 @@
 
 import pygame
 
+
 class Actor(pygame.sprite.Sprite):
     def __init__(self, image, position, *groups):
         super(Actor, self).__init__(*groups)
@@ -20,11 +21,13 @@ class Actor(pygame.sprite.Sprite):
 
     def saveLastPos(self):
         self.savedLastPos = (self.rect.x, self.rect.y)
-        self.savedLastCollisionPos = (self.collision_rect.x, self.collision_rect.y)
+        self.savedLastCollisionPos = \
+            (self.collision_rect.x, self.collision_rect.y)
 
     def resetPos(self):
         self.rect.x, self.rect.y = self.savedLastPos
-        self.collision_rect.x, self.collision_rect.y = self.savedLastCollisionPos
+        (self.collision_rect.x, self.collision_rect.y) = \
+            self.savedLastCollisionPos
 
     def move(self, x, y):
         self.rect.move_ip(x, y)
