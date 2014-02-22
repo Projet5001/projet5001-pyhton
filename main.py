@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
-
+import monster
 import os
 import actors
 from lib import tmx
@@ -19,6 +19,7 @@ class Game(object):
         self.clock = pygame.time.Clock()
         #Créer un contenant pour les personnages
         self.players = tmx.SpriteLayer()
+        self.monsters = tmx.SpriteLayer()
         self.stackEvents = []
         #Trouve l'emplacement du héro
         start_cell = self.tilemap.layers['pnjs'].find('player')[0]
@@ -28,6 +29,8 @@ class Game(object):
         self.userInput = userInput.Keyboard(self.perso)
         #Ajouter le personnage à la carte
         self.tilemap.layers.append(self.players)
+        self.tilemap.layers.append(self.monsters)
+        self.chargeLesMonstres()
 
         while True:
             dt = self.clock.tick(30)
@@ -45,6 +48,7 @@ class Game(object):
 
             #Récupère les collisions
             self.stackCollisionEvents(self.perso, self.stackEvents)
+
             #Gère les colisions selon leur nature
             self.manageCollisionEvents(self.perso,
                                        self.tilemap,
@@ -55,6 +59,12 @@ class Game(object):
             self.tilemap.draw(screen)
             #TODO: trouver un façon d'appeller cette méthode
             pygame.display.flip()
+
+    def chargeLesMonstres(self):
+        for cell in  self.tilemap.layers['pnjs'].find('monstre'):
+            monster.Monster(os.path.join(rep_sprites, "perso.png"), (cell.px, cell.py), self.monsters)
+
+
 
     # system un peu plus pres du MVC qui stack tous les event du monde
     def stackCollisionEvents(self, perso, stackEvents):
