@@ -13,6 +13,8 @@ class Actor(pygame.sprite.Sprite):
                                                20,
                                                20)
         self.savedLastPos = (self.rect.x, self.rect.y)
+	self.savedLastCollisionPos = (self.collision_rect.x,
+                                      self.collision_rect.y)
 
         #spec of perso
         self.speed = 10
