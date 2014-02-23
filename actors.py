@@ -1,5 +1,3 @@
-
-
 import pygame
 
 
@@ -14,10 +12,14 @@ class Actor(pygame.sprite.Sprite):
                                                20)
         self.savedLastPos = (self.rect.x, self.rect.y)
 
+
         #spec of perso
-        self.speed = 10
+        self.dommage = 1
+        self.protection = 0
+        self.life = 100
+        self.speed = 8
         self.accel = 1
-        self.isDoing = "nothing"
+        self.isDoing = 'nothing'
 
     def saveLastPos(self):
         self.savedLastPos = (self.rect.x, self.rect.y)
@@ -33,6 +35,28 @@ class Actor(pygame.sprite.Sprite):
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
 
+    def attack(self):
+        return (self.dommage * self.luck())
+
+    def take_dommage(self, dommage):
+        self.life -= (dommage - self.protectionTotal())
+        self.isBleeding()
+
+    def block(self):
+        pass
+
+    def luck(self):
+        return 1
+
+    def protectionTotal(self):
+        return self.protection
+
+    #fake death juste pour le moment en enleve le sprit de la map
+    def isBleeding(self):
+        if self.life == 0:
+            self.kill()
+
+
     # this need the dt and game otherwise bug in tmx
     def update(self, dt, game):
-        game.tilemap.set_focus(self.collision_rect.x, self.collision_rect.y)
+        pass
