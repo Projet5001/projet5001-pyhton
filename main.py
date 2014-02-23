@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pygame
+from pygame import sprite as p_sprt
 import monster
 import os
-import actors
+import player
 from lib import tmx
 import userInput
 
@@ -17,16 +18,19 @@ class Game(object):
         self.tilemap = tmx.load(os.path.join(rep_assets, "ageei.tmx"),
                                 screen.get_size())
         self.clock = pygame.time.Clock()
-        #Créer un contenant pour les personnages
+        self.screen = screen
+        #Créer un contenant pour les personnages et monstre
         self.players = tmx.SpriteLayer()
         self.monsters = tmx.SpriteLayer()
-        self.stackEvents = []
+        self.tmxEvents = []
+        self.playerEvents = []
         #Trouve l'emplacement du héro
         start_cell = self.tilemap.layers['pnjs'].find('player')[0]
-        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"),
+        self.perso = player.Player(os.path.join(rep_sprites, "perso.png"),
                                   (start_cell.px, start_cell.py),
                                   self.players)
         self.userInput = userInput.Keyboard(self.perso)
+
         #Ajouter le personnage à la carte
         self.tilemap.layers.append(self.players)
         self.tilemap.layers.append(self.monsters)
@@ -47,50 +51,68 @@ class Game(object):
             self.userInput.updateKey(dt)
 
             #Récupère les collisions
-            self.stackCollisionEvents(self.perso, self.stackEvents)
+            self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
+
+            #stack les collision de monstre
+            self.player_stackEvents(self.perso, self.monsters, self.playerEvents)
+
+            #gère les évenement crée par le joureur
+            self.player_manageCollisionEvents(self.perso, self.playerEvents)
 
             #Gère les colisions selon leur nature
-            self.manageCollisionEvents(self.perso,
-                                       self.tilemap,
-                                       self.stackEvents)
+            self.tmx_manageCollisionEvents(self.perso, self.tmxEvents)
 
-            self.tilemap.update(dt, self)
-            screen.fill((0, 0, 0))
+            self.tilemap.update(dt/1000., self)
+
             self.tilemap.draw(screen)
-            #TODO: trouver un façon d'appeller cette méthode
-            pygame.display.flip()
+
+            pygame.display.update()
 
     def chargeLesMonstres(self):
-        for cell in  self.tilemap.layers['pnjs'].find('monstre'):
+        for cell in self.tilemap.layers['pnjs'].find('monstre'):
             monster.Monster(os.path.join(rep_sprites, "perso.png"), (cell.px, cell.py), self.monsters)
 
-
-
     # system un peu plus pres du MVC qui stack tous les event du monde
-    def stackCollisionEvents(self, perso, stackEvents):
+    def tmx_stackCollisionEvents(self, perso, tmxEvents):
         pass
         #vérifie si il y a collision entre rect et un objet qui a a la
         # propriété block retourne un rect
-        boundaries = self.tilemap.layers['boundaries']
-        walls = self.tilemap.layers['walls']
-        for cell in boundaries.collide(perso.collision_rect, 'boundary'):
-            stackEvents.append(cell)
-        for cell in walls.collide(perso.collision_rect, 'wall'):
-            stackEvents.append(cell)
+        layers = self.tilemap.layers
+
+        for cell in layers['boundaries'].collide(perso.collision_rect, 'boundary'):
+            tmxEvents.append(cell)
+        for cell in layers['walls'].collide(perso.collision_rect, 'wall'):
+            tmxEvents.append(cell)
+
 
     # systeme qui pop les event et les gere
     # (cest un médiateur entre acteur tilemap)
-    def manageCollisionEvents(self, perso, tilemap, stackEvents):
-        while len(stackEvents) > 0:
-            e = stackEvents.pop()
+    def tmx_manageCollisionEvents(self, perso, tmxEvents):
+        while len(tmxEvents) > 0:
+            e = tmxEvents.pop()
 
             try:
                 if e['wall'] or e['boundary']:
                     perso.resetPos()
+
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas
                 # mettre de propriété à la cellule... :(
                 perso.resetPos()
+
+    def player_stackEvents(self, sprit, groupe, playerEvents):
+
+        coll = p_sprt.spritecollideany(sprit, groupe)
+        if coll:
+         print coll
+         playerEvents.append(coll)
+
+    def player_manageCollisionEvents(self,player, playerEvents):
+        while len(playerEvents) > 0:
+            e = playerEvents.pop()
+            if e.block and e.attack:
+                player.take_dommage(e.attack())
+                print player.life
 
 if __name__ == '__main__':
     pygame.init()
