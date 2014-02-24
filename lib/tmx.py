@@ -66,7 +66,7 @@ class Tileset(object):
             firstgid = int(tag.attrib['firstgid'])
 
             basepath = os.path.dirname(__file__)
-            filepath = os.path.abspath(os.path.join(basepath, tag.attrib['source']))
+            filepath = os.path.abspath(os.path.join(basepath, "../assets/", tag.attrib['source']))
             with open(filepath) as f:
                 tileset = ElementTree.fromstring(f.read())
                 cls.basepath = os.path.dirname(filepath)
