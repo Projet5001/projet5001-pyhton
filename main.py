@@ -63,9 +63,9 @@ class Game(object):
         # propriété block retourne un rect
         boundaries = self.tilemap.layers['boundaries']
         walls = self.tilemap.layers['walls']
-        for cell in boundaries.collide(perso.collision_rect, 'boundary'):
+        for cell in walls.collideLayer(perso.collision_rect):
             stackEvents.append(cell)
-        for cell in walls.collide(perso.collision_rect, 'wall'):
+        for cell in boundaries.collide(perso.collision_rect, 'block'):
             stackEvents.append(cell)
 
     # systeme qui pop les event et les gere
