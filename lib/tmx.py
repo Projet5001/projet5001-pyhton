@@ -639,6 +639,9 @@ class ObjectLayer(object):
 class SpriteLayer(pygame.sprite.AbstractGroup):
     def __init__(self):
         super(SpriteLayer, self).__init__()
+        self.position = (0, 0)
+        self.view_w = 0
+        self.view_h = 0
         self.visible = True
 
     def set_view(self, x, y, w, h, viewport_ox=0, viewport_oy=0):
@@ -696,12 +699,13 @@ class TileMap(object):
 
     '''
     def __init__(self, size, origin=(0,0)):
+        self.filename = ""
         self.px_width = 0
         self.px_height = 0
         self.tile_width = 0
         self.tile_height = 0
         self.width = 0
-        self.height  = 0
+        self.height = 0
         self.properties = {}
         self.layers = Layers()
         self.tilesets = Tilesets()
@@ -726,8 +730,9 @@ class TileMap(object):
 
         # get most general map informations and create a surface
         tilemap = TileMap(viewport)
+        tilemap.filename = os.path.basename(filename)
         tilemap.width = int(map.attrib['width'])
-        tilemap.height  = int(map.attrib['height'])
+        tilemap.height = int(map.attrib['height'])
         tilemap.tile_width = int(map.attrib['tilewidth'])
         tilemap.tile_height = int(map.attrib['tileheight'])
         tilemap.px_width = tilemap.width * tilemap.tile_width
