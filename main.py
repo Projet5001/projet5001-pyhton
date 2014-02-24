@@ -63,7 +63,6 @@ class Game(object):
 
     # system un peu plus pres du MVC qui stack tous les event du monde
     def stackCollisionEvents(self, perso, stackEvents):
-        pass
         #vérifie si il y a collision entre rect et un objet qui a a la
         # propriété block retourne un rect
         boundaries = self.tilemap.layers['boundaries']
