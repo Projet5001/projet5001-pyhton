@@ -570,6 +570,16 @@ class ObjectLayer(object):
         for object in self.objects:
             object.draw(surface, self.view_x, self.view_y)
 
+    def find_source(self, source):
+        r = None
+        for objet in self.objects:
+            if 'source' in objet.properties and \
+                        objet.properties['source'] == source:
+                r = objet
+                break
+
+        return r
+
     def find(self, *properties):
         '''Find all cells with the given properties set.
         '''
