@@ -14,6 +14,8 @@ rep_tilesets = os.path.join(rep_assets, "tilesets")
 
 class Game(object):
 
+
+
     def main(self, screen):
         self.tilemap = tmx.load(os.path.join(rep_assets, "ageei.tmx"),
                                 screen.get_size())
@@ -24,18 +26,17 @@ class Game(object):
         self.monsters = tmx.SpriteLayer()
         self.tmxEvents = []
         self.playerEvents = []
-        #Trouve l'emplacement du héro
-        start_cell = self.tilemap.layers['pnjs'].find('player')[0]
-        self.perso = player.Player(os.path.join(rep_sprites, "perso.png"),
-                                  (start_cell.px, start_cell.py),
-                                  self.players)
+
+        #Trouve l'emplacement des acteur
+
+        self.perso = self.charge_player()
+        self.charge_monstre()
         self.userInput = userInput.Keyboard(self.perso)
 
         #Ajouter le personnage à la carte
+
         self.tilemap.layers.append(self.players)
         self.tilemap.layers.append(self.monsters)
-        self.chargeLesMonstres()
-
         while True:
             dt = self.clock.tick(30)
             # ces  5 lignes sont recquises pour passer les events
@@ -68,9 +69,15 @@ class Game(object):
 
             pygame.display.update()
 
-    def chargeLesMonstres(self):
+    def charge_monstre(self):
         for cell in self.tilemap.layers['pnjs'].find('monstre'):
             monster.Monster(os.path.join(rep_sprites, "perso.png"), (cell.px, cell.py), self.monsters)
+
+    def charge_player(self):
+        start_cell = self.tilemap.layers['pnjs'].find('player')[0]
+        return player.Player(os.path.join(rep_sprites, "perso.png"),
+                             (start_cell.px, start_cell.py),
+                             self.players)
 
     # system un peu plus pres du MVC qui stack tous les event du monde
     def tmx_stackCollisionEvents(self, perso, tmxEvents):
