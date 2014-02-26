@@ -8,26 +8,47 @@ class Actor(pygame.sprite.Sprite):
         super(Actor, self).__init__(*groups)
         self.image = pygame.image.load(image)
         self.rect = pygame.rect.Rect(position, self.image.get_size())
-        self.collision_rect = pygame.rect.Rect(position[0],
-                                               position[1] + 20,
-                                               20,
-                                               20)
-        self.savedLastPos = (self.rect.x, self.rect.y)
+        self.collision_rect = pygame.rect.Rect(position[0], position[1],
+                                               25, 20)
+        self.saveLastPos()
 
         #spec of perso
         self.speed = 10
         self.accel = 1
         self.isDoing = "nothing"
 
+    def save_x_pos(self):
+        self.last_x = self.rect.x
+        self.last_coll_x = self.collision_rect.x
+
+    def save_y_pos(self):
+        self.last_y = self.rect.y
+        self.last_coll_y = self.collision_rect.y
+
     def saveLastPos(self):
-        self.savedLastPos = (self.rect.x, self.rect.y)
-        self.savedLastCollisionPos = \
-            (self.collision_rect.x, self.collision_rect.y)
+        self.save_x_pos()
+        self.save_y_pos()
+
+    def resetX(self):
+        self.rect.x = self.last_x
+        self.collision_rect.x = self.last_coll_x
+        self.save_x_pos()
+
+    def resetY(self):
+        self.rect.y = self.last_y
+        self.collision_rect.y = self.last_coll_y
+        self.save_y_pos()
 
     def resetPos(self):
-        self.rect.x, self.rect.y = self.savedLastPos
-        (self.collision_rect.x, self.collision_rect.y) = \
-            self.savedLastCollisionPos
+        self.resetX()
+        self.resetY()
+
+    def definir_position(self, x, y):
+        self.rect.x = x - 2
+        self.rect.y = y - 30
+        self.collision_rect.x = x
+        self.collision_rect.y = y
+        self.saveLastPos()
 
     def move(self, x, y):
         self.rect.move_ip(x, y)
