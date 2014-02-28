@@ -2,11 +2,12 @@ import pygame
 
 
 class Keyboard():
-    def __init__(self, actor):
-        self.actor = actor
-        self.speed = actor.speed
-        self.accel = actor.accel
-
+    def __init__(self, game):
+        self.game = game
+        self.perso = game.perso
+        self.speed = game.perso.speed
+        self.accel = game.perso.accel
+        
     def move_left(self):
         self.actor.move(-(self.speed * self.accel), 0)
 
