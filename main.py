@@ -13,27 +13,32 @@ rep_tilesets = os.path.join(rep_assets, "tilesets")
 
 class Game(object):
 
-    def main(self, screen):
-        self.screen = screen
-        self.tilemap = tmx.load(os.path.join(rep_assets, "ageei.tmx"),
-                                screen.get_size())
+    def __init__(self, start_map):
+        self.screen = pygame.display.set_mode((640, 480))
+        self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
+                                self.screen.get_size())
         self.clock = pygame.time.Clock()
         #Créer un contenant pour les personnages
         self.players = tmx.SpriteLayer()
         self.stackEvents = []
 
+        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"),
+                                  (0, 0), self.players)
+
+    def start(self):
         #Trouve l'emplacement du héro
         source = \
             self.tilemap.layers['boundaries'].find_source("start")
-        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"),
-                                  (source.px, source.py),
-                                  self.players)
         self.tilemap.set_focus(source.px, source.py, True)
         self.perso.definir_position(source.px, source.py)
-        self.userInput = userInput.Keyboard(self.perso)
+        self.userInput = userInput.Keyboard(self)
         #Ajouter le personnage à la carte
         self.tilemap.layers.append(self.players)
 
+        self.mainloop()
+
+
+    def mainloop(self):
         while True:
             dt = self.clock.tick(30)
             # ces  5 lignes sont recquises pour passer les events
@@ -56,7 +61,7 @@ class Game(object):
                                        self.stackEvents)
 
             self.tilemap.update(dt, self)
-            screen.fill((0, 0, 0))
+            self.screen.fill((0, 0, 0))
             self.tilemap.draw(self.screen)
             #TODO: trouver un façon d'appeller cette méthode
             pygame.display.flip()
@@ -108,7 +113,10 @@ class Game(object):
                 self.perso.definir_position(source.px, source.py)
                 self.tilemap.set_focus(source.px, source.py, True)
 
+    def show_hud(self):
+        print self.perso.collision_rect
+
 if __name__ == '__main__':
     pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    Game().main(screen)
+    game = Game("ageei.tmx") #TODO: lire d'un fichier de config
+    game.start()
