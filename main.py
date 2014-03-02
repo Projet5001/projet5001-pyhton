@@ -63,13 +63,13 @@ class Game(object):
 
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
-
-            for key, value in self.clocks.iteritems():
-                if value >= 0:
-                    if value == 0:
-                        self.hideHud(key)
-                    else:
-                        self.clocks[key] = value - 1
+            if len(self.clocks) > 0:
+                for key, value in self.clocks.iteritems():
+                    if value >= 0:
+                        if value == 0:
+                            self.hideHud(key)
+                        else:
+                            self.clocks[key] = value - 1
 
             #Récupère les collisions
             self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
@@ -135,7 +135,7 @@ class Game(object):
 
         #recupere le groupe player
         players = self.tilemap.layers['player_layer']
-
+        monstres = self.tilemap.layers['monster_layer']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -146,11 +146,13 @@ class Game(object):
                 self.tilemap = nouvelle_carte
                 source = \
                     self.tilemap.layers['boundaries'].find_source(source_name)
-                self.tilemap.layers.append(players)
+                self.tilemap.layers.add_named(players, 'player_layer')
+                self.tilemap.layers.add_named(monstres, 'monster_layer')
+                self.createHuds()
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()
                 self.tilemap.set_focus(source.px, source.py, True)
-                self.createHuds()
+
 
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud", self.perso, self.screen, self.tilemap)
@@ -175,8 +177,8 @@ class Game(object):
 
         coll = p_sprt.spritecollideany(sprit, groupe)
         if coll:
-         print coll
-         playerEvents.append(coll)
+            print coll
+            playerEvents.append(coll)
 
     def player_manageCollisionEvents(self,player, playerEvents):
         while len(playerEvents) > 0:
