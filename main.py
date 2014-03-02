@@ -6,6 +6,7 @@ import actors
 from lib import tmx
 import userInput
 import playerHud
+import player
 
 rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -23,7 +24,7 @@ class Game(object):
         self.players = tmx.SpriteLayer()
         self.stackEvents = []
 
-        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"),
+        self.perso = player.Player(os.path.join(rep_sprites, "perso.png"),
                                   (0, 0), self.players)
 
     def start(self):
@@ -117,7 +118,7 @@ class Game(object):
                 self.showHuds()
 
     def showHuds(self):
-        hud = playerHud.PlayerHud("playerHud", True)
+        hud = playerHud.PlayerHud("playerHud", self.players) #TODO: players[0] lorsque les monstres seront implémentés
         self.tilemap.layers.add_named(hud, hud.name)
 
     def deleteHuds(self):
