@@ -24,8 +24,9 @@ class Game(object):
         self.players = tmx.SpriteLayer()
         self.stackEvents = []
 
-        self.perso = player.Player(os.path.join(rep_sprites, "perso.png"),
-                                  (0, 0), self.players)
+        self.perso = player.Player(os.path.join(rep_sprites,
+                                                "perso.png"),
+                                   (0, 0), self.players)
 
         self.FPS = 30
         self.clocks = {"playerHud": 0}
@@ -128,7 +129,7 @@ class Game(object):
                 self.createHuds()
 
     def createHuds(self):
-        hud = playerHud.PlayerHud("playerHud", self.perso, self)
+        hud = playerHud.PlayerHud("playerHud", self.perso, self.screen, self.tilemap)
         self.tilemap.layers.add_named(hud, hud.name)
 
     def showHud(self, name):
