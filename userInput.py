@@ -23,6 +23,10 @@ class Keyboard():
     def jump(self):
         pass
 
+    def show_player_hud(self):
+        self.game.showHud("playerHud")
+        self.game.addClockSec("playerHud", 1)
+
     def updateKey(self, dt):
         pressedkeys = pygame.key.get_pressed()
         self.perso.saveLastPos()
@@ -42,5 +46,5 @@ class Keyboard():
         if pressedkeys[pygame.K_SPACE]:
             self.jump()
 
-	if pressedkeys[pygame.K_LCTRL]:
-            self.game.show_hud()
+        if pressedkeys[pygame.K_LCTRL]:
+            self.show_player_hud()

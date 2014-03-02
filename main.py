@@ -5,6 +5,8 @@ import os
 import actors
 from lib import tmx
 import userInput
+import playerHud
+import player
 
 rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -22,8 +24,12 @@ class Game(object):
         self.players = tmx.SpriteLayer()
         self.stackEvents = []
 
-        self.perso = actors.Actor(os.path.join(rep_sprites, "perso.png"),
-                                  (0, 0), self.players)
+        self.perso = player.Player(os.path.join(rep_sprites,
+                                                "perso.png"),
+                                   (0, 0), self.players)
+
+        self.FPS = 30
+        self.clocks = {"playerHud": 0}
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -34,13 +40,13 @@ class Game(object):
         self.userInput = userInput.Keyboard(self)
         #Ajouter le personnage à la carte
         self.tilemap.layers.append(self.players)
-
+        self.createHuds()
         self.mainloop()
 
 
     def mainloop(self):
         while True:
-            dt = self.clock.tick(30)
+            dt = self.clock.tick(self.FPS)
             # ces  5 lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
@@ -52,6 +58,13 @@ class Game(object):
 
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
+
+            for key, value in self.clocks.iteritems():
+                if (value >= 0):
+                    if(value == 0):
+                        self.hideHud(key)
+                    else:
+                        self.clocks[key] = value - 1
 
             #Récupère les collisions
             self.stackCollisionEvents(self.perso, self.stackEvents)
@@ -98,6 +111,7 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
+        self.deleteHuds()
         players = self.tilemap.layers.pop()
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
@@ -112,9 +126,26 @@ class Game(object):
                 self.tilemap.layers.append(players)
                 self.perso.definir_position(source.px, source.py)
                 self.tilemap.set_focus(source.px, source.py, True)
+                self.createHuds()
 
-    def show_hud(self):
-        print self.perso.collision_rect
+    def createHuds(self):
+        hud = playerHud.PlayerHud("playerHud", self.perso, self.screen, self.tilemap)
+        self.tilemap.layers.add_named(hud, hud.name)
+
+    def showHud(self, name):
+        layer = self.tilemap.layers[name]
+        layer.setVisible(True)
+
+    def hideHud(self, name):
+        layer = self.tilemap.layers[name]
+        layer.setVisible(False)
+
+    def deleteHuds(self):
+        layer = self.tilemap.layers["playerHud"]
+        self.tilemap.layers.remove(layer)
+
+    def addClockSec(self, name, second):
+        self.clocks[name] += second * self.FPS
 
 if __name__ == '__main__':
     pygame.init()
