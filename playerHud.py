@@ -23,8 +23,17 @@ class PlayerHud(tmx.Layer):
         pass
 
     def draw(self, surface):
-        myfont = pygame.font.SysFont("monospace", 15)
+        hub = self.__followPlayer() #Tous les autres objets seront placés en relation avec ce point
+        hub["y"] -= self.game.tilemap.tile_height
+        self.__showName(surface, (hub["x"], hub["y"]))
+
+    def __showName(self, surface, hub):
+        myfont = pygame.font.SysFont("monospace", 15, True)
         label = myfont.render(self.player.name, 1, (255,255,255))
+        surface.blit(label, ((hub[0] - (label.get_width() / 2), hub[1] - (self.game.tilemap.tile_height) / 2)))
+        pass
+
+    def __followPlayer(self):
         #Centrer la position du HUD par rapport au personnage
         playerx, playery = self.player.collision_rect.x, self.player.collision_rect.y
         hubx = playerx - (playerx - (self.game.screen.get_width() / 2))
@@ -40,8 +49,5 @@ class PlayerHud(tmx.Layer):
             hubx += playerx - centerx
         if(playery > centery):
             huby += playery - centery
-        print "hubx" + str(hubx) + " <=> playerx " + str(playerx)
-        print "huby" + str(huby) + " <=> playery " + str(playery)
-        surface.blit(label, (hubx, huby))
-
+        return {"x": hubx, "y":huby}
 
