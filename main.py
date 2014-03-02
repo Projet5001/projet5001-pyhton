@@ -118,7 +118,7 @@ class Game(object):
                 self.showHuds()
 
     def showHuds(self):
-        hud = playerHud.PlayerHud("playerHud", self.players) #TODO: players[0] lorsque les monstres seront implémentés
+        hud = playerHud.PlayerHud("playerHud", self.perso)
         self.tilemap.layers.add_named(hud, hud.name)
 
     def deleteHuds(self):
