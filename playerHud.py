@@ -24,23 +24,24 @@ class PlayerHud(tmx.Layer):
 
     def draw(self, surface):
         hub = self.__followPlayer() #Tous les autres objets seront placés en relation avec ce point
+        pygame.draw.line(surface, (0, 0, 0), (hub["x"], hub["y"]), (hub["x"] + 1, hub["y"]), 1)
         hub["y"] -= self.game.tilemap.tile_height
         self.__showName(surface, (hub["x"], hub["y"]))
-        self.__showHealth(surface, (hub["x"], hub["y"]))
+        self.__showHealth(surface, (hub["x"], hub["y"] + 5))
 
     def __showName(self, surface, hub):
         myfont = pygame.font.SysFont("monospace", 15, True)
         label = myfont.render(self.player.name, 1, (255,255,255))
-        surface.blit(label, ((hub[0] - (label.get_width() / 2), hub[1] - (self.game.tilemap.tile_height) / 2)))
-        pass
+        surface.blit(label, ((hub[0] - (label.get_width() / 2), hub[1] - (self.game.tilemap.tile_height))))
 
     def __showHealth(self, surface, hub):
         #line(Surface, color, start_pos, end_pos, width=1) -> Rect
-        tileHalfWidth =  + self.game.tilemap.tile_width / 2
+        tileHalfWidth = self.game.tilemap.tile_width / 2
         originx = hub[0] - tileHalfWidth
-        pygame.draw.line(surface, (0, 0, 0), (originx, hub[1]), (originx + tileHalfWidth * 2, hub[1]), 5)
+        originy = hub[1] -  self.game.tilemap.tile_height / 2
+        pygame.draw.line(surface, (0, 0, 0), (originx, originy), (originx + tileHalfWidth * 2, originy), 5)
         health = (tileHalfWidth * 2)  * (float(self.player.health["hp"]) / self.player.health["max"])
-        pygame.draw.line(surface, (255, 0, 0), (originx, hub[1]), (originx + health, hub[1]), 3)
+        pygame.draw.line(surface, (255, 0, 0), (originx, originy), (originx + health, originy), 3)
 
     def __followPlayer(self):
         #Centrer la position du HUD par rapport au personnage
@@ -58,5 +59,7 @@ class PlayerHud(tmx.Layer):
             hubx += playerx - centerx
         if(playery > centery):
             huby += playery - centery
+        hubx += self.game.tilemap.tile_width / 2
+        huby += self.game.tilemap.tile_height / 2
         return {"x": hubx, "y":huby}
 
