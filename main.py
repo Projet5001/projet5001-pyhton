@@ -133,15 +133,15 @@ class Game(object):
         self.tilemap.layers.add_named(hud, hud.name)
 
     def showHud(self, name):
-        layer = self.tilemap.layers.__getitem__(name)
+        layer = self.tilemap.layers[name]
         layer.setVisible(True)
 
     def hideHud(self, name):
-        layer = self.tilemap.layers.__getitem__(name)
+        layer = self.tilemap.layers[name]
         layer.setVisible(False)
 
     def deleteHuds(self):
-        layer = self.tilemap.layers.__getitem__("playerHud")
+        layer = self.tilemap.layers["playerHud"]
         self.tilemap.layers.remove(layer)
 
     def addClockSec(self, name, second):
