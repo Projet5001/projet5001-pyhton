@@ -118,7 +118,7 @@ class Game(object):
                 self.showHuds()
 
     def showHuds(self):
-        hud = playerHud.PlayerHud("playerHud", self.perso)
+        hud = playerHud.PlayerHud("playerHud", self.perso, self)
         self.tilemap.layers.add_named(hud, hud.name)
 
     def deleteHuds(self):
