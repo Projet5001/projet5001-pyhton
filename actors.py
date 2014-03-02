@@ -77,7 +77,6 @@ class Actor(pygame.sprite.Sprite):
         if self.life == 0:
             self.kill()
 
-
     # this need the dt and game otherwise bug in tmx
     def update(self, dt, game):
         pass
