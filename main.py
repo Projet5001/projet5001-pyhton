@@ -5,6 +5,7 @@ import os
 import actors
 from lib import tmx
 import userInput
+import playerHud
 
 rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -34,7 +35,7 @@ class Game(object):
         self.userInput = userInput.Keyboard(self)
         #Ajouter le personnage à la carte
         self.tilemap.layers.append(self.players)
-
+        self.showHuds()
         self.mainloop()
 
 
@@ -98,6 +99,7 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
+        self.deleteHuds()
         players = self.tilemap.layers.pop()
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
@@ -112,9 +114,16 @@ class Game(object):
                 self.tilemap.layers.append(players)
                 self.perso.definir_position(source.px, source.py)
                 self.tilemap.set_focus(source.px, source.py, True)
+                self.showHuds()
 
-    def show_hud(self):
-        print self.perso.collision_rect
+    def showHuds(self):
+        hud = playerHud.PlayerHud("playerHud", True)
+        self.tilemap.layers.add_named(hud, hud.name)
+
+    def deleteHuds(self):
+        layer = self.tilemap.layers.__getitem__("playerHud")
+        self.tilemap.layers.remove(layer)
+
 
 if __name__ == '__main__':
     pygame.init()
