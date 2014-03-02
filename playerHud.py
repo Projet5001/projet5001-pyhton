@@ -17,5 +17,5 @@ class PlayerHud(tmx.Layer):
 
     def draw(self, surface):
         myfont = pygame.font.SysFont("monospace", 15)
-        label = myfont.render("Some text!", 1, (255,255,0))
-        surface.blit(label, (100, 100))
+        label = myfont.render(self.player.name, 1, (255,255,255))
+        surface.blit(label, (self.player.collision_rect.x, self.player.collision_rect.y))
