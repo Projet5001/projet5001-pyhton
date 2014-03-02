@@ -27,8 +27,8 @@ class Game(object):
         self.monster_layer = tmx.SpriteLayer()
 
         #Ajouter le personnage et monstres à la carte
-        self.tilemap.layers.add_named(self.player_layer, 'player')
-        self.tilemap.layers.add_named(self.monster_layer, 'monstre')
+        self.tilemap.layers.add_named(self.player_layer, 'player_layer')
+        self.tilemap.layers.add_named(self.monster_layer, 'monster_layer')
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -38,7 +38,7 @@ class Game(object):
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
 
-        self.monstres = self.charge_monstres()
+        self.charge_monstres()
 
         self.userInput = userInput.Keyboard(self)
 
@@ -79,13 +79,11 @@ class Game(object):
             pygame.display.update()
             #pygame.display.flip()
 
+    #factory pour monstre
     def charge_monstres(self):
-	monstres = []
         for cell in self.tilemap.layers['pnjs'].find('monstre'):
-            monstre = monster.Monster(os.path.join(rep_sprites, "perso.png"),
-                                      (cell.px, cell.py), self.monster_layer)
-            monstres.append(monstre)
-        return monstres
+            monster.Monster(os.path.join(rep_sprites, "perso.png"),
+                           (cell.px, cell.py), self.monster_layer)
 
     def charge_player(self):
         return player.Player(os.path.join(rep_sprites, "perso.png"),
@@ -121,7 +119,8 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
-        players = self.tilemap.layers['player']
+        #recupere le groupe player
+        players = self.tilemap.layers['player_layer']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -134,7 +133,7 @@ class Game(object):
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.append(players)
                 self.perso.definir_position(source.px, source.py)
-                self.monstres = self.charge_monstres()
+                self.charge_monstres()
                 self.tilemap.set_focus(source.px, source.py, True)
 
     def show_hud(self):
