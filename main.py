@@ -146,7 +146,6 @@ class Game(object):
     def addClockSec(self, name, second):
         self.clocks[name] += second * self.FPS
 
-gi 
 if __name__ == '__main__':
     pygame.init()
     game = Game("ageei.tmx") #TODO: lire d'un fichier de config
