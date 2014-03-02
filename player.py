@@ -1,11 +1,18 @@
-import actors
+
 import pygame
+import actors
+
 
 class Player(actors.Actor):
     def __init__(self, image, position, *groups):
         super(Player, self).__init__(image, position, *groups)
         self.tool_rect = pygame.rect.Rect(position, (5, 30))
         self.speed = 10
+
+        #pour les test du HUD
+        self.name = "Max Power"
+        self.level = 99
+        self.health = {"hp": 27, "max": 38}
 
     def block(self):
         self.protection = 1

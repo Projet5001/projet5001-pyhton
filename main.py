@@ -3,9 +3,10 @@ import pygame
 from pygame import sprite as p_sprt
 import monster
 import os
-import player
 from lib import tmx
 import userInput
+import playerHud
+import player
 
 rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -30,6 +31,9 @@ class Game(object):
         self.tilemap.layers.add_named(self.player_layer, 'player_layer')
         self.tilemap.layers.add_named(self.monster_layer, 'monster_layer')
 
+        self.FPS = 30
+        self.clocks = {"playerHud": 0}
+
     def start(self):
         #Trouve l'emplacement du héro
         source = self.tilemap.layers['boundaries'].find_source("start")
@@ -42,11 +46,12 @@ class Game(object):
 
         self.userInput = userInput.Keyboard(self)
 
+        self.createHuds()
         self.mainloop()
 
     def mainloop(self):
         while True:
-            dt = self.clock.tick(30)
+            dt = self.clock.tick(self.FPS)
             # ces  5 lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
@@ -58,6 +63,13 @@ class Game(object):
 
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
+
+            for key, value in self.clocks.iteritems():
+                if value >= 0:
+                    if value == 0:
+                        self.hideHud(key)
+                    else:
+                        self.clocks[key] = value - 1
 
             #Récupère les collisions
             self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
@@ -119,8 +131,11 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
+        self.deleteHuds()
+
         #recupere le groupe player
         players = self.tilemap.layers['player_layer']
+
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -135,9 +150,26 @@ class Game(object):
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()
                 self.tilemap.set_focus(source.px, source.py, True)
+                self.createHuds()
 
-    def show_hud(self):
-        print self.perso.collision_rect
+    def createHuds(self):
+        hud = playerHud.PlayerHud("playerHud", self.perso, self.screen, self.tilemap)
+        self.tilemap.layers.add_named(hud, hud.name)
+
+    def showHud(self, name):
+        layer = self.tilemap.layers[name]
+        layer.setVisible(True)
+
+    def hideHud(self, name):
+        layer = self.tilemap.layers[name]
+        layer.setVisible(False)
+
+    def deleteHuds(self):
+        layer = self.tilemap.layers["playerHud"]
+        self.tilemap.layers.remove(layer)
+
+    def addClockSec(self, name, second):
+        self.clocks[name] += second * self.FPS
 
     def player_stackEvents(self, sprit, groupe, playerEvents):
 
