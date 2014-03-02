@@ -63,11 +63,11 @@ class Game(object):
 
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
-            if len(self.clocks) > 0:
-                for key, value in self.clocks.iteritems():
-                    if value >= 0:
-                        if value == 0:
-                            self.hideHud(key)
+            #if len(self.clocks) > 0:
+            for key, value in self.clocks.iteritems():
+                if value >= 0:
+                    if value == 0:
+                        self.hideHud(key)
                         else:
                             self.clocks[key] = value - 1
 
