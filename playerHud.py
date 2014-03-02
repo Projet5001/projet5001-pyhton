@@ -4,9 +4,10 @@ import pygame
 from lib import tmx
 
 class PlayerHud(tmx.Layer):
-    def __init__(self, name, visible):
+    def __init__(self, name, player):
         self.name = name
-        self.visible = visible
+        self.visible = True
+        self.player = player
 
     def __iter__(self):
         return tmx.LayerIterator(self)
