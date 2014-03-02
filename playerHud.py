@@ -26,12 +26,21 @@ class PlayerHud(tmx.Layer):
         hub = self.__followPlayer() #Tous les autres objets seront placés en relation avec ce point
         hub["y"] -= self.game.tilemap.tile_height
         self.__showName(surface, (hub["x"], hub["y"]))
+        self.__showHealth(surface, (hub["x"], hub["y"]))
 
     def __showName(self, surface, hub):
         myfont = pygame.font.SysFont("monospace", 15, True)
         label = myfont.render(self.player.name, 1, (255,255,255))
         surface.blit(label, ((hub[0] - (label.get_width() / 2), hub[1] - (self.game.tilemap.tile_height) / 2)))
         pass
+
+    def __showHealth(self, surface, hub):
+        #line(Surface, color, start_pos, end_pos, width=1) -> Rect
+        tileHalfWidth =  + self.game.tilemap.tile_width / 2
+        originx = hub[0] - tileHalfWidth
+        pygame.draw.line(surface, (0, 0, 0), (originx, hub[1]), (originx + tileHalfWidth * 2, hub[1]), 5)
+        health = (tileHalfWidth * 2)  * (float(self.player.health["hp"]) / self.player.health["max"])
+        pygame.draw.line(surface, (255, 0, 0), (originx, hub[1]), (originx + health, hub[1]), 3)
 
     def __followPlayer(self):
         #Centrer la position du HUD par rapport au personnage
