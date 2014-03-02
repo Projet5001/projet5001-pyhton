@@ -12,9 +12,12 @@ class PlayerHud(tmx.Layer):
         :param screen: Permet de récupérer (width, height) de l'écran dynamiquement
         """
         self.name = name
-        self.visible = True
+        self.visible = False
         self.player = player
         self.game = game
+
+    def setVisible(self, bool):
+        self.visible = bool
 
     def __iter__(self):
         return tmx.LayerIterator(self)
