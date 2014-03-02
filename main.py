@@ -27,13 +27,12 @@ class Game(object):
         self.monster_layer = tmx.SpriteLayer()
 
         #Ajouter le personnage et monstres à la carte
-        self.tilemap.layers.append(self.player_layer)
-        self.tilemap.layers.append(self.monster_layer)
+        self.tilemap.layers.add_named(self.player_layer, 'player')
+        self.tilemap.layers.add_named(self.monster_layer, 'monstre')
 
     def start(self):
         #Trouve l'emplacement du héro
-        source = \
-            self.tilemap.layers['boundaries'].find_source("start")
+        source = self.tilemap.layers['boundaries'].find_source("start")
         self.tilemap.set_focus(source.px, source.py, True)
 
         self.perso = self.charge_player()
@@ -122,7 +121,7 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
-        players = self.tilemap.layers.pop()
+        players = self.tilemap.layers['player']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
