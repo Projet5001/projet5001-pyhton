@@ -1,12 +1,11 @@
+# -*- coding: utf-8 -*-
 
-import pygame
 import actors
-
+import tools
 
 class Player(actors.Actor):
     def __init__(self, image, position, *groups):
         super(Player, self).__init__(image, position, *groups)
-        self.tool_rect = pygame.rect.Rect(position, (5, 30))
         self.speed = 10
 
         #pour les test du HUD
