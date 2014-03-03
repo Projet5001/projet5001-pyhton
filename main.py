@@ -7,6 +7,8 @@ from lib import tmx
 import userInput
 import playerHud
 import player
+import tools
+
 
 rep_assets = os.path.relpath("assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -41,10 +43,15 @@ class Game(object):
 
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
-
         self.charge_monstres()
 
         self.userInput = userInput.Keyboard(self)
+
+
+        epe = tools.Tools(self, self.perso, 'epe')
+        self.perso.tools[0].definir_position(source.px, source.py)
+        self.tilemap.layers.add_named(epe, 'epe')
+        self.perso.ajoute_outils(epe)
 
         self.createHuds()
         self.mainloop()
@@ -63,13 +70,13 @@ class Game(object):
 
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
-            if len(self.clocks) > 0:
-                for key, value in self.clocks.iteritems():
-                    if value >= 0:
-                        if value == 0:
-                            self.hideHud(key)
-                        else:
-                            self.clocks[key] = value - 1
+
+            for key, value in self.clocks.iteritems():
+                if value >= 0:
+                    if value == 0:
+                        self.hideHud(key)
+                    else:
+                        self.clocks[key] = value - 1
 
             #Récupère les collisions
             self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
@@ -83,9 +90,12 @@ class Game(object):
             #Gère les colisions selon leur nature
             self.tmx_manageCollisionEvents(self.perso, self.tmxEvents)
 
-            self.tilemap.update(dt/1000, self)
+
+
+            self.tilemap.update(dt, self)
 
             self.screen.fill((0, 0, 0))
+
             self.tilemap.draw(self.screen)
 
             pygame.display.update()
@@ -177,7 +187,7 @@ class Game(object):
 
         coll = p_sprt.spritecollideany(sprit, groupe)
         if coll:
-            print coll
+            print 'collision'
             playerEvents.append(coll)
 
     def player_manageCollisionEvents(self,player, playerEvents):

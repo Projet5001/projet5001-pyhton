@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import pygame
-
 from lib import tmx
 
 class PlayerHud(tmx.Layer):
     def __init__(self, name, player, screen, tilemap):
         """
 
-        :param name: Le nom du hub (permet la recherche dans layers.__get_name__())
+        :param name: Le nom du hub (permet la recherche dans layers[name]
         :param player: Le joueur auquelle nous voulons afficher l'information
         :param screen: Permet de récupérer (width, height) de l'écran dynamiquement
         """
