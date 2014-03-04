@@ -10,7 +10,6 @@ class Actor(pygame.sprite.Sprite):
                                                25, 20)
         self.saveLastPos()
 
-
         #spec of perso
         self.dommage = 1
         self.protection = 0
