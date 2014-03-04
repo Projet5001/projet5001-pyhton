@@ -1,3 +1,5 @@
+# -*-coding:utf-8-*-
+
 import pygame
 
 
@@ -6,8 +8,10 @@ class Actor(pygame.sprite.Sprite):
         super(Actor, self).__init__(*groups)
         self.image = pygame.image.load(image)
         self.rect = pygame.rect.Rect(position, self.image.get_size())
-        self.collision_rect = pygame.rect.Rect(position[0], position[1],
-                                               25, 20)
+        self.collision_rect = pygame.rect.Rect(position[0] + 2,
+                                               position[1] + 30,
+                                               25,
+                                               20)
         self.saveLastPos()
 
         #spec of perso
@@ -66,6 +70,8 @@ class Actor(pygame.sprite.Sprite):
         pass
 
     def luck(self):
+        # TODO: pourquoi c'est une fonction si ca retourne toujours 1?
+        # est-ce que c'est sensé être variable?
         return 1
 
     def protectionTotal(self):
