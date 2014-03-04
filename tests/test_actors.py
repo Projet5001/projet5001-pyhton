@@ -1,8 +1,10 @@
+#-*-coding:utf-8-*-
 '''
 Created on 2014-02-18
 
 @author: mtrudel
 '''
+
 import unittest
 from unittest import TestCase
 from actors import Actor
