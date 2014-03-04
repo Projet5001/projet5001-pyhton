@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pygame
 import actors
 import tools
 
@@ -14,8 +15,8 @@ class Player(actors.Actor):
         self.health = {"hp": 27, "max": 38}
 
     def block(self):
+        #methode qui aura plus de fonctionalié plus tard
         self.protection = 1
-        print "protection"
 
     def update(self, dt, game):
         game.tilemap.set_focus(self.collision_rect.x, self.collision_rect.y)

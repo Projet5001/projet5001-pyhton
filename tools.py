@@ -18,10 +18,9 @@ class Tools(pygame.sprite.Sprite):
         print self.visible
         pygame.draw.rect(screen, (140,240,130), self.rect_aff)
 
-     def definir_position(self, x, y):
-        
-        self.collision_rect.x = x
-        self.collision_rect.y = y
+    def definir_position(self, x, y):
+        self.rect_aff.x = x
+        self.rect_aff.y = y
 
     def update(self, dt, *args):
         self.hub = self.__followPlayer__()
