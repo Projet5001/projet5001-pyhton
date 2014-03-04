@@ -8,7 +8,7 @@ import userInput
 import playerHud
 import player
 
-rep_assets = os.path.relpath("assets")
+rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
 rep_tilesets = os.path.join(rep_assets, "tilesets")
 
