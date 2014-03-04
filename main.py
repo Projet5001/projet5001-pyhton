@@ -23,6 +23,9 @@ class Game(object):
         self.tmxEvents = []
         self.playerEvents = []
 
+        self.perso = None
+        self.monstres = []
+
         #Créer un contenant pour les personnages et monstre
         self.player_layer = tmx.SpriteLayer()
         self.monster_layer = tmx.SpriteLayer()
@@ -42,7 +45,7 @@ class Game(object):
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
 
-        self.charge_monstres()
+        self.monstres = self.charge_monstres()
 
         self.userInput = userInput.Keyboard(self)
 
@@ -93,9 +96,17 @@ class Game(object):
 
     #factory pour monstre
     def charge_monstres(self):
-        for cell in self.tilemap.layers['pnjs'].find('monstre'):
-            monster.Monster(os.path.join(rep_sprites, "perso.png"),
-                           (cell.px, cell.py), self.monster_layer)
+        monstres = []
+
+        try:
+            for cell in self.tilemap.layers['pnjs'].find('monstre'):
+                m = monster.Monster(os.path.join(rep_sprites, "perso.png"),
+                                    (cell.px, cell.py), self.monster_layer)
+                monstres.append(m)
+        except KeyError:
+            pass
+
+        return monstres
 
     def charge_player(self):
         return player.Player(os.path.join(rep_sprites, "perso.png"),
