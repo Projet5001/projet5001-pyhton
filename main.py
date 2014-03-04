@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pygame
-from pygame import sprite as p_sprt
 import monster
 import os
+
 from lib import tmx
 import userInput
 import playerHud
@@ -49,11 +49,12 @@ class Game(object):
 
 
         epe = tools.Tools(self, self.perso, 'epe')
-        self.perso.tools[0].definir_position(source.px, source.py)
         self.tilemap.layers.add_named(epe, 'epe')
         self.perso.ajoute_outils(epe)
+        self.perso.tools[0].definir_position(source.px, source.py)
 
         self.createHuds()
+
         self.mainloop()
 
     def mainloop(self):
@@ -82,7 +83,9 @@ class Game(object):
             self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
 
             #stack les collision de monstre
-            self.player_stackEvents(self.perso, self.monster_layer, self.playerEvents)
+            self.player_stackEvents(self.perso,
+                                    self.monster_layer,
+                                    self.playerEvents)
 
             #gère les évenement crée par le joureur
             self.player_manageCollisionEvents(self.perso, self.playerEvents)
@@ -92,7 +95,7 @@ class Game(object):
 
 
 
-            self.tilemap.update(dt, self)
+            self.tilemap.update(dt / 1000, self)
 
             self.screen.fill((0, 0, 0))
 
@@ -163,9 +166,11 @@ class Game(object):
                 self.charge_monstres()
                 self.tilemap.set_focus(source.px, source.py, True)
 
-
     def createHuds(self):
-        hud = playerHud.PlayerHud("playerHud", self.perso, self.screen, self.tilemap)
+        hud = playerHud.PlayerHud("playerHud",
+                                  self.perso,
+                                  self.screen,
+                                  self.tilemap)
         self.tilemap.layers.add_named(hud, hud.name)
 
     def showHud(self, name):
@@ -185,12 +190,12 @@ class Game(object):
 
     def player_stackEvents(self, sprit, groupe, playerEvents):
 
-        coll = p_sprt.spritecollideany(sprit, groupe)
+        coll = pygame.sprite.spritecollideany(sprit, groupe)
         if coll:
             print 'collision'
             playerEvents.append(coll)
 
-    def player_manageCollisionEvents(self,player, playerEvents):
+    def player_manageCollisionEvents(self, player, playerEvents):
         while len(playerEvents) > 0:
             e = playerEvents.pop()
             if e.block and e.attack:
@@ -199,5 +204,5 @@ class Game(object):
 
 if __name__ == '__main__':
     pygame.init()
-    game = Game("ageei.tmx") #TODO: lire d'un fichier de config
+    game = Game("ageei.tmx")  # TODO: lire d'un fichier de config
     game.start()

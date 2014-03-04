@@ -57,7 +57,7 @@ class Actor(pygame.sprite.Sprite):
     def move(self, x, y):
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
-        self.tools[0].rect.move_ip(x, y)
+        self.tools[0].rect_aff.move_ip(x, y)
 
     def attack(self):
         return (self.dommage * self.luck())

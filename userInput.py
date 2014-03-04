@@ -7,7 +7,7 @@ class Keyboard():
         self.actor = game.perso
         self.speed = game.perso.speed
         self.accel = game.perso.accel
-        
+
     def move_left(self):
         self.actor.move(-(self.speed * self.accel), 0)
 
