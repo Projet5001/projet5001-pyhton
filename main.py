@@ -68,8 +68,8 @@ class Game(object):
                 if value >= 0:
                     if value == 0:
                         self.hideHud(key)
-                        else:
-                            self.clocks[key] = value - 1
+                    else:
+                        self.clocks[key] = value - 1
 
             #Récupère les collisions
             self.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
