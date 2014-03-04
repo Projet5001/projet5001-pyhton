@@ -15,7 +15,7 @@ class ActorTest(TestCase):
     group = []
 
     def setUp(self):
-        self.actor = Actor("../assets/sprites/perso.png", (0, 0), self.group)
+        self.actor = Actor("assets/sprites/perso.png", (0, 0), self.group)
 
     def test_move_changes_actor_rect(self):
         TestCase.assertEqual(self,
