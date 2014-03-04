@@ -8,8 +8,10 @@ class Actor(pygame.sprite.Sprite):
         super(Actor, self).__init__(*groups)
         self.image = pygame.image.load(image)
         self.rect = pygame.rect.Rect(position, self.image.get_size())
-        self.collision_rect = pygame.rect.Rect(position[0], position[1],
-                                               25, 20)
+        self.collision_rect = pygame.rect.Rect(position[0] + 2,
+                                               position[1] + 30,
+                                               25,
+                                               20)
         self.saveLastPos()
 
 
