@@ -71,6 +71,8 @@ class Actor(pygame.sprite.Sprite):
         pass
 
     def luck(self):
+        # TODO: pourquoi c'est une fonction si ca retourne toujours 1?
+        # est-ce que c'est sensé être variable?
         return 1
 
     def protectionTotal(self):
