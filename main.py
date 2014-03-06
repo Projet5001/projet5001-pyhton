@@ -39,22 +39,25 @@ class Game(object):
     def start(self):
         #Trouve l'emplacement du héro
         source = self.tilemap.layers['boundaries'].find_source("start")
-        self.tilemap.set_focus(source.px, source.py, True)
 
+        self.tilemap.set_focus(source.px, source.py, True)
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
         self.charge_monstres()
-
         self.userInput = userInput.Keyboard(self)
 
 
+
+        #prototype !!!!!!!!!!
         epe = tools.Tools(self, self.perso, 'epe')
         self.tilemap.layers.add_named(epe, 'epe')
         self.perso.ajoute_outils(epe)
         self.perso.tools[0].definir_position(source.px, source.py)
+        #prototype !!!!!!!!!!
 
+
+        #hub
         self.createHuds()
-
         self.mainloop()
 
     def mainloop(self):
@@ -190,16 +193,29 @@ class Game(object):
 
     def player_stackEvents(self, sprit, groupe, playerEvents):
 
-        coll = pygame.sprite.spritecollideany(sprit, groupe)
+        coll = self.spritecollideany(sprit.tools[0], groupe)
         if coll:
             print 'collision'
             playerEvents.append(coll)
+
+    #overide
+    def spritecollideany(self, sprite, group, collided = None):
+        if collided is None:
+            for s in group:
+                if sprite.rect.colliderect(s.collision_rect):
+                    return s
+        else:
+            for s in group:
+                if collided(sprite, s):
+                    return s
+        return None
+
 
     def player_manageCollisionEvents(self, player, playerEvents):
         while len(playerEvents) > 0:
             e = playerEvents.pop()
             if e.block and e.attack:
-                player.take_dommage(e.attack())
+                e.take_dommage(player.attack())
                 print player.life
 
 if __name__ == '__main__':
