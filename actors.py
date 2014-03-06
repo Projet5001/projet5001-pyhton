@@ -1,18 +1,22 @@
 # -*-coding:utf-8-*-
 
 import pygame
+from pygame import rect as rect
 
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, image, position, *groups):
         super(Actor, self).__init__(*groups)
         self.image = pygame.image.load(image)
+
         self.rect = pygame.rect.Rect(position, self.image.get_size())
         self.collision_rect = pygame.rect.Rect(position[0] + 2,
                                                position[1] + 30,
                                                25,
                                                20)
         self.saveLastPos()
+
+        self.tools = []
 
         #spec of perso
         self.dommage = 1
@@ -58,9 +62,10 @@ class Actor(pygame.sprite.Sprite):
     def move(self, x, y):
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
+        self.tools[0].rect.move_ip(x, y)
 
     def attack(self):
-        return (self.dommage * self.luck())
+        return self.dommage * self.luck()
 
     def take_dommage(self, dommage):
         self.life -= (dommage - self.protectionTotal())
@@ -76,6 +81,9 @@ class Actor(pygame.sprite.Sprite):
 
     def protectionTotal(self):
         return self.protection
+
+    def ajoute_outils(self, tool):
+        self.tools.append(tool)
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
