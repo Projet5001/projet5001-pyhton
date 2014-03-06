@@ -10,6 +10,11 @@ class CollisionManager():
         self.game = game
         self.player_groupe = self.tmx.layers['player_layer']
         self.monstre_groupe = self.tmx.layers['monster_layer']
+        self.player_events = []
+        self.tmx_events = []
+
+    def set_tilemap(self, tilemap):
+        self.tmx = tilemap
 
     #overide
     def spritecollideany(self, collided = None):
@@ -29,23 +34,23 @@ class CollisionManager():
 
         return None
 
-    def player_stackEvents(self, player_events):
+    def player_stackEvents(self):
 
         coll = self.spritecollideany()
         if coll:
             print 'collision'
-            player_events.append(coll)
+            self.player_events.append(coll)
 
-    def player_manageCollisionEvents(self, player_events):
+    def player_manageCollisionEvents(self):
 
-        while len(player_events) > 0:
-            e = player_events.pop()
+        while len(self.player_events) > 0:
+            e = self.player_events.pop()
 
             if e.block and e.attack:
                 e.take_dommage(self.player.attack())
                 print e.life
 
-    def tmx_stackCollisionEvents(self,tmxEvents):
+    def tmx_stackCollisionEvents(self):
 
         boundaries = self.tmx.layers['boundaries']
         walls = self.tmx.layers['walls']
@@ -56,22 +61,22 @@ class CollisionManager():
             pass
 
         for cell in walls.collideLayer(self.player.collision_rect):
-            tmxEvents.append(cell)
+            self.tmx_events.append(cell)
         for cell in boundaries.collide(self.player.collision_rect, 'block'):
-            tmxEvents.append(cell)
+            self.tmx_events.append(cell)
         if objets:
             for objet in objets.collide(perso.collision_rect, 'type'):
-                tmxEvents.append(objet)
+                self.tmx_events.append(objet)
 
-    def tmx_manageCollisionEvents(self, tmx_events):
+    def tmx_manageCollisionEvents(self):
 
-        while len(tmx_events) > 0:
-            e = tmx_events.pop()
+        while len(self.tmx_events) > 0:
+            e = self.tmx_events.pop()
 
             try:
                 if isinstance(e, tmx.Cell):
                     self.player.resetPos()
-                elif len(tmx_events) == 0 and isinstance(e, tmx.Object):
+                elif len(self.tmx_events) == 0 and isinstance(e, tmx.Object):
                     if e.type == 'porte' or e.type == 'escalier':
                         self.player.resetPos()
                         self.game.effectuer_transition(e)

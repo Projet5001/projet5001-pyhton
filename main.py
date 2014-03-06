@@ -23,9 +23,6 @@ class Game(object):
         self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
                                 self.screen.get_size())
         self.clock = pygame.time.Clock()
-        #stack pour les events
-        self.tmxEvents = []
-        self.playerEvents = []
 
         #list pour le joueur et monstre
         self.perso = None
@@ -93,16 +90,16 @@ class Game(object):
                         self.clocks[key] = value - 1
 
             #Récupère les collisions
-            self.collision_manager.tmx_stackCollisionEvents(self.tmxEvents)
+            self.collision_manager.tmx_stackCollisionEvents()
 
             #stack les collision de monstre
-            self.collision_manager.player_stackEvents(self.playerEvents)
+            self.collision_manager.player_stackEvents()
 
             #gère les évenement crée par le joureur
-            self.collision_manager.player_manageCollisionEvents(self.playerEvents)
+            self.collision_manager.player_manageCollisionEvents()
 
             #Gère les colisions selon leur nature
-            self.collision_manager.tmx_manageCollisionEvents(self.tmxEvents)
+            self.collision_manager.tmx_manageCollisionEvents()
 
             self.tilemap.update(dt / 1000, self)
 
@@ -158,6 +155,7 @@ class Game(object):
                          self.screen.get_size())
             if nouvelle_carte:
                 self.tilemap = nouvelle_carte
+                self.collision_manager.set_tilemap(self.tilemap)
                 source = \
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.add_named(players, 'player_layer')
