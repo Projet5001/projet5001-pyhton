@@ -19,6 +19,5 @@ class Player(actors.Actor):
         self.protection = 1
 
     def update(self, dt, game):
-        print 'rect-player', self.rect.x, self.rect.y
         game.tilemap.set_focus(self.collision_rect.x, self.collision_rect.y)
         self.protection = 0
