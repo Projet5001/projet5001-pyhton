@@ -671,6 +671,10 @@ class Layers(list):
             return self[item]
         return self.by_name[item]
 
+    def remove(self, layer):
+        super(Layers, self).remove(layer)
+        self.by_name.pop(layer.name)
+
 class TileMap(object):
     '''A TileMap is a collection of Layers which contain gridded maps or sprites
     which are drawn constrained by a viewport.
