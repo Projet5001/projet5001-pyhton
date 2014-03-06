@@ -12,19 +12,20 @@ class Tools(pygame.sprite.Sprite):
         self.player = player
         self.visible = False
         self.hub = self.__followPlayer__()
-        self.rect_aff = Rect((self.hub[0], self.hub[1]+8), (5, 100))
+        self.rect = Rect((self.hub[0], self.hub[1]+8), (5, 100))
 
     def draw(self, screen):
-        print self.visible
-        pygame.draw.rect(screen, (140,240,130), self.rect_aff)
+        self.hub = self.__followPlayer__()
+        pygame.draw.rect(screen, (140,240,130), ((self.hub[0], self.hub[1]+8), (5, 100)))
 
     def definir_position(self, x, y):
-        self.rect_aff.x = x
-        self.rect_aff.y = y
+        self.rect.x = x
+        self.rect.y = y
 
     def update(self, dt, *args):
+        print 'rect-tool', self.rect.x, self.rect.y
         self.hub = self.__followPlayer__()
-        self.rect_aff = Rect((self.hub[0], self.hub[1]+8), (5, 100))
+        self.rect = Rect((self.player.collision_rect[0], self.player.collision_rect[1]+8), (5, 100))
 
     #overide
     def set_view(self, *args):
@@ -53,4 +54,4 @@ class Tools(pygame.sprite.Sprite):
             hubx += self.game.tilemap.tile_width / 2
             huby += self.game.tilemap.tile_height / 2
 
-        return hubx,huby
+        return hubx, huby
