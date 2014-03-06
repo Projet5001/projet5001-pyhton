@@ -56,9 +56,14 @@ class Game(object):
 
 
         #prototype !!!!!!!!!!
+        #creation de l'arme
         epe = weapon.Weapon(self, self.perso, 'epe')
-        self.tilemap.layers.add_named(epe, 'epe')
+
+        #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
         self.perso.ajoute_outils(epe)
+        self.tilemap.layers.add_named(epe, 'epe')
+
+
         #prototype !!!!!!!!!!
 
 
@@ -126,7 +131,6 @@ class Game(object):
     def charge_player(self):
         return player.Player(os.path.join(rep_sprites, "perso.png"),
                              (0, 0), self.player_layer)
-
 
     def effectuer_transition(self, limite):
         if not isinstance(limite, tmx.Object):

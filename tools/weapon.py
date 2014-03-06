@@ -8,6 +8,8 @@ class Weapon(BaseTool):
         super(Weapon, self).__init__(game, player, name, obj)
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.hub[0], self.hub[1]+8), (5, 100))
+        self.image = None
+        self.type = 'weapon'
 
     @classmethod
     def is_type_for(cls, object_type):

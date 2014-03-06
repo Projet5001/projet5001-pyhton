@@ -57,3 +57,4 @@ class Keyboard():
 
         if pressedkeys[pygame.K_LALT]:
             self.actor.make_tools_visible(True)
+
