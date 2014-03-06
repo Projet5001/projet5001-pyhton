@@ -10,7 +10,7 @@ import player
 import tools
 import collisionManager
 
-rep_assets = os.path.relpath("assets")
+rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
 rep_tilesets = os.path.join(rep_assets, "tilesets")
 
@@ -22,8 +22,13 @@ class Game(object):
         self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
                                 self.screen.get_size())
         self.clock = pygame.time.Clock()
+        #stack pour les events
         self.tmxEvents = []
         self.playerEvents = []
+
+        #list pour le joueur et monstre
+        self.perso = None
+        self.monstres = []
 
         #Créer un contenant pour les personnages et monstre
         self.player_layer = tmx.SpriteLayer()
@@ -35,6 +40,7 @@ class Game(object):
         self.collision_manager = None
         self.FPS = 30
         self.clocks = {"playerHud": 0}
+        self.userInput = None
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -43,7 +49,7 @@ class Game(object):
         self.tilemap.set_focus(source.px, source.py, True)
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
-        self.charge_monstres()
+        self.monstres = self.charge_monstres()
         self.userInput = userInput.Keyboard(self)
 
 
@@ -87,8 +93,8 @@ class Game(object):
 
             #stack les collision de monstre
             self.collision_manager.player_stackEvents(self.perso,
-                                    self.monster_layer,
-                                    self.playerEvents)
+                                                    self.monster_layer,
+                                                    self.playerEvents)
 
             #gère les évenement crée par le joureur
             self.collision_manager.player_manageCollisionEvents(self.perso, self.playerEvents)
@@ -107,9 +113,17 @@ class Game(object):
 
     #factory pour monstre
     def charge_monstres(self):
-        for cell in self.tilemap.layers['pnjs'].find('monstre'):
-            monster.Monster(os.path.join(rep_sprites, "perso.png"),
-                           (cell.px, cell.py), self.monster_layer)
+        monstres = []
+
+        try:
+            for cell in self.tilemap.layers['pnjs'].find('monstre'):
+                m = monster.Monster(os.path.join(rep_sprites, "perso.png"),
+                                    (cell.px, cell.py), self.monster_layer)
+                monstres.append(m)
+        except KeyError:
+            pass
+
+        return monstres
 
     def charge_player(self):
         return player.Player(os.path.join(rep_sprites, "perso.png"),
