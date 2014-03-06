@@ -45,11 +45,15 @@ class Game(object):
     def start(self):
         #Trouve l'emplacement du héro
         source = self.tilemap.layers['boundaries'].find_source("start")
-        self.collision_manager = collisionManager.CollisionManager(self)
+
         self.tilemap.set_focus(source.px, source.py, True)
+
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
         self.monstres = self.charge_monstres()
+
+        self.collision_manager = collisionManager.CollisionManager(self.perso, self.tilemap)
+
         self.userInput = userInput.Keyboard(self)
 
 
@@ -89,18 +93,16 @@ class Game(object):
                         self.clocks[key] = value - 1
 
             #Récupère les collisions
-            self.collision_manager.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
+            self.collision_manager.tmx_stackCollisionEvents(self.tmxEvents)
 
             #stack les collision de monstre
-            self.collision_manager.player_stackEvents(self.perso,
-                                                    self.monster_layer,
-                                                    self.playerEvents)
+            self.collision_manager.player_stackEvents(self.playerEvents)
 
             #gère les évenement crée par le joureur
-            self.collision_manager.player_manageCollisionEvents(self.perso, self.playerEvents)
+            self.collision_manager.player_manageCollisionEvents(self.playerEvents)
 
             #Gère les colisions selon leur nature
-            self.collision_manager.tmx_manageCollisionEvents(self.perso, self.tmxEvents)
+            self.collision_manager.tmx_manageCollisionEvents(self.tmxEvents)
 
             self.tilemap.update(dt / 1000, self)
 
@@ -118,7 +120,7 @@ class Game(object):
         try:
             for cell in self.tilemap.layers['pnjs'].find('monstre'):
                 m = monster.Monster(os.path.join(rep_sprites, "perso.png"),
-                                    (cell.px, cell.py), self.monster_layer)
+                                   (cell.px, cell.py), self.monster_layer)
                 monstres.append(m)
         except KeyError:
             pass
