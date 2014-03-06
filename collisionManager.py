@@ -48,10 +48,19 @@ class CollisionManager():
 
         boundaries = self.tmx.layers['boundaries']
         walls = self.tmx.layers['walls']
+        objets = None
+        try:
+            objets = self.game.tilemap.layers['objets']
+        except KeyError:
+            pass
+
         for cell in walls.collideLayer(self.player.collision_rect):
             tmxEvents.append(cell)
         for cell in boundaries.collide(self.player.collision_rect, 'block'):
             tmxEvents.append(cell)
+        if objets:
+            for objet in objets.collide(perso.collision_rect, 'type'):
+                tmxEvents.append(objet)
 
     def tmx_manageCollisionEvents(self, tmx_events):
 
@@ -61,9 +70,13 @@ class CollisionManager():
             try:
                 if isinstance(e, tmx.Cell):
                     self.player.resetPos()
-                elif len(tmx_events) == 0 and isinstance(e, tmx.Object):
-                    self.player.resetPos()
-                    #self.game.effectuer_transition(e)
+                elif len(tmxEvents) == 0 and isinstance(e, tmx.Object):
+                    if e.type == 'porte' or e.type == 'escalier':
+                        self.player.resetPos()
+                        self.game.effectuer_transition(e)
+                    else:
+                        self.player.objets.append(e.name)
+                        e.visible = False
 
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas
