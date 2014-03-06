@@ -2,12 +2,11 @@
 
 import pygame
 import actors
-
+import tools
 
 class Player(actors.Actor):
     def __init__(self, image, position, *groups):
         super(Player, self).__init__(image, position, *groups)
-        self.tool_rect = pygame.rect.Rect(position, (5, 30))
         self.speed = 10
 
         #pour les test du HUD
@@ -16,9 +15,10 @@ class Player(actors.Actor):
         self.health = {"hp": 27, "max": 38}
 
     def block(self):
+        #methode qui aura plus de fonctionalié plus tard
         self.protection = 1
-        print "protection"
 
     def update(self, dt, game):
+        print 'rect-player', self.rect.x, self.rect.y
         game.tilemap.set_focus(self.collision_rect.x, self.collision_rect.y)
         self.protection = 0
