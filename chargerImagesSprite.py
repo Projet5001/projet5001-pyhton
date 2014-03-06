@@ -3,13 +3,10 @@ import pygame
 
 class Charger_Images_Sprite(pygame.sprite.Sprite):
     def __init__(self,imageDuSprite):
-        #super(ChargeurImages, self).__init__(*groups)e
-        #print "Charger_Images_Sprite _____________________________________"
-        self.image_set = pygame.image.load(imageDuSprite)
 
+        self.image_set = pygame.image.load(imageDuSprite)
         self.personnage = [] # La liste des images de personnages en png ou jpg a voir ???
         self.charge_les_Images()
-        #self.image = self.personnage[0] # ou [self.lesImages]
 
     def charge_les_Images(self):
         #Pour la marche du personnage
@@ -35,18 +32,3 @@ class Charger_Images_Sprite(pygame.sprite.Sprite):
                self.personnage.append(self.image_set.subsurface((40+imgIndex,posY,90,80)))
                imgIndex += 100
             posY += 95
-
-
-
-
-
-       # self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(imageDuSprite)
-       #  self.rect = pygame.rect.Rect(position, self.charger_Images_Sprite.image.get_size())
-       #  self.collision_rect = pygame.rect.Rect(position[0], position[1],25, 20)
-       #
-       #
-       #  self.image = self.charger_Images_Sprite.image
-       #  self.personnage = self.charger_Images_Sprite.personnage
-       #  self.actor_action = actors_actions.ActorActions(self.image, self.personnage)
-       #  self.actor_action.reinitValSiDetecter()
-       #  self.image = self.actor_action.image

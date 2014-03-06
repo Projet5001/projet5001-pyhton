@@ -90,7 +90,6 @@ class ActorActions(pygame.sprite.Sprite):
 
 
     def jumpAndAttack(self, action_du_perso,est_cycle_de_pause):
-        print "jumpAttack__________"
         self.le_set_image = 0 # egal sequence d images de jump
         if action_du_perso == "attack":
             self.le_set_image = 28
@@ -141,7 +140,7 @@ class ActorActions(pygame.sprite.Sprite):
 
     def sequenceImages(self, intervalle_img,une_direction,type_image):
         if type_image == "droit":
-            print " inside sequenceImages droit et self.lesImages === "+str(self.lesImages)
+            #print " inside sequenceImages droit et self.lesImages === "+str(self.lesImages)
             if self.lesImages < intervalle_img["debut"] or self.lesImages > intervalle_img["fin"]:
                  print "reset images"
                  self.lesImages = intervalle_img["debut"]
