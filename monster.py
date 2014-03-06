@@ -7,4 +7,4 @@ class Monster(actors.Actor):
         super(Monster, self).__init__(image, position, *groups)
 
     def update(self, dt, game):
-        print 'rect-monstre', self.rect.x, self.rect.y
+        pass
