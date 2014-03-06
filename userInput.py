@@ -23,10 +23,10 @@ class Keyboard():
         self.actor.move(self.coord_right[0], self.coord_right[1], "right")
 
     def move_up(self):
-        self.actor.move(self.coord_up[0],self.coord_up[1], "up")#, "up",is_doing)
+        self.actor.move(self.coord_up[0],self.coord_up[1], "up")
 
     def move_down(self):
-        self.actor.move(self.coord_down[0],self.coord_down[1], "down")#, "down",is_doing)
+        self.actor.move(self.coord_down[0],self.coord_down[1], "down")
 
     def jump(self):
         pygame.time.set_timer(self.game.persoJump, 150)#1 second is 1000 milliseconds
@@ -46,6 +46,12 @@ class Keyboard():
     def updateKey(self, dt, desactiv_commande):
         pressedkeys = pygame.key.get_pressed()
         self.actor.saveLastPos()
+
+        if pressedkeys[pygame.K_LALT] and self.actor.tools[0].visible == False:
+         self.actor.tools[0].visible = True
+        elif pressedkeys[pygame.K_LALT] and self.actor.tools[0].visible == True:
+            self.actor.tools[0].visible = False
+
         if desactiv_commande  == 1:
             pass
         else:
@@ -70,5 +76,3 @@ class Keyboard():
             if pressedkeys[pygame.K_c]:
                 self.attack()
 
-            if pressedkeys[pygame.K_LALT]:
-                self.actor.tools[0].visible = True
