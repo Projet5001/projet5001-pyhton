@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 import pygame
-
 from lib import tmx
 
 
 class PlayerHud(tmx.Layer):
     def __init__(self, name, player, screen, tilemap):
-        """
 
-        :param name: Le nom du HUD
-        :param player: Le joueur auquelle nous voulons afficher l'information
-        :param screen: Écran pour le dessin des éléments du HUD
-        """
         self.name = name
         self.visible = False
         self.player = player

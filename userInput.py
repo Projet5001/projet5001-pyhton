@@ -54,3 +54,6 @@ class Keyboard():
 
         if pressedkeys[pygame.K_LCTRL]:
             self.show_player_hud()
+
+        if pressedkeys[pygame.K_LALT]:
+            self.actor.tools[0].visible = True
