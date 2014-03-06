@@ -25,7 +25,6 @@ class Tools(pygame.sprite.Sprite):
         self.rect.y = y
 
     def update(self, dt, *args):
-        print 'rect-tool', self.rect.x, self.rect.y
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.player.collision_rect[0], self.player.collision_rect[1]+8), (5, 100))
 
