@@ -9,6 +9,7 @@ import playerHud
 import player
 import tools
 import collisionManager
+import weapon
 
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -53,13 +54,12 @@ class Game(object):
         self.monstres = self.charge_monstres()
 
         self.collision_manager = collisionManager.CollisionManager(self.perso, self.tilemap)
-
         self.userInput = userInput.Keyboard(self)
 
 
 
         #prototype !!!!!!!!!!
-        epe = tools.Tools(self, self.perso, 'epe')
+        epe = weapon.Weapon(self, self.perso, 'epe')
         self.tilemap.layers.add_named(epe, 'epe')
         self.perso.ajoute_outils(epe)
         self.perso.tools[0].definir_position(source.px, source.py)
