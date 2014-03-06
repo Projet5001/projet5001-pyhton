@@ -4,9 +4,10 @@ from lib import tmx
 
 class CollisionManager():
 
-    def __init__(self, player, tmx):
-        self.tmx = tmx
-        self.player = player
+    def __init__(self, game):
+        self.tmx = game.tilemap
+        self.player = game.perso
+        self.game = game
         self.player_groupe = self.tmx.layers['player_layer']
         self.monstre_groupe = self.tmx.layers['monster_layer']
 
@@ -63,7 +64,7 @@ class CollisionManager():
                     self.player.resetPos()
                 elif len(tmx_events) == 0 and isinstance(e, tmx.Object):
                     self.player.resetPos()
-                    #self.game.effectuer_transition(e)
+                    self.game.effectuer_transition(e)
 
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas
