@@ -134,6 +134,15 @@ class Game(object):
         if not isinstance(limite, tmx.Object):
             pass
 
+        try:
+            if limite.properties['barree']:
+                clef_requise = limite.properties['clef']
+                if not clef_requise in self.perso.objets:
+                    return
+        except KeyError:
+            # la porte n'est probablement pas barrée...
+            pass
+
         self.deleteHuds()
 
         #recupere le groupe player

@@ -35,10 +35,19 @@ class CollisionManager():
     def tmx_stackCollisionEvents(self, perso, tmxEvents):
         boundaries = self.game.tilemap.layers['boundaries']
         walls = self.game.tilemap.layers['walls']
+        objets = None
+        try:
+            objets = self.game.tilemap.layers['objets']
+        except KeyError:
+            pass
+
         for cell in walls.collideLayer(perso.collision_rect):
             tmxEvents.append(cell)
         for cell in boundaries.collide(perso.collision_rect, 'block'):
             tmxEvents.append(cell)
+        if objets:
+            for objet in objets.collide(perso.collision_rect, 'type'):
+                tmxEvents.append(objet)
 
     def tmx_manageCollisionEvents(self, perso, tmxEvents):
         while len(tmxEvents) > 0:
@@ -48,8 +57,12 @@ class CollisionManager():
                 if isinstance(e, tmx.Cell):
                     perso.resetPos()
                 elif len(tmxEvents) == 0 and isinstance(e, tmx.Object):
-                    perso.resetPos()
-                    self.game.effectuer_transition(e)
+                    if e.type == 'porte' or e.type == 'escalier':
+                        perso.resetPos()
+                        self.game.effectuer_transition(e)
+                    else:
+                        perso.objets.append(e.name)
+                        e.visible = False
 
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas
