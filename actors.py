@@ -20,6 +20,7 @@ class Actor(pygame.sprite.Sprite):
         self.speed = 8
         self.accel = 1
         self.isDoing = 'nothing'
+        self.arme_equipe = 0
 
     def save_x_pos(self):
         self.last_x = self.rect.x
@@ -62,6 +63,9 @@ class Actor(pygame.sprite.Sprite):
 
     def attack(self):
         return self.dommage * self.luck()
+
+    def active_arme(self):
+        self.tools[self.arme_equipe].visible = True
 
     def take_dommage(self, dommage):
         self.life -= (dommage - self.protectionTotal())
