@@ -53,7 +53,7 @@ class Game(object):
         self.perso.definir_position(source.px, source.py)
         self.monstres = self.charge_monstres()
 
-        self.collision_manager = collisionManager.CollisionManager(self.perso, self.tilemap)
+        self.collision_manager = collisionManager.CollisionManager(self)
         self.userInput = userInput.Keyboard(self)
 
 
