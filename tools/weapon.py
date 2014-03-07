@@ -1,13 +1,17 @@
 from pygame.locals import *
-import tools
+from basetool import BaseTool
 import pygame
 
 
-class Weapon(tools.Tools):
-    def __init__(self, game, player, name):
-        super(Weapon, self).__init__(game, player, name)
+class Weapon(BaseTool):
+    def __init__(self, game, player, name, obj=None):
+        super(Weapon, self).__init__(game, player, name, obj)
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.hub[0], self.hub[1]+8), (5, 100))
+
+    @classmethod
+    def is_type_for(cls, object_type):
+        return object_type == "weapon"
 
     def draw(self, screen):
         self.hub = self.__followPlayer__()
@@ -20,6 +24,9 @@ class Weapon(tools.Tools):
     def update(self, dt, *args):
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.player.collision_rect[0], self.player.collision_rect[1]+8), (5, 100))
+
+    def handle_collision(self):
+        pass
 
     #overide
     def set_view(self, *args):
