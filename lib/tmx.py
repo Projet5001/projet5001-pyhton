@@ -606,6 +606,16 @@ class ObjectLayer(object):
                     r.append(object)
         return r
 
+    def collide_any(self, rect):
+        '''
+        Find all objects the rect is touching
+        '''
+        r = []
+        for object in self.get_in_region(rect.left, rect.top, rect.right,
+                rect.bottom):
+            r.append(object)
+        return r
+
     def collide(self, rect, propname):
         '''Find all objects the rect is touching that have the indicated
         property name set.

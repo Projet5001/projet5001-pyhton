@@ -1,7 +1,5 @@
 # -*-coding:utf-8-*-
 
-# -*-coding:utf-8-*-
-
 import pygame
 import  chargerImagesSprite
 import actors_actions
@@ -34,7 +32,7 @@ class Actor(pygame.sprite.Sprite):
         self.a_fini_cycle = 0
         self.compteur = 0
 
-        self.tools = []
+        self.tools = {}
 
         #spec of perso
         self.dommage = 1
@@ -43,6 +41,7 @@ class Actor(pygame.sprite.Sprite):
         self.speed = 8
         self.accel = 1
         self.isDoing = 'nothing'
+        self.arme_equipe = 'epe'
 
     def save_x_pos(self):
         self.last_x = self.rect.x
@@ -87,18 +86,24 @@ class Actor(pygame.sprite.Sprite):
         self.image =  self.actors_actions.actionMarche(self.coord_to_move,self.coord_to_move["side"])
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
-        self.tools[0].rect.move_ip(x, y)
+        for tool in self.tools.values():
+            tool.definir_position(self.rect.x, self.rect.y)
         #self.saveLastPos()
 
     def jump(self):
         self.actors_actions.jumpAndAttack("jump",0)
         self.image = self.actors_actions.image
 
-
     def attack(self):
         self.actors_actions.jumpAndAttack("attack",0)
         self.image = self.actors_actions.image
         return self.dommage * self.luck()
+
+    def active_arme(self, active):
+        self.tools[self.arme_equipe].visible = active
+
+    def is_arme_active(self):
+        return self.tools[self.arme_equipe].visible
 
     def take_dommage(self, dommage):
         self.life -= (dommage - self.protectionTotal())
@@ -108,15 +113,14 @@ class Actor(pygame.sprite.Sprite):
         pass
 
     def luck(self):
-        # TODO: pourquoi c'est une fonction si ca retourne toujours 1?
-        # est-ce que c'est sensé être variable?
         return 1
 
     def protectionTotal(self):
         return self.protection
 
     def ajoute_outils(self, tool):
-        self.tools.append(tool)
+        self.tools[tool.name] = tool
+        tool.definir_position(self.rect.x, self.rect.y)
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):

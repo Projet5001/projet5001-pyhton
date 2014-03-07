@@ -1,69 +1,106 @@
 # -*- coding: utf-8 -*-
 from lib import tmx
+from tools.basetool import BaseTool
 
 
 class CollisionManager():
 
-    def __init__(self, player, tmx):
-        self.tmx = tmx
-        self.player = player
+    def __init__(self, game):
+        self.tmx = game.tilemap
+        self.player = game.perso
+        self.game = game
         self.player_groupe = self.tmx.layers['player_layer']
         self.monstre_groupe = self.tmx.layers['monster_layer']
+        self.player_events = []
+        self.tmx_events = []
+
+        self.object_reference = {}
+
+    def set_tilemap(self, tilemap):
+        self.tmx = tilemap
 
     #overide
     def spritecollideany(self, collided = None):
         try:
-            sprite = self.player.tools[0]
+            for tool in self.player.tools.values():
+                sprite = tool
 
-            if collided is None:
-                        for s in self.monstre_groupe:
-                            if sprite.rect.colliderect(s.collision_rect):
-                                return s
-            else:
-                for s in self.monstre_groupe:
-                    if collided(sprite, s):
-                        return s
+                if collided is None:
+                    for s in self.monstre_groupe:
+                        if sprite.is_equippable() and sprite.rect.colliderect(s.collision_rect):
+                            return s
+                else:
+                    for s in self.monstre_groupe:
+                        if collided(sprite, s):
+                            return s
         except KeyError:
             pass
 
         return None
 
-    def player_stackEvents(self, player_events):
+    def player_stackEvents(self):
 
         coll = self.spritecollideany()
         if coll:
             print 'collision'
-            player_events.append(coll)
+            self.player_events.append(coll)
 
-    def player_manageCollisionEvents(self, player_events):
+    def player_manageCollisionEvents(self):
 
-        while len(player_events) > 0:
-            e = player_events.pop()
+        while len(self.player_events) > 0:
+            e = self.player_events.pop()
 
             if e.block and e.attack:
                 e.take_dommage(self.player.attack())
                 print e.life
 
-    def tmx_stackCollisionEvents(self,tmxEvents):
+    def tmx_stackCollisionEvents(self):
 
         boundaries = self.tmx.layers['boundaries']
         walls = self.tmx.layers['walls']
+        objets = None
+        try:
+            objets = self.tmx.layers['objets']
+        except KeyError:
+            pass
+
         for cell in walls.collideLayer(self.player.collision_rect):
-            tmxEvents.append(cell)
-        for cell in boundaries.collide(self.player.collision_rect, 'block'):
-            tmxEvents.append(cell)
+            self.tmx_events.append(cell)
+        for objet in boundaries.collide(self.player.collision_rect, 'block'):
+            tool = None
+            if objet not in self.object_reference:
+                self.object_reference[objet] = \
+                    BaseTool.make_tool(self.game, self.player, objet)
+            else:
+                tool = self.object_reference[objet]
 
-    def tmx_manageCollisionEvents(self, tmx_events):
+            if tool:
+                self.tmx_events.append(tool)
 
-        while len(tmx_events) > 0:
-            e = tmx_events.pop()
+        if objets:
+            for objet in objets.collide_any(self.player.collision_rect):
+                tool = None
+
+                if objet not in self.object_reference:
+                    self.object_reference[objet] = \
+                        BaseTool.make_tool(self.game, self.player, objet)
+                else:
+                    tool = self.object_reference[objet]
+
+                if tool:
+                    self.tmx_events.append(tool)
+
+    def tmx_manageCollisionEvents(self):
+
+        while len(self.tmx_events) > 0:
+            e = self.tmx_events.pop()
+            print e
 
             try:
                 if isinstance(e, tmx.Cell):
                     self.player.resetPos()
-                elif len(tmx_events) == 0 and isinstance(e, tmx.Object):
-                    self.player.resetPos()
-                    #self.game.effectuer_transition(e)
+                elif isinstance(e, BaseTool):
+                    e.handle_collision()
 
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas

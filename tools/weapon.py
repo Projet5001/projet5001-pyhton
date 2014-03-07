@@ -1,20 +1,22 @@
-# -*- coding: utf-8 -*-
-
-import pygame
-from lib import tmx
-from pygame import rect as rect
 from pygame.locals import *
+from basetool import BaseTool
+import pygame
 
 
-class Tools(pygame.sprite.Sprite):
-    def __init__(self, game, player, name):
-        super(Tools, self).__init__()
-        self.game = game
-        self.name = name
-        self.player = player
-        self.visible = False
+class Weapon(BaseTool):
+    def __init__(self, game, player, name, obj=None):
+        super(Weapon, self).__init__(game, player, name, obj)
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.hub[0], self.hub[1]+8), (5, 100))
+        self.image = None
+        self.type = 'weapon'
+
+    @classmethod
+    def is_type_for(cls, object_type):
+        return object_type == "weapon"
+
+    def is_equippable(self):
+        return True
 
     def draw(self, screen):
         self.hub = self.__followPlayer__()
@@ -28,8 +30,7 @@ class Tools(pygame.sprite.Sprite):
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.player.collision_rect[0], self.player.collision_rect[1]+8), (5, 100))
 
-    #overide
-    def set_view(self, *args):
+    def handle_collision(self):
         pass
 
     def __followPlayer__(self):
