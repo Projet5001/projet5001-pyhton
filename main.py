@@ -9,6 +9,7 @@ import playerHud
 import player
 import tools
 import collisionManager
+from tools import weapon
 
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -22,9 +23,6 @@ class Game(object):
         self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
                                 self.screen.get_size())
         self.clock = pygame.time.Clock()
-        #stack pour les events
-        self.tmxEvents = []
-        self.playerEvents = []
 
         #list pour le joueur et monstre
         self.perso = None
@@ -58,17 +56,20 @@ class Game(object):
         self.perso.definir_position(source.px, source.py)
         self.monstres = self.charge_monstres()
 
-        self.collision_manager = collisionManager.CollisionManager(self.perso, self.tilemap)
-
+        self.collision_manager = collisionManager.CollisionManager(self)
         self.userInput = userInput.Keyboard(self)
 
 
 
         #prototype !!!!!!!!!!
-        epe = tools.Tools(self, self.perso, 'epe')
-        self.tilemap.layers.add_named(epe, 'epe')
+        #creation de l'arme
+        epe = weapon.Weapon(self, self.perso, 'epe')
+
+        #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
         self.perso.ajoute_outils(epe)
-        self.perso.tools[0].definir_position(source.px, source.py)
+        self.tilemap.layers.add_named(epe, 'epe')
+
+
         #prototype !!!!!!!!!!
 
 
@@ -119,16 +120,16 @@ class Game(object):
                         self.clocks[key] = value - 1
 
             #Récupère les collisions
-            self.collision_manager.tmx_stackCollisionEvents(self.tmxEvents)
+            self.collision_manager.tmx_stackCollisionEvents()
 
             #stack les collision de monstre
-            self.collision_manager.player_stackEvents(self.playerEvents)
+            self.collision_manager.player_stackEvents()
 
             #gère les évenement crée par le joureur
-            self.collision_manager.player_manageCollisionEvents(self.playerEvents)
+            self.collision_manager.player_manageCollisionEvents()
 
             #Gère les colisions selon leur nature
-            self.collision_manager.tmx_manageCollisionEvents(self.tmxEvents)
+            self.collision_manager.tmx_manageCollisionEvents()
 
             self.tilemap.update(dt / 1000, self)
 
@@ -157,9 +158,17 @@ class Game(object):
         return player.Player(os.path.join(rep_sprites, "sprite-Hero4.png"),
                              (0, 0), self.player_layer)
 
-
     def effectuer_transition(self, limite):
         if not isinstance(limite, tmx.Object):
+            pass
+
+        try:
+            if limite.properties['barree']:
+                clef_requise = limite.properties['clef']
+                if not clef_requise in self.perso.tools:
+                    return
+        except KeyError:
+            # la porte n'est probablement pas barrée...
             pass
 
         self.deleteHuds()
@@ -167,6 +176,8 @@ class Game(object):
         #recupere le groupe player
         players = self.tilemap.layers['player_layer']
         monstres = self.tilemap.layers['monster_layer']
+        # future: equippement = self.tilemap.layers[self.perso.arme_equipe]
+        equippement = self.tilemap.layers['epe']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -175,10 +186,13 @@ class Game(object):
                          self.screen.get_size())
             if nouvelle_carte:
                 self.tilemap = nouvelle_carte
+                self.collision_manager.set_tilemap(self.tilemap)
                 source = \
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.add_named(players, 'player_layer')
                 self.tilemap.layers.add_named(monstres, 'monster_layer')
+                # future: self.tilemap.layers.add_named(equipement, self.perso.arme_equipe)
+                self.tilemap.layers.add_named(equippement, 'epe')
                 self.createHuds()
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()

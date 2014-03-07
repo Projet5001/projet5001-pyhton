@@ -47,10 +47,8 @@ class Keyboard():
         pressedkeys = pygame.key.get_pressed()
         self.actor.saveLastPos()
 
-        if pressedkeys[pygame.K_LALT] and self.actor.tools[0].visible == False:
-         self.actor.tools[0].visible = True
-        elif pressedkeys[pygame.K_LALT] and self.actor.tools[0].visible == True:
-            self.actor.tools[0].visible = False
+        if pressedkeys[pygame.K_LALT]:
+            self.actor.active_arme(not self.actor.is_arme_active())
 
         if desactiv_commande  == 1:
             pass
@@ -75,4 +73,5 @@ class Keyboard():
 
             if pressedkeys[pygame.K_c]:
                 self.attack()
+
 
