@@ -59,7 +59,6 @@ class Game(object):
         epe = weapon.Weapon(self, self.perso, 'epe')
         self.tilemap.layers.add_named(epe, 'epe')
         self.perso.ajoute_outils(epe)
-        self.perso.tools[0].definir_position(source.px, source.py)
         #prototype !!!!!!!!!!
 
 
