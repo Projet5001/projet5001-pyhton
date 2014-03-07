@@ -1,20 +1,38 @@
 # -*-coding:utf-8-*-
 
+# -*-coding:utf-8-*-
+
 import pygame
+import  chargerImagesSprite
+import actors_actions
 from pygame import rect as rect
 
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, image, position, *groups):
         super(Actor, self).__init__(*groups)
-        self.image = pygame.image.load(image)
+        # self.image = pygame.image.load(image)
+        self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image)
+
+        self.personnage = self.charger_Images_Sprite.personnage
+        self.image = self.personnage[4]
 
         self.rect = pygame.rect.Rect(position, self.image.get_size())
         self.collision_rect = pygame.rect.Rect(position[0] + 2,
                                                position[1] + 30,
                                                25,
                                                20)
+
+        self.actors_actions = actors_actions.ActorActions(self.image, self.personnage)
+
         self.saveLastPos()
+
+        self.coord_to_move = {"posX":0, "posY":0 ,"side":"none"}
+        self.cycle_est_fini = False
+        self.compteur_cycle = 0
+        self.horloge = 0
+        self.a_fini_cycle = 0
+        self.compteur = 0
 
         self.tools = []
 
@@ -59,12 +77,27 @@ class Actor(pygame.sprite.Sprite):
         self.collision_rect.y = y
         self.saveLastPos()
 
-    def move(self, x, y):
+
+    def move(self, x, y,laDirection):
+        #print "dans la class Actor la direction recu ===  "+str(laDirection)
+        self.coord_to_move["posX"] = x
+        self.coord_to_move["posY"] = y
+        self.coord_to_move["side"] = laDirection
+
+        self.image =  self.actors_actions.actionMarche(self.coord_to_move,self.coord_to_move["side"])
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
         self.tools[0].rect.move_ip(x, y)
+        #self.saveLastPos()
+
+    def jump(self):
+        self.actors_actions.jumpAndAttack("jump",0)
+        self.image = self.actors_actions.image
+
 
     def attack(self):
+        self.actors_actions.jumpAndAttack("attack",0)
+        self.image = self.actors_actions.image
         return self.dommage * self.luck()
 
     def take_dommage(self, dommage):
