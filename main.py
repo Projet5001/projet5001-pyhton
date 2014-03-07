@@ -136,7 +136,7 @@ class Game(object):
         try:
             if limite.properties['barree']:
                 clef_requise = limite.properties['clef']
-                if not clef_requise in self.perso.objets:
+                if not clef_requise in self.perso.tools:
                     return
         except KeyError:
             # la porte n'est probablement pas barrée...
