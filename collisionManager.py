@@ -60,7 +60,7 @@ class CollisionManager():
         walls = self.tmx.layers['walls']
         objets = None
         try:
-            objets = self.game.tilemap.layers['objets']
+            objets = self.tmx.layers['objets']
         except KeyError:
             pass
 
