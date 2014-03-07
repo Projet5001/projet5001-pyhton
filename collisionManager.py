@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from lib import tmx
+from tools.basetool import BaseTool
 
 
 class CollisionManager():
@@ -12,6 +13,8 @@ class CollisionManager():
         self.monstre_groupe = self.tmx.layers['monster_layer']
         self.player_events = []
         self.tmx_events = []
+
+        self.object_reference = {}
 
     def set_tilemap(self, tilemap):
         self.tmx = tilemap
@@ -62,27 +65,41 @@ class CollisionManager():
 
         for cell in walls.collideLayer(self.player.collision_rect):
             self.tmx_events.append(cell)
-        for cell in boundaries.collide(self.player.collision_rect, 'block'):
-            self.tmx_events.append(cell)
+        for objet in boundaries.collide(self.player.collision_rect, 'block'):
+            tool = None
+            if objet not in self.object_reference:
+                self.object_reference[objet] = \
+                    BaseTool.make_tool(self.game, self.player, objet)
+            else:
+                tool = self.object_reference[objet]
+
+            if tool:
+                self.tmx_events.append(tool)
+
         if objets:
-            for objet in objets.collide(self.player.collision_rect, 'type'):
-                self.tmx_events.append(objet)
+            for objet in objets.collide_any(self.player.collision_rect):
+                tool = None
+
+                if objet not in self.object_reference:
+                    self.object_reference[objet] = \
+                        BaseTool.make_tool(self.game, self.player, objet)
+                else:
+                    tool = self.object_reference[objet]
+
+                if tool:
+                    self.tmx_events.append(tool)
 
     def tmx_manageCollisionEvents(self):
 
         while len(self.tmx_events) > 0:
             e = self.tmx_events.pop()
+            print e
 
             try:
                 if isinstance(e, tmx.Cell):
                     self.player.resetPos()
-                elif len(self.tmx_events) == 0 and isinstance(e, tmx.Object):
-                    if e.type == 'porte' or e.type == 'escalier':
-                        self.player.resetPos()
-                        self.game.effectuer_transition(e)
-                    else:
-                        self.player.objets.append(e.name)
-                        e.visible = False
+                elif isinstance(e, BaseTool):
+                    e.handle_collision()
 
             except KeyError:
                 # pas de clé block ici (e.g. pour un layer, où on ne peut pas
