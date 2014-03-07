@@ -4,23 +4,26 @@ import pygame
 
 
 class ActorActions(pygame.sprite.Sprite):
-    def __init__(self,image,personnage):
+    def __init__(self,image, sprite_sheet, actor):
         #self.actor = actor
         self.quatreDirections = {}
         self.reinitValSiDetecter()
 
-        self.image =  image
-        self.personnage =  personnage
-
+        self.image = image
+        self.sprite_sheet = sprite_sheet
+        self.actor = actor
         self.lesImages = 4
         self.imageAngleBas = 0
         self.imageAngleHaut = 0
-        self.derniere_direction_perso  = "none"
+        self.derniere_direction_perso = "none"
         self.aEteSauver = 0
-        self.last_side_before_action = ["none","none"] # a nest pas utliser pour linstant
+        self.last_side_before_action = ["none", "none"] # a nest pas utliser pour linstant
 
-        self.intervalImage = {"debut":0,"fin":0}
-
+        self.intervalImage = {"debut": 0, "fin": 0}
+        self.persoJump = pygame.USEREVENT + 1
+        self.persoAttack = pygame.USEREVENT + 2
+        self.nbrFrame = 0
+        self.desactiv_commande = 0
 
     def actionMarche(self,coord_to_move,laDirection):
        # print "ENTER____walkImage_____________________laDirection___" +str(laDirection)
@@ -35,11 +38,11 @@ class ActorActions(pygame.sprite.Sprite):
             else:
                 self.last_side_before_action[0] = "right"
             self.last_side_before_action[1] = "down"
-            self.intervalImage["debut"] =  0
-            self.intervalImage["fin"] =  6
+            self.intervalImage["debut"] = 0
+            self.intervalImage["fin"] = 6
             self.sequenceImages(self.intervalImage,"none","angle_bas")
 
-        elif  self.vaEnAngleHaut != 0:
+        elif self.vaEnAngleHaut != 0:
             #print "IM going vaEnAngleHaut >>>>>>>>>>vaEnAngleHaut"
             if self.vaEnAngleHaut == -1:
                 self.last_side_before_action[0] = "left"
@@ -72,8 +75,8 @@ class ActorActions(pygame.sprite.Sprite):
                 #print "IM going right >>>>>>>>>>right"
                 self.last_side_before_action[0] = "none"
                 self.last_side_before_action[1] = "right"
-                self.intervalImage["debut"] =  14
-                self.intervalImage["fin"] =  20
+                self.intervalImage["debut"] = 14
+                self.intervalImage["fin"] = 20
                 self.sequenceImages(self.intervalImage,"right","droit")
 
             if laDirection == "left":
@@ -144,21 +147,21 @@ class ActorActions(pygame.sprite.Sprite):
             if self.lesImages < intervalle_img["debut"] or self.lesImages > intervalle_img["fin"]:
                  print "reset images"
                  self.lesImages = intervalle_img["debut"]
-            self.image = self.personnage[self.lesImages]
+            self.image = self.sprite_sheet[self.lesImages]
             self.lesImages += 1
 
         elif type_image == "angle_bas":
             #print " inside angle_bas  self.imageAngleBas === "+str(self.imageAngleBas)
             if self.imageAngleBas < intervalle_img["debut"] or self.imageAngleBas > intervalle_img["fin"]:
                  self.imageAngleBas = intervalle_img["debut"]
-            self.image = self.personnage[self.imageAngleBas]
+            self.image = self.sprite_sheet[self.imageAngleBas]
             self.imageAngleBas += 1
 
         elif type_image == "angle_haut":
             #print " inside angle_haut  self.imageAngleHaut === "+str(self.imageAngleHaut)
             if self.imageAngleHaut < intervalle_img["debut"] or self.imageAngleHaut > intervalle_img["fin"]:
                  self.imageAngleHaut = intervalle_img["debut"]
-            self.image = self.personnage[self.imageAngleHaut]
+            self.image = self.sprite_sheet[self.imageAngleHaut]
             self.imageAngleHaut += 1
 
         self.reinitValSiDetecter()
@@ -201,3 +204,28 @@ class ActorActions(pygame.sprite.Sprite):
         self.quatreDirections["up"] = 0
         self.quatreDirections["right"] = 0
         self.quatreDirections["left"] = 0
+
+    def update(self):
+        for event in pygame.event.get():
+                if event.type == self.persoJump:
+                    #print "                    PERSO JUMP"
+                    self.nbrFrame += 1
+                    self.desactiv_commande = 1
+                    #self.actor.jump()
+
+                    if self.nbrFrame == 7:
+                        pygame.time.set_timer(self.persoJump, 0)#1 second is 1000 milliseconds
+                        self.desactiv_commande = 0
+                        self.nbrFrame = 0
+
+                if event.type == self.persoAttack:
+                    #print "                     PERSO ATTACK"
+                    self.nbrFrame += 1
+                    self.desactiv_commande  = 1
+                    #self.actor.attack()
+
+                    if self.nbrFrame == 7:
+                        pygame.time.set_timer(self.persoAttack, 0)#1 second is 1000 milliseconds
+                        self.desactiv_commande =0
+                        self.nbrFrame = 0
+                        #self.perso.jump()
