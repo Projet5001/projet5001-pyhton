@@ -13,6 +13,9 @@ class Weapon(BaseTool):
     def is_type_for(cls, object_type):
         return object_type == "weapon"
 
+    def is_equippable(self):
+        return True
+
     def draw(self, screen):
         self.hub = self.__followPlayer__()
         pygame.draw.rect(screen, (140,240,130), ((self.hub[0], self.hub[1]+8), (5, 100)))
@@ -26,10 +29,6 @@ class Weapon(BaseTool):
         self.rect = Rect((self.player.collision_rect[0], self.player.collision_rect[1]+8), (5, 100))
 
     def handle_collision(self):
-        pass
-
-    #overide
-    def set_view(self, *args):
         pass
 
     def __followPlayer__(self):

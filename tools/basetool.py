@@ -14,6 +14,9 @@ class BaseTool(pygame.sprite.Sprite):
         self.visible = False
         self.tmx_object = obj
 
+    def is_equippable(self):
+        return False
+
     def definir_position(self, x, y):
         pass
 
@@ -21,6 +24,9 @@ class BaseTool(pygame.sprite.Sprite):
         pass
 
     def handle_collision(self):
+        pass
+
+    def set_view(self, *args):
         pass
 
     @classmethod

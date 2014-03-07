@@ -27,7 +27,7 @@ class CollisionManager():
 
                 if collided is None:
                     for s in self.monstre_groupe:
-                        if sprite.rect.colliderect(s.collision_rect):
+                        if sprite.is_equippable() and sprite.rect.colliderect(s.collision_rect):
                             return s
                 else:
                     for s in self.monstre_groupe:
