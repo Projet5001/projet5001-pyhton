@@ -9,7 +9,7 @@ import playerHud
 import player
 import tools
 import collisionManager
-import weapon
+from tools import weapon
 
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
