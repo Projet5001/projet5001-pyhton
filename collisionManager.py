@@ -22,16 +22,17 @@ class CollisionManager():
     #overide
     def spritecollideany(self, collided = None):
         try:
-            sprite = self.player.tools[0]
+            for tool in self.player.tools.values():
+                sprite = tool
 
-            if collided is None:
-                        for s in self.monstre_groupe:
-                            if sprite.rect.colliderect(s.collision_rect):
-                                return s
-            else:
-                for s in self.monstre_groupe:
-                    if collided(sprite, s):
-                        return s
+                if collided is None:
+                    for s in self.monstre_groupe:
+                        if sprite.rect.colliderect(s.collision_rect):
+                            return s
+                else:
+                    for s in self.monstre_groupe:
+                        if collided(sprite, s):
+                            return s
         except KeyError:
             pass
 
