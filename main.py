@@ -9,6 +9,7 @@ import playerHud
 import player
 import tools
 import collisionManager
+import weapon
 
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
@@ -22,9 +23,6 @@ class Game(object):
         self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
                                 self.screen.get_size())
         self.clock = pygame.time.Clock()
-        #stack pour les events
-        self.tmxEvents = []
-        self.playerEvents = []
 
         #list pour le joueur et monstre
         self.perso = None
@@ -45,17 +43,20 @@ class Game(object):
     def start(self):
         #Trouve l'emplacement du héro
         source = self.tilemap.layers['boundaries'].find_source("start")
-        self.collision_manager = collisionManager.CollisionManager(self)
+
         self.tilemap.set_focus(source.px, source.py, True)
+
         self.perso = self.charge_player()
         self.perso.definir_position(source.px, source.py)
         self.monstres = self.charge_monstres()
+
+        self.collision_manager = collisionManager.CollisionManager(self)
         self.userInput = userInput.Keyboard(self)
 
 
 
         #prototype !!!!!!!!!!
-        epe = tools.Tools(self, self.perso, 'epe')
+        epe = weapon.Weapon(self, self.perso, 'epe')
         self.tilemap.layers.add_named(epe, 'epe')
         self.perso.ajoute_outils(epe)
         self.perso.tools[0].definir_position(source.px, source.py)
@@ -89,18 +90,16 @@ class Game(object):
                         self.clocks[key] = value - 1
 
             #Récupère les collisions
-            self.collision_manager.tmx_stackCollisionEvents(self.perso, self.tmxEvents)
+            self.collision_manager.tmx_stackCollisionEvents()
 
             #stack les collision de monstre
-            self.collision_manager.player_stackEvents(self.perso,
-                                                    self.monster_layer,
-                                                    self.playerEvents)
+            self.collision_manager.player_stackEvents()
 
             #gère les évenement crée par le joureur
-            self.collision_manager.player_manageCollisionEvents(self.perso, self.playerEvents)
+            self.collision_manager.player_manageCollisionEvents()
 
             #Gère les colisions selon leur nature
-            self.collision_manager.tmx_manageCollisionEvents(self.perso, self.tmxEvents)
+            self.collision_manager.tmx_manageCollisionEvents()
 
             self.tilemap.update(dt / 1000, self)
 
@@ -118,7 +117,7 @@ class Game(object):
         try:
             for cell in self.tilemap.layers['pnjs'].find('monstre'):
                 m = monster.Monster(os.path.join(rep_sprites, "perso.png"),
-                                    (cell.px, cell.py), self.monster_layer)
+                                   (cell.px, cell.py), self.monster_layer)
                 monstres.append(m)
         except KeyError:
             pass
@@ -156,6 +155,7 @@ class Game(object):
                          self.screen.get_size())
             if nouvelle_carte:
                 self.tilemap = nouvelle_carte
+                self.collision_manager.set_tilemap(self.tilemap)
                 source = \
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.add_named(players, 'player_layer')
