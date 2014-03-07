@@ -21,7 +21,7 @@ class Actor(pygame.sprite.Sprite):
                                                25,
                                                20)
 
-        self.actors_actions = actors_actions.ActorActions(self.image, self.personnage)
+        self.actors_actions = actors_actions.ActorActions(self.image, self.personnage, self)
 
         self.saveLastPos()
 
