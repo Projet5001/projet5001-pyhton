@@ -16,8 +16,7 @@ class Actor(pygame.sprite.Sprite):
                                                20)
         self.saveLastPos()
 
-        self.tools = []
-        self.objets = []
+        self.tools = {}
 
         #spec of perso
         self.dommage = 1
