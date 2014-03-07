@@ -2,7 +2,6 @@
 
 import pygame
 import importlib
-import tools
 
 
 class BaseTool(pygame.sprite.Sprite):
@@ -41,6 +40,11 @@ class BaseTool(pygame.sprite.Sprite):
     '''
     @classmethod
     def __load_subclasses(classe):
-        for module in tools.__all__:
-            importlib.import_module(".".join(["tools", module]))
+        try:
+            import tools
+        except ImportError:
+            pass
+        finally:
+            for module in tools.__all__:
+                importlib.import_module(".".join(["tools", module]))
 
