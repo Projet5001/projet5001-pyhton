@@ -146,6 +146,8 @@ class Game(object):
         #recupere le groupe player
         players = self.tilemap.layers['player_layer']
         monstres = self.tilemap.layers['monster_layer']
+        # future: equippement = self.tilemap.layers[self.perso.arme_equipe]
+        equippement = self.tilemap.layers['epe']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -159,6 +161,8 @@ class Game(object):
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.add_named(players, 'player_layer')
                 self.tilemap.layers.add_named(monstres, 'monster_layer')
+                # future: self.tilemap.layers.add_named(equipement, self.perso.arme_equipe)
+                self.tilemap.layers.add_named(equippement, 'epe')
                 self.createHuds()
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()
