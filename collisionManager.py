@@ -51,7 +51,7 @@ class CollisionManager():
             e = self.player_events.pop()
 
             if e.block and e.attack:
-                e.take_dommage(self.player.attack())
+                e.take_dommage(self.player.calcul_dommage())
                 print e.life
 
     def tmx_stackCollisionEvents(self):

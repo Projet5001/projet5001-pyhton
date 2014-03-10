@@ -97,6 +97,8 @@ class Actor(pygame.sprite.Sprite):
     def attack(self):
         self.actors_actions.jumpAndAttack("attack",0)
         self.image = self.actors_actions.image
+
+    def calcul_dommage(self):
         return self.dommage * self.luck()
 
     def active_arme(self, active):
