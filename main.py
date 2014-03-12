@@ -193,11 +193,10 @@ class Game(object):
                 self.tilemap.layers.add_named(monstres, 'monster_layer')
                 # future: self.tilemap.layers.add_named(equipement, self.perso.arme_equipe)
                 self.tilemap.layers.add_named(equippement, 'epe')
-                self.createHuds()
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()
                 self.tilemap.set_focus(source.px, source.py, True)
-
+                self.createHuds()
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud",
                                   self.perso,
