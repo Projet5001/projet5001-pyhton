@@ -84,49 +84,48 @@ class ActorActions(pygame.sprite.Sprite):
         self.actor.is_doing = action_du_perso
 
         if action_du_perso == "attack":
-            self.le_set_image = 28
+            le_set_image = 28
         else:
-            self.le_set_image = 0
+            le_set_image = 0
 
         if self.direction_angle_bas():
             self.derniere_direction_perso = "none"
-            self.intervalImage["debut"] =  28 +  self.le_set_image
-            self.intervalImage["fin"] =  34 +  self.le_set_image
+            self.intervalImage["debut"] =  28 + le_set_image
+            self.intervalImage["fin"] =  34 + le_set_image
             self.sequenceImages(self.intervalImage,"angle_bas")
 
         elif  self.direction_angle_haut():
             self.derniere_direction_perso = "none"
-            self.intervalImage["debut"] =  35 +  self.le_set_image
-            self.intervalImage["fin"] =  41 +  self.le_set_image
+            self.intervalImage["debut"] =  35 + le_set_image
+            self.intervalImage["fin"] =  41 + le_set_image
             self.sequenceImages(self.intervalImage,"angle_haut")
 
         else:
             if self.derniere_direction_perso == "down":
-                self.intervalImage["debut"] =  28 +  self.le_set_image
-                self.intervalImage["fin"] =  34 +  self.le_set_image
+                self.intervalImage["debut"] =  28 + le_set_image
+                self.intervalImage["fin"] =  34 + le_set_image
                 self.sequenceImages(self.intervalImage,"droit")
 
 
             if self.derniere_direction_perso == "up":
-                self.intervalImage["debut"] =  35 +  self.le_set_image
-                self.intervalImage["fin"] =  41 +  self.le_set_image
+                self.intervalImage["debut"] =  35 + le_set_image
+                self.intervalImage["fin"] =  41 + le_set_image
                 self.sequenceImages(self.intervalImage,"droit")
 
 
             if self.derniere_direction_perso == "right":
-                self.intervalImage["debut"] =  42 +  self.le_set_image
-                self.intervalImage["fin"] =  48 +  self.le_set_image
+                self.intervalImage["debut"] =  42 + le_set_image
+                self.intervalImage["fin"] =  48 + le_set_image
                 self.sequenceImages(self.intervalImage,"droit")
 
 
             if self.derniere_direction_perso == "left":
-                self.intervalImage["debut"] =  49 +  self.le_set_image
-                self.intervalImage["fin"] =  55 +  self.le_set_image
+                self.intervalImage["debut"] =  49 + le_set_image
+                self.intervalImage["fin"] =  55 + le_set_image
                 self.sequenceImages(self.intervalImage,"droit")
 
 
         self.__reset_quatreDirections__()
-
         self.__sauve_direction_effectue__()
         return self.image
 
