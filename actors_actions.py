@@ -24,7 +24,8 @@ class ActorActions(pygame.sprite.Sprite):
         self.event_attack = pygame.USEREVENT + 2
         self.nbrFrame = 0
 
-    def actionMarche(self,coord_to_move):
+
+    def mouvement(self,coord_to_move):
 
         laDirection = coord_to_move["side"]
         self.derniere_direction_perso = coord_to_move["side"]
@@ -75,7 +76,7 @@ class ActorActions(pygame.sprite.Sprite):
 
 
 
-    def jumpAndAttack(self, action_du_perso):
+    def action(self, action_du_perso):
         self.actor.is_doing = action_du_perso
         self.le_set_image = 0 #
         if action_du_perso == "attack":

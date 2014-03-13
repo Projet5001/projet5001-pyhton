@@ -84,18 +84,18 @@ class Actor(pygame.sprite.Sprite):
         self.coord_to_move["posY"] = y
         self.coord_to_move["side"] = laDirection
 
-        self.image =  self.actors_actions.actionMarche(self.coord_to_move)
+        self.image =  self.actors_actions.mouvement(self.coord_to_move)
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
         for tool in self.tools.values():
             tool.definir_position(self.rect.x, self.rect.y)
 
     def jump(self):
-        self.actors_actions.jumpAndAttack("jump")
+        self.actors_actions.action("jump")
         self.image = self.actors_actions.image
 
     def attack(self):
-        self.actors_actions.jumpAndAttack("attack")
+        self.actors_actions.action("attack")
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
