@@ -91,11 +91,12 @@ class Actor(pygame.sprite.Sprite):
         #self.saveLastPos()
 
     def jump(self):
-        self.actors_actions.jumpAndAttack("jump",0)
+
+        self.actors_actions.jumpAndAttack("jump")
         self.image = self.actors_actions.image
 
     def attack(self):
-        self.actors_actions.jumpAndAttack("attack",0)
+        self.actors_actions.jumpAndAttack("attack")
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
