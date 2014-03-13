@@ -77,7 +77,7 @@ class Game(object):
     def mainloop(self):
         while True:
             dt = self.clock.tick(self.FPS)
-            # ces  5 lignes sont recquises pour passer les events
+            # ces lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
 
