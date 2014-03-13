@@ -30,11 +30,13 @@ class Keyboard():
 
     def jump(self):
         self.actor.jump()
-        pygame.time.set_timer(self.actor.actors_actions.persoJump, 150)#1 second is 1000 milliseconds
+        #déclanche un event
+        pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
 
     def attack(self):
-        self.attack()
-        pygame.time.set_timer(self.actor.actors_actions.persoAttack, 150)#1 second is 1000 milliseconds
+        self.actor.attack()
+        #déclanche un event
+        pygame.time.set_timer(self.actor.actors_actions.event_attack, 70)#1 second is 1000 milliseconds
 
     def block(self):
         self.actor.block()

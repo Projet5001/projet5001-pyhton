@@ -9,8 +9,8 @@ import playerHud
 import player
 import tools
 import collisionManager
+import actors_actions
 from tools import weapon
-
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
 rep_tilesets = os.path.join(rep_assets, "tilesets")
@@ -80,11 +80,19 @@ class Game(object):
             # ces  5 lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     return
                 if event.type == pygame.KEYDOWN \
                         and event.key == pygame.K_ESCAPE:
                     return
+                if event.type == self.perso.actors_actions.event_jump:
+                    print event
+                    self.perso.actors_actions.update_frame_jump(event)
+
+                if event.type == self.perso.actors_actions.event_attack:
+                    print event
+                    self.perso.actors_actions.update_frame_attack(event)
 
             # doit etre executé dans cette ordre
 
