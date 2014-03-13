@@ -10,7 +10,6 @@ class Keyboard():
         self.actor = game.perso
         self.speed = game.perso.speed
         self.accel = game.perso.accel
-        self.desactiv_commande = self.actor.actors_actions.desactiv_commande
         self.coord_left = [-(self.speed * self.accel), 0]
         self.coord_right = [(self.speed * self.accel), 0]
         self.coord_up = [0, -(self.speed * self.accel)]
@@ -38,7 +37,7 @@ class Keyboard():
         if self.actor.is_doing == "nothing":
             self.actor.attack()
             #déclanche un event
-            pygame.time.set_timer(self.actor.actors_actions.event_attack, 60)#1 second is 1000 milliseconds
+            pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
 
     def block(self):
         self.actor.block()
@@ -54,8 +53,6 @@ class Keyboard():
         if pressedkeys[pygame.K_LALT]:
             self.actor.active_arme(not self.actor.is_arme_active())
 
-        if self.desactiv_commande == 1:
-            pass
         else:
             if pressedkeys[pygame.K_LEFT]:
                 self.move_left()

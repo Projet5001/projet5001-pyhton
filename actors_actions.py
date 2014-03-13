@@ -209,7 +209,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.nbrFrame += 1
 
             #reset frame
-            if self.nbrFrame == 7:
+            if self.nbrFrame == 6:
                 pygame.time.set_timer(self.event_jump, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
@@ -222,7 +222,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.nbrFrame += 1
 
             #reset frame
-            if self.nbrFrame == 7:
+            if self.nbrFrame == 6:
                 pygame.time.set_timer(self.event_attack, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"

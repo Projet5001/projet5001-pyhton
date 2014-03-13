@@ -87,11 +87,9 @@ class Game(object):
                         and event.key == pygame.K_ESCAPE:
                     return
                 if event.type == self.perso.actors_actions.event_jump:
-                    print event
                     self.perso.actors_actions.update_frame_jump(event)
 
                 if event.type == self.perso.actors_actions.event_attack:
-                    print event
                     self.perso.actors_actions.update_frame_attack(event)
 
             # doit etre executé dans cette ordre
