@@ -22,17 +22,18 @@ class Actor(pygame.sprite.Sprite):
                                                20)
 
         self.actors_actions = actors_actions.ActorActions(self.image, self.personnage, self)
-
+        self.tools = {}
         self.saveLastPos()
 
         self.coord_to_move = {"posX":0, "posY":0 ,"side":"none"}
+
+        #encoure utile ???
         self.cycle_est_fini = False
         self.compteur_cycle = 0
         self.horloge = 0
         self.a_fini_cycle = 0
         self.compteur = 0
 
-        self.tools = {}
 
         #spec of perso
         self.dommage = 1
@@ -83,7 +84,7 @@ class Actor(pygame.sprite.Sprite):
         self.coord_to_move["posY"] = y
         self.coord_to_move["side"] = laDirection
 
-        self.image =  self.actors_actions.actionMarche(self.coord_to_move,self.coord_to_move["side"])
+        self.image =  self.actors_actions.actionMarche(self.coord_to_move)
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
         for tool in self.tools.values():
