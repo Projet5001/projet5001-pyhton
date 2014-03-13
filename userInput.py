@@ -29,14 +29,16 @@ class Keyboard():
         self.actor.move(self.coord_down[0],self.coord_down[1], "down")
 
     def jump(self):
-        self.actor.jump()
-        #déclanche un event
-        pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
+        if self.actor.is_doing == "nothing":
+            self.actor.jump()
+            #déclanche un event
+            pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
 
     def attack(self):
-        self.actor.attack()
-        #déclanche un event
-        pygame.time.set_timer(self.actor.actors_actions.event_attack, 70)#1 second is 1000 milliseconds
+        if self.actor.is_doing == "nothing":
+            self.actor.attack()
+            #déclanche un event
+            pygame.time.set_timer(self.actor.actors_actions.event_attack, 60)#1 second is 1000 milliseconds
 
     def block(self):
         self.actor.block()

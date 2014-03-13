@@ -23,7 +23,6 @@ class ActorActions(pygame.sprite.Sprite):
         self.event_jump = pygame.USEREVENT + 1
         self.event_attack = pygame.USEREVENT + 2
         self.nbrFrame = 0
-        self.desactiv_commande = 0
 
     def actionMarche(self,coord_to_move,laDirection):
        # print "ENTER____walkImage_____________________laDirection___" +str(laDirection)
@@ -93,6 +92,7 @@ class ActorActions(pygame.sprite.Sprite):
 
 
     def jumpAndAttack(self, action_du_perso):
+        self.actor.is_doing = action_du_perso
         self.le_set_image = 0 # egal sequence d images de jump
         if action_du_perso == "attack":
             self.le_set_image = 28
@@ -142,8 +142,7 @@ class ActorActions(pygame.sprite.Sprite):
 
         if type_image == "droit":
             print self.lesImages
-            #print " inside sequenceImages droit et self.lesImages === "+str(self.lesImages)
-            if intervalle_img["debut"] > self.lesImages or  self.lesImages > intervalle_img["fin"]:
+            if self.lesImages < intervalle_img["debut"] or  self.lesImages > intervalle_img["fin"]:
                  print "reset images"
                  self.lesImages = intervalle_img["debut"]
 
@@ -151,14 +150,12 @@ class ActorActions(pygame.sprite.Sprite):
             self.lesImages += 1
 
         elif type_image == "angle_bas":
-            #print " inside angle_bas  self.imageAngleBas === "+str(self.imageAngleBas)
             if self.imageAngleBas < intervalle_img["debut"] or self.imageAngleBas > intervalle_img["fin"]:
                  self.imageAngleBas = intervalle_img["debut"]
             self.image = self.sprite_sheet[self.imageAngleBas]
             self.imageAngleBas += 1
 
         elif type_image == "angle_haut":
-            #print " inside angle_haut  self.imageAngleHaut === "+str(self.imageAngleHaut)
             if self.imageAngleHaut < intervalle_img["debut"] or self.imageAngleHaut > intervalle_img["fin"]:
                  self.imageAngleHaut = intervalle_img["debut"]
             self.image = self.sprite_sheet[self.imageAngleHaut]
@@ -208,29 +205,27 @@ class ActorActions(pygame.sprite.Sprite):
     def update_frame_jump(self,event):
 
         if event.type == self.event_jump:
-            #print "                    PERSO JUMP"
-
             self.actor.jump()
             self.nbrFrame += 1
 
+            #reset frame
             if self.nbrFrame == 7:
                 pygame.time.set_timer(self.event_jump, 0)#1 second is 1000 milliseconds
-                #self.desactiv_commande = 0
                 self.nbrFrame = 0
+                self.actor.is_doing = "nothing"
 
 
     def update_frame_attack(self,event):
 
         if event.type == self.event_attack:
-            #print "                     PERSO ATTACK"
             self.actor.attack()
             self.nbrFrame += 1
 
-
+            #reset frame
             if self.nbrFrame == 7:
                 pygame.time.set_timer(self.event_attack, 0)#1 second is 1000 milliseconds
-                #self.desactiv_commande =0
                 self.nbrFrame = 0
+                self.actor.is_doing = "nothing"
 
 
     def update(self,event):
