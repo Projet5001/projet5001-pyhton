@@ -7,7 +7,7 @@ class ActorActions(pygame.sprite.Sprite):
     def __init__(self,image, sprite_sheet, actor):
 
         self.quatreDirections = {}
-        self.reinitValSiDetecter()
+        self.__reset_quatreDirections__()
 
         self.image = image
         self.sprite_sheet = sprite_sheet
@@ -25,12 +25,15 @@ class ActorActions(pygame.sprite.Sprite):
         self.nbrFrame = 0
 
 
+    def __sauve_direction_effectue__(self):
+        if self.derniere_direction_perso != "none":
+            self.quatreDirections[self.derniere_direction_perso] = 1
+        self.aEteSauver += 1
+
     def mouvement(self,coord_to_move):
 
         laDirection = coord_to_move["side"]
         self.derniere_direction_perso = coord_to_move["side"]
-
-
 
         #diagonal
         if self.direction_angle_bas():
@@ -72,10 +75,7 @@ class ActorActions(pygame.sprite.Sprite):
                 self.intervalImage["fin"] =  27
                 self.sequenceImages(self.intervalImage,"droit")
 
-        if self.derniere_direction_perso != "none":
-            self.quatreDirections[self.derniere_direction_perso] = 1
-
-        self.aEteSauver  += 1
+        self.__sauve_direction_effectue__()
         return self.image
 
 
@@ -87,9 +87,6 @@ class ActorActions(pygame.sprite.Sprite):
             self.le_set_image = 28
         else:
             self.le_set_image = 0
-
-
-
 
         if self.direction_angle_bas():
             self.derniere_direction_perso = "none"
@@ -128,12 +125,9 @@ class ActorActions(pygame.sprite.Sprite):
                 self.sequenceImages(self.intervalImage,"droit")
 
 
-        self.reinitValSiDetecter()
+        self.__reset_quatreDirections__()
 
-        if self.derniere_direction_perso != "none":
-            self.quatreDirections[self.derniere_direction_perso] = 1
-
-        self.aEteSauver  += 1
+        self.__sauve_direction_effectue__()
         return self.image
 
 
@@ -161,6 +155,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.imageAngleHaut += 1
 
     def direction_angle_bas(self):
+
         if  ((self.derniere_direction_perso == "down"  and self.quatreDirections["right"] > 0) or
              ( self.quatreDirections["right"] > 0 and self.derniere_direction_perso == "down"  )):
             return True
@@ -171,6 +166,7 @@ class ActorActions(pygame.sprite.Sprite):
 
 
     def direction_angle_haut(self):
+
         if  ((self.derniere_direction_perso == "up"  and self.quatreDirections["right"] > 0) or
              ( self.quatreDirections["right"] > 0 and self.derniere_direction_perso == "up"  )):
             return True
@@ -179,7 +175,7 @@ class ActorActions(pygame.sprite.Sprite):
              ( self.quatreDirections["left"] > 0 and self.derniere_direction_perso == "up"  )):
             return False
 
-    def reinitValSiDetecter(self):
+    def __reset_quatreDirections__(self):
         self.quatreDirections["down"] = 0
         self.quatreDirections["up"] = 0
         self.quatreDirections["right"] = 0
