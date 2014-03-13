@@ -40,7 +40,7 @@ class Actor(pygame.sprite.Sprite):
         self.life = 100
         self.speed = 8
         self.accel = 1
-        self.isDoing = 'nothing'
+        self.is_doing = "nothing"
         self.arme_equipe = 'epe'
 
     def save_x_pos(self):
@@ -88,10 +88,8 @@ class Actor(pygame.sprite.Sprite):
         self.collision_rect.move_ip(x, y)
         for tool in self.tools.values():
             tool.definir_position(self.rect.x, self.rect.y)
-        #self.saveLastPos()
 
     def jump(self):
-
         self.actors_actions.jumpAndAttack("jump")
         self.image = self.actors_actions.image
 
