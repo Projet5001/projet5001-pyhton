@@ -141,11 +141,10 @@ class ActorActions(pygame.sprite.Sprite):
     def sequenceImages(self, intervalle_img,une_direction,type_image):
 
         if type_image == "droit":
-            print self.lesImages
             if self.lesImages < intervalle_img["debut"] or  self.lesImages > intervalle_img["fin"]:
-                 print "reset images"
-                 self.lesImages = intervalle_img["debut"]
-
+                print "reset images"
+                self.lesImages = intervalle_img["debut"]
+                self.actor.is_doing = "nothing"
             self.image = self.sprite_sheet[self.lesImages]
             self.lesImages += 1
 
@@ -209,7 +208,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.nbrFrame += 1
 
             #reset frame
-            if self.nbrFrame == 6:
+            if self.nbrFrame >= 6:
                 pygame.time.set_timer(self.event_jump, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
@@ -222,7 +221,8 @@ class ActorActions(pygame.sprite.Sprite):
             self.nbrFrame += 1
 
             #reset frame
-            if self.nbrFrame == 6:
+            print self.nbrFrame
+            if self.nbrFrame >= 6:
                 pygame.time.set_timer(self.event_attack, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
