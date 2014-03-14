@@ -120,9 +120,10 @@ class Actor(pygame.sprite.Sprite):
     def protectionTotal(self):
         return self.protection
 
-    def ajoute_outils(self, tool):
+    def ajoute_outils(self, tool, tilemap):
         self.tools[tool.name] = tool
         tool.definir_position(self.rect.x, self.rect.y)
+        tilemap.layers.add_named(tool, type(tool).__name__)
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
