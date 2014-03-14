@@ -108,13 +108,14 @@ class Game(object):
                         self.desactiv_commande =0
                         self.nbrFrame = 0
                     #self.perso.jump()
-            # doit etre executé dans cette ordre
+
             self.userInput.updateKey(dt,self.desactiv_commande)
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
                     if value == 0:
-                        self.hideHud(key)
+                        if key == "playerHud":
+                            self.hideHud(key)
                     else:
                         self.clocks[key] = value - 1
 
@@ -211,8 +212,9 @@ class Game(object):
         layer.setVisible(False)
 
     def deleteHuds(self):
-        layer = self.tilemap.layers["playerHud"]
-        self.tilemap.layers.remove(layer)
+        if "playerHud" in self.tilemap.layers:
+            layer = self.tilemap.layers["playerHud"]
+            self.tilemap.layers.remove(layer)
 
     def addClockSec(self, name, second):
         self.clocks[name] += second * self.FPS
