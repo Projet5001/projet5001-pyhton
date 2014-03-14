@@ -5,12 +5,15 @@ from lib import tmx
 
 class PlayerHud(tmx.Layer):
     def __init__(self, name, player, screen, tilemap):
+
         self.name = name
         self.visible = False
         self.player = player
         self.screen = screen
         self.tilemap = tilemap
-        self.hud = {"x": 0, "y": 0}
+
+    def move(self, offsetx, offsety):
+        pass
 
     def setVisible(self, visible):
         self.visible = visible
@@ -19,59 +22,62 @@ class PlayerHud(tmx.Layer):
         return tmx.LayerIterator(self)
 
     def update(self, dt, *args):
-        self.hud = self.__findPlayer()
+        pass
 
     def draw(self, surface):
+        # Tous les autres objets seront placés en relation avec ce point
+        hub = self.__followPlayer()
         pygame.draw.line(surface,
                          (0, 0, 0),
-                         (self.hud["x"], self.hud["y"]),
-                         (self.hud["x"] + 1, self.hud["y"]),
+                         (hub["x"], hub["y"]),
+                         (hub["x"] + 1, hub["y"]),
                          1)
-        self.__showName(surface)
-        self.__showHealth(surface)
+        hub["y"] -= self.tilemap.tile_height
+        self.__showName(surface, (hub["x"], hub["y"]))
+        self.__showHealth(surface, (hub["x"], hub["y"] + 5))
 
-    def __showName(self, surface):
+    def __showName(self, surface, hub):
         myfont = pygame.font.SysFont("monospace", 15, True)
         label = myfont.render(self.player.name, 1, (255, 255, 255))
-        surface.blit(label, (self.hud["x"] - (label.get_width() / 2),
-                             self.hud["y"] - (self.tilemap.tile_height)))
+        surface.blit(label, (hub[0] - (label.get_width() / 2),
+                             hub[1] - (self.tilemap.tile_height)))
 
-    def __showHealth(self, surface):
+    def __showHealth(self, surface, hub):
         #line(Surface, color, start_pos, end_pos, width=1) -> Rect
         tileHalfWidth = self.tilemap.tile_width / 2
-        origin_X = self.hud["x"] - tileHalfWidth
-        origin_Y = self.hud["y"] - self.tilemap.tile_height / 2
+        originx = hub[0] - tileHalfWidth
+        originy = hub[1] - self.tilemap.tile_height / 2
         pygame.draw.line(surface,
                          (0, 0, 0),
-                         (origin_X, origin_Y),
-                         (origin_X + tileHalfWidth * 2, origin_Y),
+                         (originx, originy),
+                         (originx + tileHalfWidth * 2, originy),
                          5)
         health = (tileHalfWidth * 2) \
                     * float(self.player.health["hp"] \
                             / self.player.health["max"])
         pygame.draw.line(surface,
                          (255, 0, 0),
-                         (origin_X, origin_Y),
-                         (origin_X + health, origin_Y),
+                         (originx, originy),
+                         (originx + health, originy),
                          3)
 
-    def __findPlayer(self):
+    def __followPlayer(self):
         #Centrer la position du HUD par rapport au personnage
-        player_X = self.player.collision_rect.x
-        player_Y = self.player.collision_rect.y
-        hud_X = player_X - (player_X - (self.screen.get_width() / 2))
-        hud_Y = player_Y - (player_Y - (self.screen.get_height() / 2))
+        playerx = self.player.collision_rect.x
+        playery = self.player.collision_rect.y
+        hubx = playerx - (playerx - (self.screen.get_width() / 2))
+        huby = playery - (playery - (self.screen.get_height() / 2))
         #Gérer les bordures
-        if(player_X < hud_X):
-            hud_X = player_X
-        if(player_Y < hud_Y):
-            hud_Y = player_Y
-        center_X = self.tilemap.px_width - self.screen.get_width() / 2
-        center_Y = self.tilemap.px_height - self.screen.get_height() / 2
-        if(player_X > center_X):
-            hud_X += player_X - center_X
-        if(player_Y > center_Y):
-            hud_Y += player_Y - center_Y
-        hud_X += self.tilemap.tile_width / 2
-        hud_Y += self.tilemap.tile_height / 2
-        return {"x": hud_X, "y": hud_Y - self.tilemap.tile_height}
+        if(playerx < hubx):
+            hubx = playerx
+        if(playery < huby):
+            huby = playery
+        centerx = self.tilemap.px_width - self.screen.get_width() / 2
+        centery = self.tilemap.px_height - self.screen.get_height() / 2
+        if(playerx > centerx):
+            hubx += playerx - centerx
+        if(playery > centery):
+            huby += playery - centery
+        hubx += self.tilemap.tile_width / 2
+        huby += self.tilemap.tile_height / 2
+        return {"x": hubx, "y": huby}
