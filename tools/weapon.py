@@ -1,7 +1,7 @@
+import pygame
 from pygame.locals import *
 from basetool import BaseTool
 from pygame import Rect
-
 
 class Weapon(BaseTool):
     def __init__(self, game, player, name, obj=None):

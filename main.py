@@ -9,8 +9,8 @@ import playerHud
 import player
 import tools
 import collisionManager
+import actors_actions
 from tools import weapon
-
 rep_assets = os.path.join(os.path.dirname(__file__), "assets")
 rep_sprites = os.path.join(rep_assets, "sprites")
 rep_tilesets = os.path.join(rep_assets, "tilesets")
@@ -40,10 +40,7 @@ class Game(object):
         self.clocks = {"playerHud": 0}
         self.userInput = None
 
-        self.persoJump = pygame.USEREVENT + 1
-        self.persoAttack = pygame.USEREVENT + 2
-        self.nbrFrame = 0
-        self.desactiv_commande = 0
+
 
 
     def start(self):
@@ -79,37 +76,26 @@ class Game(object):
     def mainloop(self):
         while True:
             dt = self.clock.tick(self.FPS)
-            # ces  5 lignes sont recquises pour passer les events
+            # ces lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     return
                 if event.type == pygame.KEYDOWN \
                         and event.key == pygame.K_ESCAPE:
                     return
-                if event.type == self.persoJump:
-                    #print "                    PERSO JUMP"
-                    self.nbrFrame += 1
-                    self.desactiv_commande  = 1
-                    self.perso.jump()
 
-                    if self.nbrFrame == 7:
-                        pygame.time.set_timer(self.persoJump, 0)#1 second is 1000 milliseconds
-                        self.desactiv_commande =0
-                        self.nbrFrame = 0
-                if event.type == self.persoAttack:
-                    #print "                     PERSO ATTACK"
-                    self.nbrFrame += 1
-                    self.desactiv_commande  = 1
-                    self.perso.attack()
+                if event.type == self.perso.actors_actions.event_jump:
+                    self.perso.actors_actions.update_frame_jump(event)
 
-                    if self.nbrFrame == 7:
-                        pygame.time.set_timer(self.persoAttack, 0)#1 second is 1000 milliseconds
-                        self.desactiv_commande =0
-                        self.nbrFrame = 0
-                    #self.perso.jump()
+                if event.type == self.perso.actors_actions.event_attack:
+                    self.perso.actors_actions.update_frame_attack(event)
 
-            self.userInput.updateKey(dt,self.desactiv_commande)
+            # doit etre executé dans cette ordre
+
+            self.userInput.updateKey(dt)
+
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
