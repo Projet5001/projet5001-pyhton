@@ -11,18 +11,20 @@ import tools
 import collisionManager
 import actors_actions
 from tools import weapon
-rep_assets = os.path.join(os.path.dirname(__file__), "assets")
-rep_sprites = os.path.join(rep_assets, "sprites")
-rep_tilesets = os.path.join(rep_assets, "tilesets")
+from gameconfig import GameConfig
 
 
 class Game(object):
 
-    def __init__(self, start_map):
-        self.screen = pygame.display.set_mode((640, 480))
-        self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
-                                self.screen.get_size())
+    def __init__(self, conffile):
+        pygame.init()
+        self.config = GameConfig(conffile)
         self.clock = pygame.time.Clock()
+        self.screen = \
+            pygame.display.set_mode(self.config.read_global("screen_size"))
+        self.tilemap = tmx.load(os.path.join(self.config.get_asset_dir(),
+                                             self.config.get_start_map()),
+                                self.screen.get_size())
 
         #list pour le joueur et monstre
         self.perso = None
@@ -40,9 +42,6 @@ class Game(object):
         self.clocks = {"playerHud": 0}
         self.userInput = None
 
-
-
-
     def start(self):
         #Trouve l'emplacement du héro
         source = self.tilemap.layers['boundaries'].find_source("start")
@@ -56,18 +55,13 @@ class Game(object):
         self.collision_manager = collisionManager.CollisionManager(self)
         self.userInput = userInput.Keyboard(self)
 
-
-
         #prototype !!!!!!!!!!
         #creation de l'arme
         epe = weapon.Weapon(self, self.perso, 'epe')
 
         #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
         self.perso.ajoute_outils(epe, self.tilemap)
-
-
         #prototype !!!!!!!!!!
-
 
         #hub
         self.createHuds()
@@ -93,9 +87,7 @@ class Game(object):
                     self.perso.actors_actions.update_frame_attack(event)
 
             # doit etre executé dans cette ordre
-
             self.userInput.updateKey(dt)
-
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
@@ -132,7 +124,8 @@ class Game(object):
 
         try:
             for cell in self.tilemap.layers['pnjs'].find('monstre'):
-                m = monster.Monster(os.path.join(rep_sprites, "sprite-Hero4.png"),
+                m = monster.Monster(os.path.join(self.config.get_sprite_dir(),
+                                                 "sprite-Hero4.png"),
                                    (cell.px, cell.py), self.monster_layer)
                 monstres.append(m)
         except KeyError:
@@ -141,7 +134,8 @@ class Game(object):
         return monstres
 
     def charge_player(self):
-        return player.Player(os.path.join(rep_sprites, "sprite-Hero4.png"),
+        return player.Player(os.path.join(self.config.get_sprite_dir(),
+                                          "sprite-Hero4.png"),
                              (0, 0), self.player_layer)
 
     def effectuer_transition(self, limite):
@@ -166,7 +160,7 @@ class Game(object):
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
-                tmx.load(os.path.join(rep_assets,
+                tmx.load(os.path.join(self.config.get_asset_dir(),
                                       limite.properties['destination']),
                          self.screen.get_size())
             if nouvelle_carte:
@@ -207,6 +201,5 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    pygame.init()
-    game = Game("ageei.tmx")  # TODO: lire d'un fichier de config
+    game = Game(os.path.join(os.path.dirname(__file__), "projet5001.json"))
     game.start()
