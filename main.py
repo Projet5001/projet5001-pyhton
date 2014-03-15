@@ -66,8 +66,7 @@ class Game(object):
         epe = weapon.Weapon(self, self.perso, 'epe')
 
         #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
-        self.perso.ajoute_outils(epe)
-        self.tilemap.layers.add_named(epe, 'epe')
+        self.perso.ajoute_outils(epe, self.tilemap)
 
 
         #prototype !!!!!!!!!!
@@ -109,13 +108,14 @@ class Game(object):
                         self.desactiv_commande =0
                         self.nbrFrame = 0
                     #self.perso.jump()
-            # doit etre executé dans cette ordre
+
             self.userInput.updateKey(dt,self.desactiv_commande)
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
                     if value == 0:
-                        self.hideHud(key)
+                        if key == "playerHud":
+                            self.hideHud(key)
                     else:
                         self.clocks[key] = value - 1
 
@@ -176,8 +176,7 @@ class Game(object):
         #recupere le groupe player
         players = self.tilemap.layers['player_layer']
         monstres = self.tilemap.layers['monster_layer']
-        # future: equippement = self.tilemap.layers[self.perso.arme_equipe]
-        equippement = self.tilemap.layers['epe']
+        equippement = self.tilemap.layers['Weapon']
         source_name = self.tilemap.filename
         if 'destination' in limite.properties:
             nouvelle_carte = \
@@ -191,8 +190,7 @@ class Game(object):
                     self.tilemap.layers['boundaries'].find_source(source_name)
                 self.tilemap.layers.add_named(players, 'player_layer')
                 self.tilemap.layers.add_named(monstres, 'monster_layer')
-                # future: self.tilemap.layers.add_named(equipement, self.perso.arme_equipe)
-                self.tilemap.layers.add_named(equippement, 'epe')
+                self.tilemap.layers.add_named(equippement, 'Weapon')
                 self.createHuds()
                 self.perso.definir_position(source.px, source.py)
                 self.charge_monstres()
@@ -214,8 +212,9 @@ class Game(object):
         layer.setVisible(False)
 
     def deleteHuds(self):
-        layer = self.tilemap.layers["playerHud"]
-        self.tilemap.layers.remove(layer)
+        if "playerHud" in self.tilemap.layers:
+            layer = self.tilemap.layers["playerHud"]
+            self.tilemap.layers.remove(layer)
 
     def addClockSec(self, name, second):
         self.clocks[name] += second * self.FPS
