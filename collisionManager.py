@@ -5,19 +5,16 @@ from tools.basetool import BaseTool
 
 class CollisionManager():
 
-    def __init__(self, game):
-        self.tmx = game.tilemap
-        self.player = game.perso
-        self.game = game
-        self.player_groupe = self.tmx.layers['player_layer']
-        self.monstre_groupe = self.tmx.layers['monster_layer']
+    def __init__(self, layer_manager):
+        self.layer_manager = layer_manager
+        self.player = None
         self.player_events = []
         self.tmx_events = []
 
         self.object_reference = {}
 
-    def set_tilemap(self, tilemap):
-        self.tmx = tilemap
+    def set_player(self, player):
+        self.player = player
 
     #overide
     def spritecollideany(self, collided = None):
@@ -26,7 +23,7 @@ class CollisionManager():
                 sprite = tool
 
                 if collided is None:
-                    for s in self.monstre_groupe:
+                    for s in self.layer_manager['monster']:
                         if sprite.is_equippable() and sprite.rect.colliderect(s.collision_rect):
                             return s
                 else:
@@ -56,11 +53,11 @@ class CollisionManager():
 
     def tmx_stackCollisionEvents(self):
 
-        boundaries = self.tmx.layers['boundaries']
-        walls = self.tmx.layers['walls']
+        boundaries = self.layer_manager['boundaries']
+        walls = self.layer_manager['walls']
         objets = None
         try:
-            objets = self.tmx.layers['objets']
+            objets = self.layer_manager['objets']
         except KeyError:
             pass
 
@@ -70,7 +67,7 @@ class CollisionManager():
             tool = None
             if objet not in self.object_reference:
                 self.object_reference[objet] = \
-                    BaseTool.make_tool(self.game, self.player, objet)
+                    BaseTool.make_tool(self.layer_manager, self.player, objet)
             else:
                 tool = self.object_reference[objet]
 
@@ -83,7 +80,7 @@ class CollisionManager():
 
                 if objet not in self.object_reference:
                     self.object_reference[objet] = \
-                        BaseTool.make_tool(self.game, self.player, objet)
+                        BaseTool.make_tool(self.layer_manager, self.player, objet)
                 else:
                     tool = self.object_reference[objet]
 
