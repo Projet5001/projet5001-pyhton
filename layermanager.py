@@ -1,6 +1,7 @@
 
 import os
 import pygame
+from operator import attrgetter, methodcaller
 from lib import tmx
 
 
@@ -12,9 +13,22 @@ class LayerManager(object):
         self.clock = clock
         self.tilemap = None
         self.layers = {}
+        self.attr_source = { \
+            "screen_height": [ "screen", methodcaller('get_height') ],
+            "screen_width": [ "screen", methodcaller('get_width') ],
+            "map_height": [ "tilemap", attrgetter('px_height') ],
+            "map_width": [ "tilemap", attrgetter('px_width') ],
+            "tile_height": [ "tilemap", attrgetter('tile_height') ],
+            "tile_width": [ "tilemap", attrgetter('tile_width') ],
+            }
 
     def __getattr__(self, name):
-        return getattr(self.tilemap, name)
+        if name in self.attr_source:
+            obj = self.__getattribute__(self.attr_source[name][0])
+            func = self.attr_source[name][1]
+            return func(obj)
+        else:
+            raise AttributeError
 
     def __getitem__(self, key):
         try:
@@ -27,13 +41,11 @@ class LayerManager(object):
             self.tilemap.layers.remove(layer_name)
 
     def set_map(self, game, new_map):
-        print "set_map"
         map_path = os.path.join(self.config.get_asset_dir(), new_map)
         new_tilemap = tmx.load(map_path,
                                self.config.read_global('screen_size'))
 
         for layer in self.layers.keys():
-            print layer
             new_tilemap.layers.add_named(self.layers[layer], layer)
 
         self.tilemap = new_tilemap
@@ -43,8 +55,6 @@ class LayerManager(object):
         return self.tilemap.filename
 
     def set_focus(self, px, py, boolean):
-        for layer in self.tilemap.layers:
-            print layer
         self.tilemap.set_focus(px, py, boolean)
 
     def update(self):
@@ -60,8 +70,6 @@ class LayerManager(object):
         self.add_layer(name, layer)
 
     def add_layer(self, name, layer):
-        print name
-        print layer
         self.tilemap.layers.add_named(layer, name)
         self.layers[name] = layer
 
