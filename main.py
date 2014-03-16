@@ -53,7 +53,7 @@ class Game(object):
 
         #prototype !!!!!!!!!!
         #creation de l'arme
-        epe = weapon.Weapon(self, self.perso, 'epe')
+        epe = weapon.Weapon(self.layer_manager, self.perso, 'epe')
 
         #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
         self.perso.ajoute_outils(epe, self.layer_manager)
