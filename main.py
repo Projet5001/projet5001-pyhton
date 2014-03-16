@@ -161,7 +161,6 @@ class Game(object):
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud",
                                   self.perso,
-                                  self.screen,
                                   self.layer_manager)
         self.layer_manager.add_layer(hud.name, hud)
 

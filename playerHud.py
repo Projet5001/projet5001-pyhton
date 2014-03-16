@@ -4,12 +4,11 @@ from lib import tmx
 
 
 class PlayerHud(tmx.Layer):
-    def __init__(self, name, player, screen, layer_manager):
+    def __init__(self, name, player, layer_manager):
 
         self.name = name
         self.visible = False
         self.player = player
-        self.screen = screen
         self.layer_manager = layer_manager
 
     def move(self, offsetx, offsety):
@@ -65,17 +64,17 @@ class PlayerHud(tmx.Layer):
         #Centrer la position du HUD par rapport au personnage
         playerx = self.player.collision_rect.x
         playery = self.player.collision_rect.y
-        hubx = playerx - (playerx - (self.screen.get_width() / 2))
-        huby = playery - (playery - (self.screen.get_height() / 2))
+        hubx = playerx - (playerx - (self.layer_manager.screen_width / 2))
+        huby = playery - (playery - (self.layer_manager.screen_height / 2))
         #Gérer les bordures
         if(playerx < hubx):
             hubx = playerx
         if(playery < huby):
             huby = playery
         centerx = \
-            self.layer_manager.px_width - self.screen.get_width() / 2
+            self.layer_manager.map_width - self.layer_manager.screen_width / 2
         centery = \
-            self.layer_manager.px_height - self.screen.get_height() / 2
+            self.layer_manager.map_height - self.layer_manager.screen_height / 2
         if(playerx > centerx):
             hubx += playerx - centerx
         if(playery > centery):
