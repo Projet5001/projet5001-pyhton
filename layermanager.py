@@ -13,6 +13,9 @@ class LayerManager(object):
         self.tilemap = None
         self.layers = {}
 
+    def __getattr__(self, name):
+        return getattr(self.tilemap, name)
+
     def __getitem__(self, key):
         try:
             return self.layers[key]
