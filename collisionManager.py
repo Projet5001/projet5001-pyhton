@@ -5,8 +5,7 @@ from tools.basetool import BaseTool
 
 class CollisionManager():
 
-    def __init__(self, game, layer_manager):
-        self.game = game
+    def __init__(self, layer_manager):
         self.layer_manager = layer_manager
         self.player = None
         self.player_events = []
@@ -68,7 +67,7 @@ class CollisionManager():
             tool = None
             if objet not in self.object_reference:
                 self.object_reference[objet] = \
-                    BaseTool.make_tool(self.game, self.player, objet)
+                    BaseTool.make_tool(self.layer_manager, self.player, objet)
             else:
                 tool = self.object_reference[objet]
 
@@ -81,7 +80,7 @@ class CollisionManager():
 
                 if objet not in self.object_reference:
                     self.object_reference[objet] = \
-                        BaseTool.make_tool(self.game, self.player, objet)
+                        BaseTool.make_tool(self.layer_manager, self.player, objet)
                 else:
                     tool = self.object_reference[objet]
 

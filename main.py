@@ -23,7 +23,7 @@ class Game(object):
         self.clock = pygame.time.Clock()
 
         self.layer_manager = LayerManager(self.config, self.clock)
-        self.collision_manager = CollisionManager(self, self.layer_manager)
+        self.collision_manager = CollisionManager(self.layer_manager)
 
         #list pour le joueur et monstre
         self.perso = None
