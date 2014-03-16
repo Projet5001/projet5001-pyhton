@@ -4,8 +4,8 @@ import pygame
 
 
 class TransitionObject(BaseTool):
-    def __init__(self, game, player, name, obj=None):
-        super(TransitionObject, self).__init__(game, player, name, obj)
+    def __init__(self, layer_manager, player, name, obj=None):
+        super(TransitionObject, self).__init__(layer_manager, player, name, obj)
 
     @classmethod
     def is_type_for(cls, object_type):

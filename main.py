@@ -21,10 +21,8 @@ class Game(object):
         pygame.init()
         self.config = GameConfig(conffile)
         self.clock = pygame.time.Clock()
-        self.screen = \
-            pygame.display.set_mode(self.config.read_global("screen_size"))
 
-        self.layer_manager = LayerManager(self.config, self.screen, self.clock)
+        self.layer_manager = LayerManager(self.config, self.clock)
         self.collision_manager = CollisionManager(self, self.layer_manager)
 
         #list pour le joueur et monstre
@@ -108,7 +106,7 @@ class Game(object):
             self.collision_manager.tmx_manageCollisionEvents()
 
             self.layer_manager.update()
-            self.layer_manager.draw(self.screen)
+            self.layer_manager.draw()
 
             pygame.display.update()
             #pygame.display.flip()
