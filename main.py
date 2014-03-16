@@ -82,6 +82,9 @@ class Game(object):
                 if event.type == self.perso.actors_actions.event_attack:
                     self.perso.actors_actions.update_frame_attack(event)
 
+                if event.type == pygame.USEREVENT+3:
+                    self.effectuer_transition(event.transition)
+
             # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
 
