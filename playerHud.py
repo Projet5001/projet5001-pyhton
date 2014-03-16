@@ -10,7 +10,7 @@ class PlayerHud(tmx.Layer):
         self.visible = False
         self.player = player
         self.screen = screen
-        self.tilemap = layer_manager.tilemap
+        self.layer_manager = layer_manager
 
     def move(self, offsetx, offsety):
         pass
@@ -32,7 +32,7 @@ class PlayerHud(tmx.Layer):
                          (hub["x"], hub["y"]),
                          (hub["x"] + 1, hub["y"]),
                          1)
-        hub["y"] -= self.tilemap.tile_height
+        hub["y"] -= self.layer_manager.tile_height
         self.__showName(surface, (hub["x"], hub["y"]))
         self.__showHealth(surface, (hub["x"], hub["y"] + 5))
 
@@ -40,13 +40,13 @@ class PlayerHud(tmx.Layer):
         myfont = pygame.font.SysFont("monospace", 15, True)
         label = myfont.render(self.player.name, 1, (255, 255, 255))
         surface.blit(label, (hub[0] - (label.get_width() / 2),
-                             hub[1] - (self.tilemap.tile_height)))
+                             hub[1] - (self.layer_manager.tile_height)))
 
     def __showHealth(self, surface, hub):
         #line(Surface, color, start_pos, end_pos, width=1) -> Rect
-        tileHalfWidth = self.tilemap.tile_width / 2
+        tileHalfWidth = self.layer_manager.tile_width / 2
         originx = hub[0] - tileHalfWidth
-        originy = hub[1] - self.tilemap.tile_height / 2
+        originy = hub[1] - self.layer_manager.tile_height / 2
         pygame.draw.line(surface,
                          (0, 0, 0),
                          (originx, originy),
@@ -72,12 +72,14 @@ class PlayerHud(tmx.Layer):
             hubx = playerx
         if(playery < huby):
             huby = playery
-        centerx = self.tilemap.px_width - self.screen.get_width() / 2
-        centery = self.tilemap.px_height - self.screen.get_height() / 2
+        centerx = \
+            self.layer_manager.px_width - self.screen.get_width() / 2
+        centery = \
+            self.layer_manager.px_height - self.screen.get_height() / 2
         if(playerx > centerx):
             hubx += playerx - centerx
         if(playery > centery):
             huby += playery - centery
-        hubx += self.tilemap.tile_width / 2
-        huby += self.tilemap.tile_height / 2
+        hubx += self.layer_manager.tile_width / 2
+        huby += self.layer_manager.tile_height / 2
         return {"x": hubx, "y": huby}
