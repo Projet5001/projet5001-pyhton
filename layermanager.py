@@ -7,11 +7,15 @@ from lib import tmx
 
 class LayerManager(object):
 
-    def __init__(self, config, screen, clock):
+    def __init__(self, config, clock):
         self.config = config
-        self.screen = screen
         self.clock = clock
+
+        self.screen = \
+            pygame.display.set_mode(self.config.read_global("screen_size"))
+
         self.tilemap = None
+
         self.layers = {}
         self.attr_source = { \
             "screen_height": [ "screen", methodcaller('get_height') ],
@@ -61,9 +65,9 @@ class LayerManager(object):
         dt = self.clock.tick()
         self.tilemap.update(dt, self)
 
-    def draw(self, screen):
+    def draw(self):
         self.screen.fill((0, 0, 0))
-        self.tilemap.draw(screen)
+        self.tilemap.draw(self.screen)
 
     def new_layer(self, name, layer_type):
         layer = layer_type()
