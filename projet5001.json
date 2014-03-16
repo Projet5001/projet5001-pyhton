@@ -1,0 +1,9 @@
+{
+    "global": {
+        "asset_dir": "assets/",
+        "tileset_dir": "assets/tileset/",
+        "sprite_dir": "assets/sprites/",
+        "start_map": "ageei.tmx",
+        "screen_size": [ 640, 480 ]
+    }
+}

@@ -4,8 +4,8 @@ from basetool import BaseTool
 from pygame import Rect
 
 class Weapon(BaseTool):
-    def __init__(self, game, player, name, obj=None):
-        super(Weapon, self).__init__(game, player, name, obj)
+    def __init__(self, layer_manager, player, name, obj=None):
+        super(Weapon, self).__init__(layer_manager, player, name, obj)
         self.hub = self.__followPlayer__()
         self.rect = Rect((self.hub[0], self.hub[1]+8), (5, 100))
         self.image = None
