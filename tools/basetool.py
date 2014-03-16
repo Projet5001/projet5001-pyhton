@@ -63,15 +63,15 @@ class BaseTool(sprite.Sprite):
         if playery < huby:
             huby = playery
 
-        centerx = self.game.tilemap.px_width - self.game.screen.get_width() / 2
-        centery = self.game.tilemap.px_height - self.game.screen.get_height() / 2
+        centerx = self.game.layer_manager.tilemap.px_width - self.game.screen.get_width() / 2
+        centery = self.game.layer_manager.tilemap.px_height - self.game.screen.get_height() / 2
 
         if playerx > centerx:
             hubx += playerx - centerx
 
         if playery > centery:
             huby += playery - centery
-            hubx += self.game.tilemap.tile_width / 2
-            huby += self.game.tilemap.tile_height / 2
+            hubx += self.game.layer_manager.tilemap.tile_width / 2
+            huby += self.game.layer_manager.tilemap.tile_height / 2
 
         return hubx, huby
