@@ -4,13 +4,13 @@ from lib import tmx
 
 
 class PlayerHud(tmx.Layer):
-    def __init__(self, name, player, screen, tilemap):
+    def __init__(self, name, player, screen, layer_manager):
 
         self.name = name
         self.visible = False
         self.player = player
         self.screen = screen
-        self.tilemap = tilemap
+        self.tilemap = layer_manager.tilemap
 
     def move(self, offsetx, offsety):
         pass

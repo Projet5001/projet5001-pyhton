@@ -14,7 +14,7 @@ class Clef(BaseTool):
         return object_type == "clef"
 
     def handle_collision(self):
-        self.player.ajoute_outils(self, self.game.tilemap)
+        self.player.ajoute_outils(self, self.game.layer_manager)
         self.tmx_object.visible = False
         self.visible = False
 
