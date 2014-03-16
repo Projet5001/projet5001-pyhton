@@ -16,7 +16,11 @@ class TransitionObject(BaseTool):
 
     def handle_collision(self):
         self.player.resetPos()
-        self.game.effectuer_transition(self.tmx_object)
+
+        # fire new event for transition (otherwise there is no way to call effectuer_transition)
+        # TODO: rework events into own class.
+        event = pygame.event.Event(pygame.USEREVENT+3, transition=self.tmx_object)
+        pygame.event.post(event)
 
     def draw(self, screen):
         pass
