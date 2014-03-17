@@ -18,6 +18,12 @@ class EventManager():
     def update(self, game):
         for event in pygame.event.get():
 
+            if event.type == pygame.QUIT:
+                return True
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return True
+
             if event.type == self.event_jump:
                 game.perso.actors_actions.update_frame_jump(event)
 
