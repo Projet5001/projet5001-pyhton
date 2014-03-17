@@ -10,10 +10,14 @@ import pygame
 
 class EventManager():
     #de 1 à 255
+    event_jump = pygame.USEREVENT + 1
+    event_attack = pygame.USEREVENT + 2
+    effectuer_transition = pygame.USEREVENT+3
+    move = pygame.USEREVENT+4
+    action = pygame.USEREVENT+4
+
     def __init__(self):
-        self.event_jump = pygame.USEREVENT + 1
-        self.event_attack = pygame.USEREVENT + 2
-        self.effectuer_transition = pygame.USEREVENT+3
+        self.data = None
 
     def update(self, game):
         for event in pygame.event.get():
@@ -33,3 +37,5 @@ class EventManager():
             if event.type == self.effectuer_transition:
                 game.effectuer_transition(event.transition)
 
+            if event.type == self.action:
+                pass
