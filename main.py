@@ -8,70 +8,56 @@ import userInput
 import playerHud
 import player
 import tools
-import collisionManager
+import actors_actions
 from tools import weapon
-
-rep_assets = os.path.join(os.path.dirname(__file__), "assets")
-rep_sprites = os.path.join(rep_assets, "sprites")
-rep_tilesets = os.path.join(rep_assets, "tilesets")
+from gameconfig import GameConfig
+from layermanager import LayerManager
+from collisionManager import CollisionManager
 
 
 class Game(object):
 
-    def __init__(self, start_map):
-        self.screen = pygame.display.set_mode((640, 480))
-        self.tilemap = tmx.load(os.path.join(rep_assets, start_map),
-                                self.screen.get_size())
+    def __init__(self, conffile):
+        pygame.init()
+        self.config = GameConfig(conffile)
         self.clock = pygame.time.Clock()
+
+        self.layer_manager = LayerManager(self.config, self.clock)
+        self.collision_manager = CollisionManager(self.layer_manager)
 
         #list pour le joueur et monstre
         self.perso = None
         self.monstres = []
 
-        #Créer un contenant pour les personnages et monstre
-        self.player_layer = tmx.SpriteLayer()
-        self.monster_layer = tmx.SpriteLayer()
+        self.layer_manager.set_map(self, self.config.get_start_map())
+        self.layer_manager.new_layer('player', tmx.SpriteLayer)
+        self.layer_manager.new_layer('monster', tmx.SpriteLayer)
 
-        #Ajouter le personnage et monstres à la carte
-        self.tilemap.layers.add_named(self.player_layer, 'player_layer')
-        self.tilemap.layers.add_named(self.monster_layer, 'monster_layer')
-        self.collision_manager = None
         self.FPS = 30
         self.clocks = {"playerHud": 0}
         self.userInput = None
 
-        self.persoJump = pygame.USEREVENT + 1
-        self.persoAttack = pygame.USEREVENT + 2
-        self.nbrFrame = 0
-        self.desactiv_commande = 0
-
-
     def start(self):
         #Trouve l'emplacement du héro
-        source = self.tilemap.layers['boundaries'].find_source("start")
+        source = self.layer_manager['boundaries'].find_source("start")
 
-        self.tilemap.set_focus(source.px, source.py, True)
+        self.layer_manager.set_focus(source.px, source.py, True)
 
         self.perso = self.charge_player()
+        self.collision_manager.set_player(self.perso)
         self.perso.definir_position(source.px, source.py)
+
         self.monstres = self.charge_monstres()
 
-        self.collision_manager = collisionManager.CollisionManager(self)
         self.userInput = userInput.Keyboard(self)
-
-
 
         #prototype !!!!!!!!!!
         #creation de l'arme
-        epe = weapon.Weapon(self, self.perso, 'epe')
+        epe = weapon.Weapon(self.layer_manager, self.perso, 'epe')
 
         #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
-        self.perso.ajoute_outils(epe)
-        self.tilemap.layers.add_named(epe, 'epe')
-
-
+        self.perso.ajoute_outils(epe, self.layer_manager)
         #prototype !!!!!!!!!!
-
 
         #hub
         self.createHuds()
@@ -80,42 +66,33 @@ class Game(object):
     def mainloop(self):
         while True:
             dt = self.clock.tick(self.FPS)
-            # ces  5 lignes sont recquises pour passer les events
+            # ces lignes sont recquises pour passer les events
             # au gestionaire d'event de pygame
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     return
                 if event.type == pygame.KEYDOWN \
                         and event.key == pygame.K_ESCAPE:
                     return
-                if event.type == self.persoJump:
-                    #print "                    PERSO JUMP"
-                    self.nbrFrame += 1
-                    self.desactiv_commande  = 1
-                    self.perso.jump()
 
-                    if self.nbrFrame == 7:
-                        pygame.time.set_timer(self.persoJump, 0)#1 second is 1000 milliseconds
-                        self.desactiv_commande =0
-                        self.nbrFrame = 0
-                if event.type == self.persoAttack:
-                    #print "                     PERSO ATTACK"
-                    self.nbrFrame += 1
-                    self.desactiv_commande  = 1
-                    self.perso.attack()
+                if event.type == self.perso.actors_actions.event_jump:
+                    self.perso.actors_actions.update_frame_jump(event)
 
-                    if self.nbrFrame == 7:
-                        pygame.time.set_timer(self.persoAttack, 0)#1 second is 1000 milliseconds
-                        self.desactiv_commande =0
-                        self.nbrFrame = 0
-                    #self.perso.jump()
+                if event.type == self.perso.actors_actions.event_attack:
+                    self.perso.actors_actions.update_frame_attack(event)
+
+                if event.type == pygame.USEREVENT+3:
+                    self.effectuer_transition(event.transition)
+
             # doit etre executé dans cette ordre
-            self.userInput.updateKey(dt,self.desactiv_commande)
+            self.userInput.updateKey(dt)
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
                     if value == 0:
-                        self.hideHud(key)
+                        if key == "playerHud":
+                            self.hideHud(key)
                     else:
                         self.clocks[key] = value - 1
 
@@ -131,11 +108,8 @@ class Game(object):
             #Gère les colisions selon leur nature
             self.collision_manager.tmx_manageCollisionEvents()
 
-            self.tilemap.update(dt / 1000, self)
-
-            self.screen.fill((0, 0, 0))
-
-            self.tilemap.draw(self.screen)
+            self.layer_manager.update()
+            self.layer_manager.draw()
 
             pygame.display.update()
             #pygame.display.flip()
@@ -145,9 +119,10 @@ class Game(object):
         monstres = []
 
         try:
-            for cell in self.tilemap.layers['pnjs'].find('monstre'):
-                m = monster.Monster(os.path.join(rep_sprites, "sprite-Hero4.png"),
-                                   (cell.px, cell.py), self.monster_layer)
+            for cell in self.layer_manager['pnjs'].find('monstre'):
+                m = monster.Monster(os.path.join(self.config.get_sprite_dir(),
+                                                 "sprite-Hero4.png"),
+                                   (cell.px, cell.py), self.layer_manager['monster'])
                 monstres.append(m)
         except KeyError:
             pass
@@ -155,8 +130,9 @@ class Game(object):
         return monstres
 
     def charge_player(self):
-        return player.Player(os.path.join(rep_sprites, "sprite-Hero4.png"),
-                             (0, 0), self.player_layer)
+        return player.Player(os.path.join(self.config.get_sprite_dir(),
+                                          "sprite-Hero4.png"),
+                             (0, 0), self.layer_manager['player'])
 
     def effectuer_transition(self, limite):
         if not isinstance(limite, tmx.Object):
@@ -173,55 +149,39 @@ class Game(object):
 
         self.deleteHuds()
 
-        #recupere le groupe player
-        players = self.tilemap.layers['player_layer']
-        monstres = self.tilemap.layers['monster_layer']
-        # future: equippement = self.tilemap.layers[self.perso.arme_equipe]
-        equippement = self.tilemap.layers['epe']
-        source_name = self.tilemap.filename
+        source_name = self.layer_manager.get_current_filename()
         if 'destination' in limite.properties:
-            nouvelle_carte = \
-                tmx.load(os.path.join(rep_assets,
-                                      limite.properties['destination']),
-                         self.screen.get_size())
-            if nouvelle_carte:
-                self.tilemap = nouvelle_carte
-                self.collision_manager.set_tilemap(self.tilemap)
-                source = \
-                    self.tilemap.layers['boundaries'].find_source(source_name)
-                self.tilemap.layers.add_named(players, 'player_layer')
-                self.tilemap.layers.add_named(monstres, 'monster_layer')
-                # future: self.tilemap.layers.add_named(equipement, self.perso.arme_equipe)
-                self.tilemap.layers.add_named(equippement, 'epe')
-                self.createHuds()
-                self.perso.definir_position(source.px, source.py)
-                self.charge_monstres()
-                self.tilemap.set_focus(source.px, source.py, True)
+            self.layer_manager.set_map(self, limite.properties['destination'])
+            source = \
+                self.layer_manager['boundaries'].find_source(source_name)
+            self.createHuds()
+            self.perso.definir_position(source.px, source.py)
+            self.charge_monstres()
+            self.layer_manager.set_focus(source.px, source.py, True)
 
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud",
                                   self.perso,
-                                  self.screen,
-                                  self.tilemap)
-        self.tilemap.layers.add_named(hud, hud.name)
+                                  self.layer_manager)
+        self.layer_manager.add_layer(hud.name, hud)
 
     def showHud(self, name):
-        layer = self.tilemap.layers[name]
+        layer = self.layer_manager[name]
         layer.setVisible(True)
 
     def hideHud(self, name):
-        layer = self.tilemap.layers[name]
+        layer = self.layer_manager[name]
         layer.setVisible(False)
 
     def deleteHuds(self):
-        layer = self.tilemap.layers["playerHud"]
-        self.tilemap.layers.remove(layer)
+        if "playerHud" in self.layer_manager.layers:
+            layer = self.layer_manager["playerHud"]
+            self.layer_manager.remove(layer)
 
     def addClockSec(self, name, second):
         self.clocks[name] += second * self.FPS
 
 
 if __name__ == '__main__':
-    pygame.init()
-    game = Game("ageei.tmx")  # TODO: lire d'un fichier de config
+    game = Game(os.path.join(os.path.dirname(__file__), "projet5001.json"))
     game.start()
