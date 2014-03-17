@@ -7,13 +7,12 @@ from lib import tmx
 import userInput
 import playerHud
 import player
-import tools
-import actors_actions
+
 from tools import weapon
 from gameconfig import GameConfig
 from layermanager import LayerManager
 from collisionManager import CollisionManager
-
+from eventManager import EventManager
 
 class Game(object):
 
@@ -36,6 +35,7 @@ class Game(object):
         self.FPS = 30
         self.clocks = {"playerHud": 0}
         self.userInput = None
+        self.event_manager = EventManager()
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -66,26 +66,17 @@ class Game(object):
     def mainloop(self):
         while True:
             dt = self.clock.tick(self.FPS)
-            # ces lignes sont recquises pour passer les events
-            # au gestionaire d'event de pygame
+
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
                     return
-                if event.type == pygame.KEYDOWN \
-                        and event.key == pygame.K_ESCAPE:
+
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     return
 
-                if event.type == self.perso.actors_actions.event_jump:
-                    self.perso.actors_actions.update_frame_jump(event)
+            self.event_manager.update(self)
 
-                if event.type == self.perso.actors_actions.event_attack:
-                    self.perso.actors_actions.update_frame_attack(event)
-
-                if event.type == pygame.USEREVENT+3:
-                    self.effectuer_transition(event.transition)
-
-            # doit etre executé dans cette ordre
             self.userInput.updateKey(dt)
 
             for key, value in self.clocks.iteritems():
