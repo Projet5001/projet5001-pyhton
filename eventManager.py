@@ -18,8 +18,12 @@ class EventManager():
 
     @staticmethod
     def envois_event(e, content):
-        event = pygame.event.Event(e, e=content)
+        event = pygame.event.Event(e, m=content)
         pygame.event.post(event)
+
+    @staticmethod
+    def delay_event(e, temps):
+        pygame.time.set_timer(e, temps)
 
     @staticmethod
     def update(game):
