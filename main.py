@@ -67,7 +67,6 @@ class Game(object):
         while True:
             dt = self.clock.tick(self.FPS)
 
-            #if quit
             quitter = self.event_manager.update(self)
             if quitter:
                 return
