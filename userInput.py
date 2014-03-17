@@ -2,7 +2,7 @@
 
 
 import pygame
-
+from eventManager import EventManager
 
 class Keyboard():
     def __init__(self, game):
@@ -17,6 +17,8 @@ class Keyboard():
 
     def move_left(self):
         self.actor.move(self.coord_left[0], self.coord_left[1], "left")
+        event = pygame.event.Event(EventManager.move, move='left')
+        pygame.event.post(event)
 
     def move_right(self):
         self.actor.move(self.coord_right[0], self.coord_right[1], "right")
