@@ -21,18 +21,19 @@ class Actor(pygame.sprite.Sprite):
                                                25,
                                                20)
 
-        self.actors_actions = actors_actions.ActorActions(self.image, self.personnage)
-
+        self.actors_actions = actors_actions.ActorActions(self.image, self.personnage, self)
+        self.tools = {}
         self.saveLastPos()
 
         self.coord_to_move = {"posX":0, "posY":0 ,"side":"none"}
+
+        #encoure utile ???
         self.cycle_est_fini = False
         self.compteur_cycle = 0
         self.horloge = 0
         self.a_fini_cycle = 0
         self.compteur = 0
 
-        self.tools = {}
 
         #spec of perso
         self.dommage = 1
@@ -40,7 +41,7 @@ class Actor(pygame.sprite.Sprite):
         self.life = 100
         self.speed = 8
         self.accel = 1
-        self.isDoing = 'nothing'
+        self.is_doing = "nothing"
         self.arme_equipe = 'epe'
 
     def save_x_pos(self):
@@ -83,19 +84,18 @@ class Actor(pygame.sprite.Sprite):
         self.coord_to_move["posY"] = y
         self.coord_to_move["side"] = laDirection
 
-        self.image =  self.actors_actions.actionMarche(self.coord_to_move,self.coord_to_move["side"])
+        self.image =  self.actors_actions.mouvement(self.coord_to_move)
         self.rect.move_ip(x, y)
         self.collision_rect.move_ip(x, y)
         for tool in self.tools.values():
             tool.definir_position(self.rect.x, self.rect.y)
-        #self.saveLastPos()
 
     def jump(self):
-        self.actors_actions.jumpAndAttack("jump",0)
+        self.actors_actions.action("jump")
         self.image = self.actors_actions.image
 
     def attack(self):
-        self.actors_actions.jumpAndAttack("attack",0)
+        self.actors_actions.action("attack")
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
@@ -120,9 +120,10 @@ class Actor(pygame.sprite.Sprite):
     def protectionTotal(self):
         return self.protection
 
-    def ajoute_outils(self, tool):
+    def ajoute_outils(self, tool, tilemap):
         self.tools[tool.name] = tool
         tool.definir_position(self.rect.x, self.rect.y)
+        tilemap.add_layer(type(tool).__name__, tool)
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
