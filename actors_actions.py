@@ -1,7 +1,7 @@
 
 
 import pygame
-
+from eventManager import EventEnum
 
 class ActorActions(pygame.sprite.Sprite):
     def __init__(self,image, sprite_sheet, actor):
@@ -20,8 +20,6 @@ class ActorActions(pygame.sprite.Sprite):
         self.aEteSauver = 0
         self.intervalImage = {"debut": 0, "fin": 0}
 
-        self.event_jump = pygame.USEREVENT + 1
-        self.event_attack = pygame.USEREVENT + 2
         self.nbrFrame = 0
 
 
@@ -182,27 +180,27 @@ class ActorActions(pygame.sprite.Sprite):
 
     def update_frame_jump(self, event):
 
-        if event.type == self.event_jump:
+        if event.type == EventEnum.JUMP:
             self.actor.jump()
             self.nbrFrame += 1
 
             #reset frame
             if self.nbrFrame >= 6:
-                pygame.time.set_timer(self.event_jump, 0)#1 second is 1000 milliseconds
+                pygame.time.set_timer(EventEnum.JUMP, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
 
 
     def update_frame_attack(self, event):
 
-        if event.type == self.event_attack:
+        if event.type == EventEnum.ATTACK:
             self.actor.attack()
             self.nbrFrame += 1
 
             #reset frame
             print self.nbrFrame
             if self.nbrFrame >= 6:
-                pygame.time.set_timer(self.event_attack, 0)#1 second is 1000 milliseconds
+                pygame.time.set_timer(EventEnum.ATTACK, 0)#1 second is 1000 milliseconds
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
 
