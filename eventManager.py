@@ -8,13 +8,17 @@ pygame.event.post(some_event)
 import pygame
 
 
+class EventEnum():
+    JUMP = pygame.USEREVENT + 1
+    ATTACK = pygame.USEREVENT + 2
+    TRANSITION = pygame.USEREVENT + 3
+    MOVE = pygame.USEREVENT + 4
+    ACTION = pygame.USEREVENT + 5
+
+    LAST_EVENT = pygame.NUMEVENTS - 1
+
+
 class EventManager():
-    #de 1 à 255
-    event_jump = pygame.USEREVENT + 1
-    event_attack = pygame.USEREVENT + 2
-    effectuer_transition = pygame.USEREVENT+3
-    move = pygame.USEREVENT+4
-    action = pygame.USEREVENT+4
 
     @staticmethod
     def envois_event(e, content):
@@ -35,14 +39,15 @@ class EventManager():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return True
 
-            if event.type == EventManager.event_jump:
+            if event.type == EventEnum.JUMP:
                 game.perso.actors_actions.update_frame_jump(event)
 
-            if event.type == EventManager.event_attack:
+            if event.type == EventEnum.ATTACK:
                 game.perso.actors_actions.update_frame_attack(event)
 
-            if event.type == EventManager.effectuer_transition:
+            if event.type == EventEnum.TRANSITION:
                 game.effectuer_transition(event.transition)
 
-            if event.type == EventManager.action:
+            if event.type == EventEnum.ACTION:
                 pass
+
