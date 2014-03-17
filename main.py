@@ -35,7 +35,7 @@ class Game(object):
         self.FPS = 30
         self.clocks = {"playerHud": 0}
         self.userInput = None
-        self.event_manager = EventManager()
+
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -67,7 +67,7 @@ class Game(object):
         while True:
             dt = self.clock.tick(self.FPS)
 
-            quitter = self.event_manager.update(self)
+            quitter = EventManager.update(self)
             if quitter:
                 return
 
