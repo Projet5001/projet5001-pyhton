@@ -16,10 +16,13 @@ class EventManager():
     move = pygame.USEREVENT+4
     action = pygame.USEREVENT+4
 
-    def __init__(self):
-        self.data = None
+    @staticmethod
+    def envois_event(e, content):
+        event = pygame.event.Event(e, e=content)
+        pygame.event.post(event)
 
-    def update(self, game):
+    @staticmethod
+    def update(game):
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -28,14 +31,14 @@ class EventManager():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return True
 
-            if event.type == self.event_jump:
+            if event.type == EventManager.event_jump:
                 game.perso.actors_actions.update_frame_jump(event)
 
-            if event.type == self.event_attack:
+            if event.type == EventManager.event_attack:
                 game.perso.actors_actions.update_frame_attack(event)
 
-            if event.type == self.effectuer_transition:
+            if event.type == EventManager.effectuer_transition:
                 game.effectuer_transition(event.transition)
 
-            if event.type == self.action:
+            if event.type == EventManager.action:
                 pass
