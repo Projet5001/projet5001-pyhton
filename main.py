@@ -67,15 +67,10 @@ class Game(object):
         while True:
             dt = self.clock.tick(self.FPS)
 
-            for event in pygame.event.get():
-
-                if event.type == pygame.QUIT:
-                    return
-
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    return
-
-            self.event_manager.update(self)
+            #if quit
+            quitter = self.event_manager.update(self)
+            if quitter:
+                return
 
             self.userInput.updateKey(dt)
 
