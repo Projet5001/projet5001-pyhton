@@ -4,6 +4,7 @@
 import pygame
 from eventManager import EventManager
 
+
 class Keyboard():
     def __init__(self, game):
         self.game = game
@@ -32,14 +33,15 @@ class Keyboard():
         if self.actor.is_doing == "nothing":
             self.actor.jump()
             #déclanche un event
-            pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
+            #pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
+            EventManager.delay_event(EventManager.event_jump, 40)
 
     def attack(self):
         if self.actor.is_doing == "nothing":
             self.actor.attack()
             #déclanche un event
-            pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
-
+            #pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
+            EventManager.delay_event(EventManager.event_attack, 30)
     def block(self):
         self.actor.block()
 
