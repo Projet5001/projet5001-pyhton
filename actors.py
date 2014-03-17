@@ -99,7 +99,10 @@ class Actor(pygame.sprite.Sprite):
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
-        return self.dommage * self.luck()
+        if self.is_arme_active():
+            return self.dommage * self.luck() * self.tools[self.arme_equipe].dommage
+        else:
+            return self.dommage * self.luck()
 
     def active_arme(self, active):
         self.tools[self.arme_equipe].visible = active
