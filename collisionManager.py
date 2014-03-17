@@ -27,7 +27,7 @@ class CollisionManager():
                         if sprite.is_equippable() and sprite.rect.colliderect(s.collision_rect):
                             return s
                 else:
-                    for s in self.monstre_groupe:
+                    for s in self.layer_manager['monster']:
                         if collided(sprite, s):
                             return s
         except KeyError:
