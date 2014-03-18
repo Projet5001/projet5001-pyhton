@@ -13,6 +13,7 @@ from tools import weapon
 from gameconfig import GameConfig
 from layermanager import LayerManager
 from collisionManager import CollisionManager
+from eventManager import EventManager
 from stories.storymanager import StoryManager
 
 
