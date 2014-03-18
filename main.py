@@ -13,6 +13,7 @@ from tools import weapon
 from gameconfig import GameConfig
 from layermanager import LayerManager
 from collisionManager import CollisionManager
+from stories.storymanager import StoryManager
 
 
 class Game(object):
@@ -23,6 +24,7 @@ class Game(object):
         self.clock = pygame.time.Clock()
 
         self.layer_manager = LayerManager(self.config, self.clock)
+        self.story_manager = StoryManager(self, self.layer_manager)
         self.collision_manager = CollisionManager(self.layer_manager)
 
         #list pour le joueur et monstre
@@ -61,6 +63,9 @@ class Game(object):
 
         #hub
         self.createHuds()
+
+        self.story_manager.read_story(self.config.get_start_map())
+
         self.mainloop()
 
     def mainloop(self):
@@ -84,9 +89,14 @@ class Game(object):
 
                 if event.type == pygame.USEREVENT+3:
                     self.effectuer_transition(event.transition)
+                if event.type == pygame.USEREVENT + 6:
+                    self.story_manager.story_event()
 
-            # doit etre executé dans cette ordre
-            self.userInput.updateKey(dt)
+            if not self.story_manager.blocking:
+                # doit etre executé dans cette ordre
+                self.userInput.updateKey(dt)
+            elif 1 in pygame.key.get_pressed():
+                self.story_manager.remove_speech()
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
