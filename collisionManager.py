@@ -28,7 +28,7 @@ class CollisionManager():
                             print 'test'
                             return s
                 else:
-                    for s in self.monstre_groupe:
+                    for s in self.layer_manager['monster']:
                         if collided(sprite, s):
                             return s
         except KeyError:

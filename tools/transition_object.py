@@ -1,6 +1,7 @@
 from pygame.locals import *
 from basetool import BaseTool
 import pygame
+from eventManager import EventEnum
 
 
 class TransitionObject(BaseTool):
@@ -19,7 +20,7 @@ class TransitionObject(BaseTool):
 
         # fire new event for transition (otherwise there is no way to call effectuer_transition)
         # TODO: rework events into own class.
-        event = pygame.event.Event(pygame.USEREVENT+3, transition=self.tmx_object)
+        event = pygame.event.Event(EventEnum.TRANSITION, transition=self.tmx_object)
         pygame.event.post(event)
 
     def draw(self, screen):
