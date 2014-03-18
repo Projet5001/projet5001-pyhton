@@ -32,7 +32,7 @@ class LayerManager(object):
             func = self.attr_source[name][1]
             return func(obj)
         else:
-            raise AttributeError
+            return getattr(self.tilemap, name)
 
     def __getitem__(self, key):
         try:
@@ -40,9 +40,13 @@ class LayerManager(object):
         except KeyError:
             return self.tilemap.layers[key]
 
+    def __contains__(self, key):
+	return key in self.layers.keys()
+
     def remove(self, layer_name):
         if layer_name in self.layers:
-            self.tilemap.layers.remove(layer_name)
+            self.tilemap.layers.remove(self.layers[layer_name])
+            del self.layers[layer_name]
 
     def set_map(self, game, new_map):
         map_path = os.path.join(self.config.get_asset_dir(), new_map)
