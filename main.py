@@ -7,8 +7,7 @@ from lib import tmx
 import userInput
 import playerHud
 import player
-import tools
-import actors_actions
+
 from tools import weapon
 from gameconfig import GameConfig
 from layermanager import LayerManager
@@ -39,6 +38,7 @@ class Game(object):
         self.FPS = 30
         self.clocks = {"playerHud": 0}
         self.userInput = None
+
 
     def start(self):
         #Trouve l'emplacement du héro
@@ -72,29 +72,12 @@ class Game(object):
     def mainloop(self):
         while True:
             dt = self.clock.tick(self.FPS)
-            # ces lignes sont recquises pour passer les events
-            # au gestionaire d'event de pygame
-            for event in pygame.event.get():
 
-                if event.type == pygame.QUIT:
-                    return
-                if event.type == pygame.KEYDOWN \
-                        and event.key == pygame.K_ESCAPE:
-                    return
-
-                if event.type == self.perso.actors_actions.event_jump:
-                    self.perso.actors_actions.update_frame_jump(event)
-
-                if event.type == self.perso.actors_actions.event_attack:
-                    self.perso.actors_actions.update_frame_attack(event)
-
-                if event.type == pygame.USEREVENT+3:
-                    self.effectuer_transition(event.transition)
-                if event.type == pygame.USEREVENT + 6:
-                    self.story_manager.story_event()
+            quitter = EventManager.update(self)
+            if quitter:
+                return
 
             if not self.story_manager.blocking:
-                # doit etre executé dans cette ordre
                 self.userInput.updateKey(dt)
             elif 1 in pygame.key.get_pressed():
                 self.story_manager.remove_speech()

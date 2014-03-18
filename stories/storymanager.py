@@ -6,6 +6,7 @@ import pygame
 from pygame import Rect
 
 from lib import tmx
+from eventManager import EventEnum
 
 
 class StoryManager(object):
@@ -38,7 +39,7 @@ class StoryManager(object):
                                     self.stories[story]['position'])
             elif self.stories[story]['type'] == "timer":
                 if not self.events:
-                    pygame.time.set_timer(pygame.USEREVENT + 6,
+                    pygame.time.set_timer(EventEnum.STORY,
                                           self.stories[story]['delay'])
                 self.events.append(StoryEvent(self.stories[story], self.game,
                                               self.stories[story]['delay']))
@@ -48,11 +49,11 @@ class StoryManager(object):
 
     def story_event(self):
         print "story event!!"
-        pygame.time.set_timer(pygame.USEREVENT + 6, 0)
+        pygame.time.set_timer(EventEnum.STORY, 0)
         event = self.events.pop(0)
         event.handle_event()
         if self.events:
-            pygame.time.set_timer(pygame.USEREVENT + 6, self.events[0].delay)
+            pygame.time.set_timer(EventEnum.STORY, self.events[0].delay)
 
     def display_speech(self, text, pos):
         self.speechlayer = SpeechLayer(self.layer_manager, text, pos)

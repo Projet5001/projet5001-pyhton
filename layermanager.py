@@ -17,14 +17,13 @@ class LayerManager(object):
         self.tilemap = None
 
         self.layers = {}
-        self.attr_source = { \
-            "screen_height": [ "screen", methodcaller('get_height') ],
-            "screen_width": [ "screen", methodcaller('get_width') ],
-            "map_height": [ "tilemap", attrgetter('px_height') ],
-            "map_width": [ "tilemap", attrgetter('px_width') ],
-            "tile_height": [ "tilemap", attrgetter('tile_height') ],
-            "tile_width": [ "tilemap", attrgetter('tile_width') ],
-            }
+        self.attr_source = {
+            "screen_height": ["screen", methodcaller('get_height')],
+            "screen_width": ["screen", methodcaller('get_width')],
+            "map_height": ["tilemap", attrgetter('px_height')],
+            "map_width": ["tilemap", attrgetter('px_width')],
+            "tile_height": ["tilemap", attrgetter('tile_height')],
+            "tile_width": ["tilemap", attrgetter('tile_width')], }
 
     def __getattr__(self, name):
         if name in self.attr_source:
@@ -57,7 +56,6 @@ class LayerManager(object):
             new_tilemap.layers.add_named(self.layers[layer], layer)
 
         self.tilemap = new_tilemap
-
 
     def get_current_filename(self):
         return self.tilemap.filename
