@@ -2,6 +2,7 @@
 
 
 import pygame
+from eventManager import EventManager, EventEnum
 
 
 class Keyboard():
@@ -17,6 +18,7 @@ class Keyboard():
 
     def move_left(self):
         self.actor.move(self.coord_left[0], self.coord_left[1], "left")
+        #EventManager.envois_event(EventManager.move, 'left')
 
     def move_right(self):
         self.actor.move(self.coord_right[0], self.coord_right[1], "right")
@@ -31,14 +33,15 @@ class Keyboard():
         if self.actor.is_doing == "nothing":
             self.actor.jump()
             #déclanche un event
-            pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
+            #pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
+            EventManager.delay_event(EventEnum.JUMP, 40)
 
     def attack(self):
         if self.actor.is_doing == "nothing":
             self.actor.attack()
             #déclanche un event
-            pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
-
+            #pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
+            EventManager.delay_event(EventEnum.ATTACK, 30)
     def block(self):
         self.actor.block()
 
