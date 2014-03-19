@@ -14,6 +14,7 @@ class EventEnum():
     TRANSITION = pygame.USEREVENT + 3
     MOVE = pygame.USEREVENT + 4
     ACTION = pygame.USEREVENT + 5
+    STORY = pygame.USEREVENT + 6
 
     LAST_EVENT = pygame.NUMEVENTS - 1
 
@@ -50,4 +51,7 @@ class EventManager():
 
             if event.type == EventEnum.ACTION:
                 pass
+
+            if event.type == EventEnum.STORY:
+                game.story_manager.story_event()
 
