@@ -15,7 +15,6 @@ from collisionManager import CollisionManager
 from eventManager import EventManager
 from stories.storymanager import StoryManager
 
-
 class Game(object):
 
     def __init__(self, conffile):
@@ -64,9 +63,7 @@ class Game(object):
 
         #hub
         self.createHuds()
-
         self.story_manager.read_story(self.config.get_start_map())
-
         self.mainloop()
 
     def mainloop(self):
