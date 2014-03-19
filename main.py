@@ -111,7 +111,8 @@ class Game(object):
 
         try:
             for cell in self.layer_manager['pnjs'].find('monstre'):
-                m = monster.Monster(os.path.join(self.config.get_sprite_dir(),
+                m = monster.Monster(cell.name,
+                                    os.path.join(self.config.get_sprite_dir(),
                                                  "sprite-Hero4.png"),
                                    (cell.px, cell.py), self.layer_manager['monster'])
                 monstres.append(m)
@@ -121,7 +122,8 @@ class Game(object):
         return monstres
 
     def charge_player(self):
-        return player.Player(os.path.join(self.config.get_sprite_dir(),
+        return player.Player("player",
+                             os.path.join(self.config.get_sprite_dir(),
                                           "sprite-Hero4.png"),
                              (0, 0), self.layer_manager['player'])
 

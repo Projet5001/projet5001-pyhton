@@ -7,9 +7,10 @@ from pygame import rect as rect
 
 
 class Actor(pygame.sprite.Sprite):
-    def __init__(self, image, position, *groups):
+    def __init__(self, name, image, position, *groups):
         super(Actor, self).__init__(*groups)
         # self.image = pygame.image.load(image)
+        self.name = name
         self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image)
 
         self.personnage = self.charger_Images_Sprite.personnage
