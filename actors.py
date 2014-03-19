@@ -105,11 +105,6 @@ class Actor(pygame.sprite.Sprite):
     def wait_frame(self):
         self.actors_actions.frame_pause(self.actors_actions.__sauve_direction_effectue__())
         self.image = self.actors_actions.image
-        # print "wait_frame wait_frame wait_frame wait_frame wait_frame wait_frame wait_frame wait_frame "
-        # if self.actors_actions.__sauve_direction_effectue__() != "none":
-        #     self.move(0, 0, self.actors_actions.__sauve_direction_effectue__(), "first_frame")
-        # else:
-        #     self.move(0,0, "down", "first_frame")
 
     def calcul_dommage(self):
         return self.dommage * self.luck()
