@@ -31,17 +31,21 @@ class Keyboard():
 
     def jump(self):
         if self.actor.is_doing == "nothing":
-            self.actor.jump()
+            #self.actor.jump()
             #déclanche un event
             #pygame.time.set_timer(self.actor.actors_actions.event_jump, 40)#1 second is 1000 milliseconds
             EventManager.delay_event(EventEnum.JUMP, 40)
 
     def attack(self):
         if self.actor.is_doing == "nothing":
-            self.actor.attack()
+            #self.actor.attack()
             #déclanche un event
             #pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
             EventManager.delay_event(EventEnum.ATTACK, 30)
+
+    def pause_actor(self):
+            self.actor.wait_frame()
+
     def block(self):
         self.actor.block()
 
@@ -53,9 +57,12 @@ class Keyboard():
         pressedkeys = pygame.key.get_pressed()
         self.actor.saveLastPos()
 
+
         if pressedkeys[pygame.K_LALT]:
             self.actor.active_arme(not self.actor.is_arme_active())
 
+        if self.actor.is_doing != "nothing":
+            pass
         else:
             if pressedkeys[pygame.K_LEFT]:
                 self.move_left()
