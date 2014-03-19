@@ -41,7 +41,7 @@ class Keyboard():
             #self.actor.attack()
             #déclanche un event
             #pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
-            EventManager.delay_event(EventEnum.ATTACK, 30)
+            EventManager.delay_event(EventEnum.ATTACK, 40)
 
     def pause_actor(self):
             self.actor.wait_frame()
@@ -64,6 +64,7 @@ class Keyboard():
         if self.actor.is_doing != "nothing":
             pass
         else:
+
             if pressedkeys[pygame.K_LEFT]:
                 self.move_left()
 
@@ -76,13 +77,27 @@ class Keyboard():
             if pressedkeys[pygame.K_DOWN]:
                 self.move_down()
 
-            if pressedkeys[pygame.K_SPACE]:
-                self.jump()
-
             if pressedkeys[pygame.K_LCTRL]:
                 self.show_player_hud()
 
-            if pressedkeys[pygame.K_c]:
+            if pressedkeys[pygame.K_SPACE]:
+                self.jump()
+            elif pressedkeys[pygame.K_c]:
                 self.attack()
+
+            self.doit_etre_en_pause(pressedkeys)
+
+
+
+    def doit_etre_en_pause(self, pressedkeys):
+        if (not pressedkeys[pygame.K_LEFT]) and  \
+                 (not pressedkeys[pygame.K_RIGHT]) and \
+                 (not pressedkeys[pygame.K_UP]) and \
+                 (not pressedkeys[pygame.K_DOWN]):
+            self.actor.wait_frame()
+
+
+
+
 
 

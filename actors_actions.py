@@ -23,13 +23,7 @@ class ActorActions(pygame.sprite.Sprite):
         self.nbrFrame = 0
 
 
-    def __sauve_direction_effectue__(self):
-        self.pos_to_return = "none"
-        if self.derniere_direction_perso != "none":
-            self.quatreDirections[self.derniere_direction_perso] = 1
-            self.pos_to_return = self.derniere_direction_perso
-        self.aEteSauver += 1
-        return self.pos_to_return
+
 
     def mouvement(self,coord_to_move):
 
@@ -203,7 +197,8 @@ class ActorActions(pygame.sprite.Sprite):
             self.actor.is_doing = "jump"
             #reset frame
             if self.nbrFrame >= 6:
-                self.actor.jump("last_frame")
+                self.frame_pause(self.__sauve_direction_effectue__())
+                self.actor.jump("arret_frame")
                 pygame.time.set_timer(EventEnum.JUMP, 0) #0 second is event OFF
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
@@ -220,10 +215,29 @@ class ActorActions(pygame.sprite.Sprite):
             self.actor.is_doing = "attack"
             #reset frame
             if self.nbrFrame >= 6:
-                self.actor.attack("last_frame")
+                self.frame_pause(self.__sauve_direction_effectue__())
+                self.actor.attack("arret_frame")
                 pygame.time.set_timer(EventEnum.ATTACK, 0) #0 second is event OFF
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
+
+    def frame_pause(self,set_frame):
+        if set_frame == "left":
+            self.image = self.sprite_sheet[24]
+        if set_frame == "right":
+            self.image = self.sprite_sheet[17]
+        if set_frame == "up":
+            self.image = self.sprite_sheet[10]
+        if set_frame == "down":
+            self.image = self.sprite_sheet[3]
+
+    def __sauve_direction_effectue__(self):
+        self.pos_to_return = "none"
+        if self.derniere_direction_perso != "none":
+            self.quatreDirections[self.derniere_direction_perso] = 1
+            self.pos_to_return = self.derniere_direction_perso
+        self.aEteSauver += 1
+        return self.pos_to_return
 
 
     def update(self, event):
