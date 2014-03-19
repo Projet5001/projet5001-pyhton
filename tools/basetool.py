@@ -51,6 +51,10 @@ class BaseTool(sprite.Sprite):
             for module in tools.__all__:
                 importlib.import_module(".".join(["tools", module]))
 
+    def receive_event(self, e):
+        pass
+
+
     def __followPlayer__(self):
         #Centrer la position du HUD par rapport au personnage
         playerx, playery = self.player.collision_rect.x, self.player.collision_rect.y
