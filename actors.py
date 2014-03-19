@@ -93,17 +93,15 @@ class Actor(pygame.sprite.Sprite):
             tool.definir_position(self.rect.x, self.rect.y)
 
     def jump(self, tell_frame):
-        if tell_frame != "arret_frame":
-            self.actors_actions.action("jump", tell_frame)
+        self.actors_actions.action("jump", tell_frame)
         self.image = self.actors_actions.image
 
     def attack(self, tell_frame):
-        if tell_frame != "arret_frame":
-            self.actors_actions.action("attack", tell_frame)
+        self.actors_actions.action("attack", tell_frame)
         self.image = self.actors_actions.image
 
     def wait_frame(self):
-        self.actors_actions.frame_pause(self.actors_actions.__sauve_direction_effectue__())
+        self.actors_actions.frame_pause()
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):

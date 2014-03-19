@@ -24,10 +24,10 @@ class Keyboard():
         self.actor.move(self.coord_right[0], self.coord_right[1], "right")
 
     def move_up(self):
-        self.actor.move(self.coord_up[0],self.coord_up[1], "up")
+        self.actor.move(self.coord_up[0], self.coord_up[1], "up")
 
     def move_down(self):
-        self.actor.move(self.coord_down[0],self.coord_down[1], "down")
+        self.actor.move(self.coord_down[0], self.coord_down[1], "down")
 
     def jump(self):
         if self.actor.is_doing == "nothing":
@@ -44,7 +44,7 @@ class Keyboard():
             EventManager.delay_event(EventEnum.ATTACK, 40)
 
     def pause_actor(self):
-            self.actor.wait_frame()
+        self.actor.wait_frame()
 
     def block(self):
         self.actor.block()
@@ -57,44 +57,40 @@ class Keyboard():
         pressedkeys = pygame.key.get_pressed()
         self.actor.saveLastPos()
 
+        if pressedkeys:
+            if pressedkeys[pygame.K_LALT]:
+                self.actor.active_arme(not self.actor.is_arme_active())
 
-        if pressedkeys[pygame.K_LALT]:
-            self.actor.active_arme(not self.actor.is_arme_active())
+            if self.actor.is_doing == "nothing":
 
-        if self.actor.is_doing != "nothing":
-            pass
-        else:
+                if pressedkeys[pygame.K_LEFT]:
+                    self.move_left()
 
-            if pressedkeys[pygame.K_LEFT]:
-                self.move_left()
+                if pressedkeys[pygame.K_RIGHT]:
+                    self.move_right()
 
-            if pressedkeys[pygame.K_RIGHT]:
-                self.move_right()
+                if pressedkeys[pygame.K_UP]:
+                    self.move_up()
 
-            if pressedkeys[pygame.K_UP]:
-                self.move_up()
+                if pressedkeys[pygame.K_DOWN]:
+                    self.move_down()
 
-            if pressedkeys[pygame.K_DOWN]:
-                self.move_down()
+                if pressedkeys[pygame.K_LCTRL]:
+                    self.show_player_hud()
 
-            if pressedkeys[pygame.K_LCTRL]:
-                self.show_player_hud()
+                if pressedkeys[pygame.K_SPACE]:
+                    self.jump()
+                elif pressedkeys[pygame.K_c]:
+                    self.attack()
 
-            if pressedkeys[pygame.K_SPACE]:
-                self.jump()
-            elif pressedkeys[pygame.K_c]:
-                self.attack()
+                self.est_imobile(pressedkeys)
 
-            self.doit_etre_en_pause(pressedkeys)
-
-
-
-    def doit_etre_en_pause(self, pressedkeys):
-        if (not pressedkeys[pygame.K_LEFT]) and  \
-                 (not pressedkeys[pygame.K_RIGHT]) and \
-                 (not pressedkeys[pygame.K_UP]) and \
-                 (not pressedkeys[pygame.K_DOWN]):
-            self.actor.wait_frame()
+    def est_imobile(self, pressedkeys):
+        if not (pressedkeys[pygame.K_LEFT] or
+                pressedkeys[pygame.K_RIGHT] or
+                pressedkeys[pygame.K_UP] or
+                pressedkeys[pygame.K_DOWN]):
+                    self.actor.wait_frame()
 
 
 
