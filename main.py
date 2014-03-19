@@ -70,6 +70,7 @@ class Game(object):
             quitter = EventManager.update(self)
             if quitter:
                 return
+
             self.userInput.updateKey(dt)
 
             for key, value in self.clocks.iteritems():
