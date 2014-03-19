@@ -1,0 +1,14 @@
+{
+        "ordre": [ "begin-discuss", "begin-dead-timer" ],
+	"begin-discuss": {
+		"type": "speech",
+		"text": "Il y a une épidémie de zombies!",
+		"position": "top"
+	},
+        "begin-dead-timer": {
+		"type": "timer",
+		"delay": 5000,
+		"action": "death",
+                "sprite": "player"
+	}
+}

@@ -33,6 +33,7 @@ class Actor(pygame.sprite.Sprite):
         self.horloge = 0
         self.a_fini_cycle = 0
         self.compteur = 0
+        self.wait_actors = False
 
 
         #spec of perso
@@ -78,11 +79,12 @@ class Actor(pygame.sprite.Sprite):
         self.saveLastPos()
 
 
-    def move(self, x, y,laDirection):
+    def move(self, x, y,laDirection, define_frame = "none"):
         #print "dans la class Actor la direction recu ===  "+str(laDirection)
         self.coord_to_move["posX"] = x
         self.coord_to_move["posY"] = y
         self.coord_to_move["side"] = laDirection
+        self.coord_to_move["define_frame"] = define_frame
 
         self.image =  self.actors_actions.mouvement(self.coord_to_move)
         self.rect.move_ip(x, y)
@@ -90,12 +92,16 @@ class Actor(pygame.sprite.Sprite):
         for tool in self.tools.values():
             tool.definir_position(self.rect.x, self.rect.y)
 
-    def jump(self):
-        self.actors_actions.action("jump")
+    def jump(self, tell_frame):
+        self.actors_actions.action("jump", tell_frame)
         self.image = self.actors_actions.image
 
-    def attack(self):
-        self.actors_actions.action("attack")
+    def attack(self, tell_frame):
+        self.actors_actions.action("attack", tell_frame)
+        self.image = self.actors_actions.image
+
+    def wait_frame(self):
+        self.actors_actions.frame_pause()
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
