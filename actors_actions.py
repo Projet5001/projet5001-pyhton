@@ -125,7 +125,6 @@ class ActorActions(pygame.sprite.Sprite):
         self.__sauve_direction_effectue__()
         return self.image
 
-
     #iterateur d'image
     def sequenceImages(self, intervalle_img,type_image, tell_frame):
 
@@ -139,7 +138,6 @@ class ActorActions(pygame.sprite.Sprite):
             self.image = self.sprite_sheet[self.lesImages]
             self.lesImages += 1
 
-
         elif type_image == "angle_bas":
             if self.imageAngleBas < intervalle_img["debut"] or self.imageAngleBas > intervalle_img["fin"] \
                                 or tell_frame == "first_frame":
@@ -148,7 +146,6 @@ class ActorActions(pygame.sprite.Sprite):
                 self.lesImages = intervalle_img["fin"]
             self.image = self.sprite_sheet[self.imageAngleBas]
             self.imageAngleBas += 1
-
 
         elif type_image == "angle_haut":
             if self.imageAngleHaut < intervalle_img["debut"] or self.imageAngleHaut > intervalle_img["fin"] \
@@ -161,23 +158,23 @@ class ActorActions(pygame.sprite.Sprite):
 
     def direction_angle_bas(self):
 
-        if ((self.derniere_direction_perso == "down"  and self.quatreDirections["right"] > 0) or
+        if ((self.derniere_direction_perso == "down" and self.quatreDirections["right"] > 0) or
              (self.quatreDirections["right"] > 0 and self.derniere_direction_perso == "down")):
             return True
 
-        if ((self.derniere_direction_perso == "down"  and self.quatreDirections["left"] > 0) or
+        if ((self.derniere_direction_perso == "down" and self.quatreDirections["left"] > 0) or
              (self.quatreDirections["left"] > 0 and self.derniere_direction_perso == "down")):
             return False
 
 
     def direction_angle_haut(self):
 
-        if  ((self.derniere_direction_perso == "up" and self.quatreDirections["right"] > 0) or
-             (self.quatreDirections["right"] > 0 and self.derniere_direction_perso == "up" )):
+        if ((self.derniere_direction_perso == "up" and self.quatreDirections["right"] > 0) or
+             (self.quatreDirections["right"] > 0 and self.derniere_direction_perso == "up")):
             return True
 
-        if  ((self.derniere_direction_perso == "up" and self.quatreDirections["left"] > 0) or
-             (self.quatreDirections["left"] > 0 and self.derniere_direction_perso == "up" )):
+        if ((self.derniere_direction_perso == "up" and self.quatreDirections["left"] > 0) or
+             (self.quatreDirections["left"] > 0 and self.derniere_direction_perso == "up")):
             return False
 
     def __reset_quatreDirections__(self):
@@ -202,7 +199,6 @@ class ActorActions(pygame.sprite.Sprite):
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
 
-
     def update_frame_attack(self, event):
         if event.type == EventEnum.ATTACK:
             if self.nbrFrame == 0:
@@ -219,7 +215,8 @@ class ActorActions(pygame.sprite.Sprite):
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
 
-    def frame_pause(self,set_frame):
+    def frame_pause(self):
+        set_frame = self.__sauve_direction_effectue__()
         if set_frame == "left":
             self.image = self.sprite_sheet[24]
         if set_frame == "right":
@@ -230,13 +227,12 @@ class ActorActions(pygame.sprite.Sprite):
             self.image = self.sprite_sheet[3]
 
     def __sauve_direction_effectue__(self):
-        self.pos_to_return = "none"
+        pos_to_return = "none"
         if self.derniere_direction_perso != "none":
             self.quatreDirections[self.derniere_direction_perso] = 1
-            self.pos_to_return = self.derniere_direction_perso
+            pos_to_return = self.derniere_direction_perso
         self.aEteSauver += 1
-        return self.pos_to_return
-
+        return pos_to_return
 
     def update(self, event):
         pass
