@@ -197,8 +197,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.actor.is_doing = "jump"
             #reset frame
             if self.nbrFrame >= 6:
-                self.frame_pause(self.__sauve_direction_effectue__())
-                self.actor.jump("arret_frame")
+                self.actor.wait_frame()
                 pygame.time.set_timer(EventEnum.JUMP, 0) #0 second is event OFF
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
@@ -215,8 +214,7 @@ class ActorActions(pygame.sprite.Sprite):
             self.actor.is_doing = "attack"
             #reset frame
             if self.nbrFrame >= 6:
-                self.frame_pause(self.__sauve_direction_effectue__())
-                self.actor.attack("arret_frame")
+                self.actor.wait_frame()
                 pygame.time.set_timer(EventEnum.ATTACK, 0) #0 second is event OFF
                 self.nbrFrame = 0
                 self.actor.is_doing = "nothing"
