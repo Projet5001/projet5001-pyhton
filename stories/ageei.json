@@ -9,6 +9,6 @@
 		"type": "timer",
 		"delay": 5000,
 		"action": "death",
-                "sprite": "player"
+                "sprite": "monstre2"
 	}
 }
