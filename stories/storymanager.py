@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 
 import os
 import json
@@ -27,22 +29,44 @@ class StoryManager(object):
         self.events = []
 
     def read_story(self, source):
-        self.source = "%s.json" % source.split('.')[0]
-        self.story_file = open(os.path.join(os.path.dirname(__file__),
-                                            self.source),
-                               "r")
-        self.stories = json.load(self.story_file)
+        try:
+            self.source = "%s.json" % source.split('.')[0]
+            self.story_file = open(os.path.join(os.path.dirname(__file__),
+                                                self.source),
+                                   "r")
+            self.stories = json.load(self.story_file)
 
-        for story in self.stories['ordre']:
-            if self.stories[story]['type'] == "speech":
-                self.display_speech(self.stories[story]['text'],
-                                    self.stories[story]['position'])
-            elif self.stories[story]['type'] == "timer":
-                if not self.events:
-                    pygame.time.set_timer(EventEnum.STORY,
-                                          self.stories[story]['delay'])
-                self.events.append(StoryEvent(self.stories[story], self.game,
-                                              self.stories[story]['delay']))
+            for story in self.stories['ordre']:
+                if self.stories[story]['type'] == "speech":
+                    self.display_speech(self.stories[story]['text'],
+                                        self.stories[story]['position'])
+                elif self.stories[story]['type'] == "timer":
+                    if not self.events:
+                        pygame.time.set_timer(EventEnum.STORY,
+                                              self.stories[story]['delay'])
+                    delay = self.stories[story]['delay']
+                    self.events.append(StoryEvent(self.stories[story],
+                                                  self.game,
+                                                  delay))
+        except IOError:
+            print "attention: impossible de charger le fichier d'histoire"
+            pass
+        except KeyError:
+            # On peut ici avoir passé à travers beaucoup de création d'objets
+            # il vaut mieux tout vider.
+
+            print "attention: erreur de syntaxe dans le fichier d'histoire"
+
+            self.stories.clear()
+
+            # vider les events...
+            self.events[:] = []
+
+            # désactiver les timers déjà créés
+            pygame.time.set_timer(EventEnum.STORY, 0)
+            self.unblockable = True
+            self.remove_speech()
+            pass
 
     def set_unblockable(self, unblockable):
         self.unblockable = unblockable
