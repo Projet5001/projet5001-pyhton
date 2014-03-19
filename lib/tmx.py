@@ -6,11 +6,12 @@
 
 import sys
 import struct
-import pygame
 import os.path
+from xml.etree import ElementTree
+
+import pygame
 from pygame.locals import *
 from pygame import Rect
-from xml.etree import ElementTree
 
 
 class Tile(object):
