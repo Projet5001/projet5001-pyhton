@@ -53,3 +53,7 @@ class EventManager():
             if event.type == EventEnum.STORY:
                 game.story_manager.story_event()
 
+            if event.type == EventEnum.MOVE:
+                pass
+                #game.perso.tool.receive_event()
+
