@@ -14,7 +14,7 @@ class EventEnum():
     TRANSITION = pygame.USEREVENT + 3
     MOVE = pygame.USEREVENT + 4
     ACTION = pygame.USEREVENT + 5
-
+    PAUSE = pygame.USEREVENT + 6
     LAST_EVENT = pygame.NUMEVENTS - 1
 
 
@@ -32,7 +32,6 @@ class EventManager():
     @staticmethod
     def update(game):
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 return True
 
@@ -50,4 +49,3 @@ class EventManager():
 
             if event.type == EventEnum.ACTION:
                 pass
-
