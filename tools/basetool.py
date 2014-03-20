@@ -2,7 +2,7 @@
 
 from pygame import Rect, sprite
 import importlib
-
+from eventManager import EventEnum
 
 class BaseTool(sprite.Sprite):
     def __init__(self, layer_manager, player, name, obj=None):
@@ -14,6 +14,7 @@ class BaseTool(sprite.Sprite):
         self.tmx_object = obj
         self.hub = None
         self.rect = Rect(0, 0, 0, 0)
+        self.tool_oriantation = (0, 0)
 
     def is_equippable(self):
         return False
@@ -50,10 +51,6 @@ class BaseTool(sprite.Sprite):
         finally:
             for module in tools.__all__:
                 importlib.import_module(".".join(["tools", module]))
-
-    def receive_event(self, e):
-        pass
-
 
     def __followPlayer__(self):
         #Centrer la position du HUD par rapport au personnage
