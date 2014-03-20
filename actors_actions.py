@@ -22,9 +22,6 @@ class ActorActions(pygame.sprite.Sprite):
 
         self.nbrFrame = 0
 
-
-
-
     def mouvement(self,coord_to_move):
 
         laDirection = coord_to_move["side"]

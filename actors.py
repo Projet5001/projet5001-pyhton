@@ -113,6 +113,9 @@ class Actor(pygame.sprite.Sprite):
     def active_arme(self, active):
         self.tools[self.arme_equipe].visible = active
 
+    def get_tool(self):
+        return self.tools[self.arme_equipe]
+
     def is_arme_active(self):
         return self.tools[self.arme_equipe].visible
 

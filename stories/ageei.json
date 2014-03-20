@@ -1,5 +1,5 @@
 {
-        "ordre": [ "begin-discuss", "begin-dead-timer" ],
+        "ordre": [ "begin-discuss" ],
 	"begin-discuss": {
 		"type": "speech",
 		"text": "Il y a une épidémie de zombies!",
