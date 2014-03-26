@@ -12,7 +12,7 @@ class Player(actors.Actor):
         #pour les test du HUD
         self.name = "Max Power"
         self.level = 99
-        self.health = {"hp": 27, "max": 38}
+        self.health = {"hp": 38, "max": 38}
 
     def block(self):
         #methode qui aura plus de fonctionalié plus tard

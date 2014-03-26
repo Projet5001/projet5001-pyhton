@@ -38,7 +38,6 @@ class Game(object):
         self.clocks = {"playerHud": 0}
         self.userInput = None
 
-
     def start(self):
         #Trouve l'emplacement du héro
         source = self.layer_manager['boundaries'].find_source("start")
@@ -53,16 +52,13 @@ class Game(object):
 
         self.userInput = userInput.Keyboard(self)
 
-        #prototype !!!!!!!!!!
-        #creation de l'arme
-        epe = weapon.Weapon(self.layer_manager, self.perso, 'epe', 5, 100, 1)
 
-        #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
+        epe = weapon.Weapon(self.layer_manager, self.perso, 'epe', 5, 100, 1)
         self.perso.ajoute_outils(epe, self.layer_manager)
-        #prototype !!!!!!!!!!
+
 
         #hub
-        self.createHuds()
+        #self.createHuds()
         self.story_manager.read_story(self.config.get_start_map())
         self.mainloop()
 
@@ -83,7 +79,8 @@ class Game(object):
                 if value >= 0:
                     if value == 0:
                         if key == "playerHud":
-                            self.hideHud(key)
+                            #self.hideHud(key)
+                            pass
                     else:
                         self.clocks[key] = value - 1
 
@@ -138,7 +135,7 @@ class Game(object):
             # la porte n'est probablement pas barrée...
             pass
 
-        self.deleteHuds()
+        #self.deleteHuds()
 
         source_name = self.layer_manager.get_current_filename()
         if 'destination' in limite.properties:
@@ -151,18 +148,8 @@ class Game(object):
             self.layer_manager.set_focus(source.px, source.py, True)
 
     def createHuds(self):
-        hud = playerHud.PlayerHud("playerHud",
-                                  self.perso,
-                                  self.layer_manager)
+        hud = playerHud.PlayerHud("playerHud",self.perso,self.layer_manager)
         self.layer_manager.add_layer(hud.name, hud)
-
-    def showHud(self, name):
-        layer = self.layer_manager[name]
-        layer.setVisible(True)
-
-    def hideHud(self, name):
-        layer = self.layer_manager[name]
-        layer.setVisible(False)
 
     def deleteHuds(self):
         if "playerHud" in self.layer_manager.layers:
