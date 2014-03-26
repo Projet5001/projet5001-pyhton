@@ -25,10 +25,10 @@ import actors_actions
 
 
 class Actor(pygame.sprite.Sprite):
-    def __init__(self, image, position, *groups):
+    def __init__(self, image,nombre_lignes, position, *groups):
         super(Actor, self).__init__(*groups)
         # self.image = pygame.image.load(image)
-        self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image)
+        self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image,nombre_lignes)
 
         self.personnage = self.charger_Images_Sprite.personnage
         self.image = self.personnage[4]
