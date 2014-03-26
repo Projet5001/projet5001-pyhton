@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*-coding:utf-8-*-
 #
 # Projet5001: un jeu de survie post-apocalyptique
 # Copyright (C) 2014  Équipe Projet5001
@@ -20,9 +20,12 @@
 import actors
 
 
-class Monster(actors.Actor):
+class Npc(actors.Actor):
     def __init__(self, name, image, position, *groups):
-        super(Monster, self).__init__(name, image, 4, position, *groups)
+        super(Npc, self).__init__(name, image, 4, position, *groups)
 
     def update(self, dt, game):
+        pass
+
+    def take_dommage(self, dommage):
         pass
