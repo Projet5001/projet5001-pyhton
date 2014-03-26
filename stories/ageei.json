@@ -22,7 +22,7 @@
                 "delay": 50,
                 "action": "move",
                 "sprite": "npc1",
-                "destination": [ 600, 460 ]
+                "destination": [ 594, 458 ]
         },
         "zombie": {
                 "type": "timer",
@@ -39,7 +39,7 @@
                 "delay": 50,
                 "action": "move",
                 "sprite": "monstre3",
-                "destination": [ 597, 468 ]
+                "destination": [ 591, 466 ]
         },
         "npc-dead": {
                 "type": "timer",
