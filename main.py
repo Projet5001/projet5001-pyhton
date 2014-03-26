@@ -1,19 +1,40 @@
+#!env python
 # -*- coding: utf-8 -*-
-import pygame
-import monster
+#
+# Projet5001: un jeu de survie post-apocalyptique
+# Copyright (C) 2014  Équipe Projet5001
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import os
 
-from lib import tmx
-import userInput
-import playerHud
-import player
+import pygame
+import monster
 
-from tools import weapon
+from lib import tmx
+
 from gameconfig import GameConfig
 from layermanager import LayerManager
 from collisionManager import CollisionManager
 from eventManager import EventManager
 from stories.storymanager import StoryManager
+import userInput
+import playerHud
+import player
+from tools import weapon
+
 
 class Game(object):
 
