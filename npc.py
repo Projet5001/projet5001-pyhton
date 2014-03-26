@@ -26,3 +26,6 @@ class Npc(actors.Actor):
 
     def update(self, dt, game):
         pass
+
+    def take_dommage(self, dommage):
+        pass

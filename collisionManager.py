@@ -61,11 +61,16 @@ class CollisionManager():
             print 'collision'
             self.player_events.append(coll)
 
+        for s in self.layer_manager['npcs']:
+            if self.player.collision_rect.colliderect(s.collision_rect):
+                self.player_events.append(s)
+
     def player_manageCollisionEvents(self):
 
         while len(self.player_events) > 0:
             e = self.player_events.pop()
 
+            #TODO: reset position...
             if e.block and e.attack:
                 e.take_dommage(self.player.calcul_dommage())
                 print e.life
