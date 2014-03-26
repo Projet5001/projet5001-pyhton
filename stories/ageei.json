@@ -7,7 +7,7 @@
                 "spawn_type": "npc",
                 "name": "npc1",
                 "sprite": "npc1",
-                "sprite_img": "sprite-Hero.png",
+                "sprite_img": "sprite-NPC.png",
                 "destination": [ 590, 430 ]
         },
         "npc-discuss": {
