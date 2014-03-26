@@ -73,7 +73,8 @@ class LayerManager(object):
                                self.config.read_global('screen_size'))
 
         for layer in self.layers.keys():
-            new_tilemap.layers.add_named(self.layers[layer], layer)
+            if "hidden" not in layer:
+                new_tilemap.layers.add_named(self.layers[layer], layer)
 
         self.tilemap = new_tilemap
 
