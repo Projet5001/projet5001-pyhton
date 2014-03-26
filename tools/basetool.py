@@ -18,6 +18,7 @@
 #
 
 import importlib
+from eventManager import EventEnum
 
 from pygame import Rect, sprite
 
