@@ -35,16 +35,19 @@ class Keyboard():
 
     def move_left(self):
         self.actor.move(self.coord_left[0], self.coord_left[1], "left")
-        #EventManager.envois_event(EventManager.move, 'left')
+        EventManager.envois_event(EventEnum.MOVE, 'left')
 
     def move_right(self):
         self.actor.move(self.coord_right[0], self.coord_right[1], "right")
+        EventManager.envois_event(EventEnum.MOVE, "right")
 
     def move_up(self):
         self.actor.move(self.coord_up[0], self.coord_up[1], "up")
+        EventManager.envois_event(EventEnum.MOVE, "up")
 
     def move_down(self):
         self.actor.move(self.coord_down[0], self.coord_down[1], "down")
+        EventManager.envois_event(EventEnum.MOVE, "down")
 
     def jump(self):
         if self.actor.is_doing == "nothing":

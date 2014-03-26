@@ -43,7 +43,8 @@ class CollisionManager():
 
                 if collided is None:
                     for s in self.layer_manager['monster']:
-                        if sprite.is_equippable() and sprite.rect.colliderect(s.collision_rect):
+                        if self.player.is_arme_active() and sprite.rect.colliderect(s.rect):
+                            print 'test'
                             return s
                 else:
                     for s in self.layer_manager['monster']:
