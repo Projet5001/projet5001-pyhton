@@ -133,7 +133,7 @@ class Game(object):
         try:
             for cell in self.layer_manager['pnjs'].find('monstre'):
                 m = monster.Monster(os.path.join(self.config.get_sprite_dir(),
-                                                 "sprite-Hero4.png"),
+                                                 "sprite-Ennemi.png"),
                                    (cell.px, cell.py), self.layer_manager['monster'])
                 monstres.append(m)
         except KeyError:
@@ -143,7 +143,7 @@ class Game(object):
 
     def charge_player(self):
         return player.Player(os.path.join(self.config.get_sprite_dir(),
-                                          "sprite-Hero4.png"),
+                                          "sprite-Hero.png"),
                              (0, 0), self.layer_manager['player'])
 
     def effectuer_transition(self, limite):
