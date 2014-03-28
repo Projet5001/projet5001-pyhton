@@ -201,7 +201,7 @@ class StoryEvent(object):
     def handle_event(self):
         if self.story["action"] == "death":
             if self.story["sprite"] == "player":
-                self.game.story_manager.display_speech("GAME OVER", "bottom")
+                self.game.story_manager.display_speech(["GAME OVER"], "bottom")
                 self.game.story_manager.set_unblockable(False)
                 self.game.perso.kill()
             elif self.story["sprite"]:
