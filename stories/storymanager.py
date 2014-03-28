@@ -133,14 +133,14 @@ class SpeechLayer(tmx.Layer):
 
     def __init__(self, layer_manager, text, pos="bottom"):
         super(SpeechLayer, self).__init__('speech', True, layer_manager)
-        self.text = text
-        self.width = 300
+        self.text = []
+        self.text.extend(text)
+        self.width = 0.8 * layer_manager.screen_width
         self.height = 100
+        self.px = (layer_manager.screen_width - self.width) / 2
         if pos == "top":
-            self.px = self.width / 2
             self.py = self.height / 2
         else:
-            self.px = (layer_manager.screen_width - self.width) / 2
             self.py = layer_manager.screen_height - self.height * 1.5
         self.rect = Rect(self.px,
                          self.py,
@@ -148,13 +148,44 @@ class SpeechLayer(tmx.Layer):
                          self.height)
 
     def draw(self, surface):
+        # Build dialog box shadow
+        for x in range(1, 5, 1):
+            surface.fill((0, 0, 0),
+                         rect=self.rect,
+                         special_flags=0)
+            self.rect.x = self.rect.x - 1
+            self.rect.y = self.rect.y - 1
+
+        # Build dialog box contour.
+        for x in range(1, 3, 1):
+            surface.fill((255, 255, 255),
+                         rect=self.rect,
+                         special_flags=0)
+            self.rect.x = self.rect.x - 1
+            self.rect.y = self.rect.y - 1
+
+        self.rect.x = self.rect.x + 3
+        self.rect.y = self.rect.y + 3
+        self.rect.width = self.rect.width - 3
+        self.rect.height = self.rect.height - 3
+
+        # black box for text
         surface.fill((0, 0, 0),
                      rect=self.rect,
                      special_flags=0)
-        myfont = pygame.font.SysFont("monospace", 15, True)
-        label = myfont.render(self.text, 1, (255, 255, 255))
-        surface.blit(label, (self.px + 20,
-                             self.py + 20))
+        myfont = pygame.font.SysFont("monospace", 20, True)
+        line_x = self.px + 20
+        line_y = self.py + 20
+        for line in self.text:
+            label = myfont.render(line, 1, (255, 255, 255))
+            surface.blit(label, (line_x, line_y))
+            line_y = line_y + myfont.get_linesize()
+
+        # reset for next call to draw.
+        self.rect.x = self.px
+        self.rect.y = self.py
+        self.rect.width = self.width
+        self.rect.height = self.height
 
 class StoryEvent(object):
 
