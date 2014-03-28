@@ -161,7 +161,7 @@ class Game(object):
             if limite.properties['barree']:
                 clef_requise = limite.properties['clef']
                 if not clef_requise in self.perso.tools:
-                    self.story_manager.display_speech(u"La porte est barrée...", "top")
+                    self.story_manager.display_speech([u"La porte est barrée... Il serait certainement possible de", u"l'ouvrir si tu avais une clé."], "top")
                     return
         except KeyError:
             # la porte n'est probablement pas barrée...
