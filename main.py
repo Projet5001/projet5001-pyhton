@@ -99,9 +99,6 @@ class Game(object):
 
             if not self.story_manager.blocking:
                 self.userInput.updateKey(dt)
-            elif pygame.key.get_pressed()[pygame.K_RETURN]:
-                self.story_manager.remove_speech()
-                continue
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
