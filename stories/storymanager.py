@@ -165,7 +165,7 @@ class SpeechLayer(tmx.Layer):
         self.color_counter = 0
 
     def next_speech(self):
-        self.visible_text[:] = self.text[0:1]
+        self.visible_text[:] = self.text[0:2]
         self.text[:] = self.text[2:]
 
     def has_text_left(self):
