@@ -51,6 +51,9 @@ class EventManager():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return True
 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                game.story_manager.next_speech()
+
             if event.type == EventEnum.JUMP:
                 game.perso.actors_actions.update_frame_jump(event)
 

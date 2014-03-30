@@ -112,6 +112,15 @@ class StoryManager(object):
         self.blocked_events[:] = self.events[:]
         self.events[:] = []
 
+    def next_speech(self):
+        if not self.speechlayer:
+            return
+
+        if self.speechlayer.has_text_left():
+            self.speechlayer.next_speech()
+        else:
+            self.remove_speech()
+
     def remove_speech(self):
         if not self.speechlayer:
             return
@@ -134,7 +143,9 @@ class SpeechLayer(tmx.Layer):
     def __init__(self, layer_manager, text, pos="bottom"):
         super(SpeechLayer, self).__init__('speech', True, layer_manager)
         self.text = []
-        self.text.extend(text)
+        self.text.extend(text[2:])
+        self.visible_text = []
+        self.visible_text[:] = text[0:2]
         self.width = 0.8 * layer_manager.screen_width
         self.height = 100
         self.px = (layer_manager.screen_width - self.width) / 2
@@ -147,7 +158,27 @@ class SpeechLayer(tmx.Layer):
                          self.width,
                          self.height)
 
+        self._black = (0, 0, 0)
+        self._white = (255, 255, 255)
+        self.dot_color = self._white
+        self.last_dot_color = self._white
+        self.color_counter = 0
+
+    def next_speech(self):
+        self.visible_text[:] = self.text[0:1]
+        self.text[:] = self.text[2:]
+
+    def has_text_left(self):
+        return len(self.text) > 0
+
     def draw(self, surface):
+        if self.color_counter >= 25:
+            if self.last_dot_color is self._white:
+                self.dot_color = self._black
+            else:
+                self.dot_color = self._white
+            self.color_counter = 0
+
         # Build dialog box shadow
         for x in range(1, 5, 1):
             surface.fill((0, 0, 0),
@@ -176,10 +207,17 @@ class SpeechLayer(tmx.Layer):
         myfont = pygame.font.SysFont("monospace", 20, True)
         line_x = self.px + 20
         line_y = self.py + 20
-        for line in self.text:
+        for line in self.visible_text:
             label = myfont.render(line, 1, (255, 255, 255))
             surface.blit(label, (line_x, line_y))
             line_y = line_y + myfont.get_linesize()
+        pygame.draw.circle(surface,
+                           self.dot_color,
+                           (int(line_x) + label.get_width() + 6 + 3,
+                            int(line_y) - myfont.get_linesize() + 6 + 3),
+                           6, 0)
+        self.last_dot_color = self.dot_color
+        self.color_counter = self.color_counter + 1
 
         # reset for next call to draw.
         self.rect.x = self.px
