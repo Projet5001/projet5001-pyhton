@@ -37,7 +37,7 @@ class Actor(pygame.sprite.Sprite):
         self.rect = pygame.rect.Rect(position, self.image.get_size())
         self.collision_rect = pygame.rect.Rect(position[0] - 20,
                                                position[1] - 100,
-                                               30,
+                                               40,
                                                30)
 
         self.actors_actions = actors_actions.ActorActions(self.image, self.personnage, self)
@@ -91,7 +91,7 @@ class Actor(pygame.sprite.Sprite):
         self.resetY()
 
     def definir_position(self, x, y):
-        self.rect.x = x - 32
+        self.rect.x = x - 40
         self.rect.y = y - 75
         self.collision_rect.x = x
         self.collision_rect.y = y
