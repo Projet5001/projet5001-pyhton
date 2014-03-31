@@ -3,7 +3,7 @@
         "asset_dir": "assets/",
         "tileset_dir": "assets/tileset/",
         "sprite_dir": "assets/sprites/",
-        "start_map": "ageei.tmx",
+        "start_map": "ageei2.tmx",
         "screen_size": [ 1024, 600 ]
     }
 }

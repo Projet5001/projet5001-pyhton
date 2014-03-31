@@ -113,6 +113,9 @@ class LayerManager(object):
         self.add_layer(name, layer)
 
     def add_layer(self, name, layer):
-        self.tilemap.layers.add_named(layer, name)
+        if name == "player":
+            self.tilemap.layers.insert_named(5, layer, name)
+        else:
+            self.tilemap.layers.add_named(layer, name)
         self.layers[name] = layer
 

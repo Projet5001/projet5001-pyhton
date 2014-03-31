@@ -677,6 +677,10 @@ class Layers(list):
         self.append(layer)
         self.by_name[name] = layer
 
+    def insert_named(self, index, layer, name):
+        self.insert(index, layer)
+        self.by_name[name] = layer
+
     def __getitem__(self, item):
         if isinstance(item, int):
             return self[item]
