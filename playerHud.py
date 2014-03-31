@@ -26,7 +26,7 @@ class PlayerHud(tmx.Layer):
     def __init__(self, name, player, layer_manager):
 
         self.name = name
-        self.visible = False
+        self.visible = True
         self.player = player
         self.layer_manager = layer_manager
 
