@@ -61,6 +61,7 @@ class Game(object):
         self.clocks = {"playerHud": 0}
         self.userInput = None
 
+
     def start(self):
         #Trouve l'emplacement du héro
         source = self.layer_manager['boundaries'].find_source("start")
@@ -75,10 +76,13 @@ class Game(object):
 
         self.userInput = userInput.Keyboard(self)
 
-
+        #prototype !!!!!!!!!!
+        #creation de l'arme
         epe = weapon.Weapon(self.layer_manager, self.perso, 'epe', 5, 100, 1)
-        self.perso.ajoute_outils(epe, self.layer_manager)
 
+        #ajout de l'arme (je vais tenter de trouver un moyen de ne pas passé tilemap...)
+        self.perso.ajoute_outils(epe, self.layer_manager)
+        #prototype !!!!!!!!!!
 
         #hub
         self.createHuds()
@@ -103,7 +107,6 @@ class Game(object):
                     if value == 0:
                         if key == "playerHud":
                             self.hideHud(key)
-                            pass
                     else:
                         self.clocks[key] = value - 1
 
@@ -193,6 +196,7 @@ class Game(object):
         if "playerHud" in self.layer_manager.layers:
             layer = self.layer_manager["playerHud"]
             self.layer_manager.remove(layer)
+
     def addClockSec(self, name, second):
         self.clocks[name] += second * self.FPS
 
