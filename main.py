@@ -53,7 +53,9 @@ class Game(object):
 
         self.layer_manager.set_map(self, self.config.get_start_map())
         self.layer_manager.new_layer('player', tmx.SpriteLayer)
+        self.layer_manager.new_layer('npcs', tmx.SpriteLayer)
         self.layer_manager.new_layer('monster', tmx.SpriteLayer)
+        self.layer_manager.new_layer('hidden_monsters', tmx.SpriteLayer)
 
         self.FPS = 30
         self.clocks = {"playerHud": 0}
@@ -129,9 +131,13 @@ class Game(object):
 
         try:
             for cell in self.layer_manager['pnjs'].find('monstre'):
-                m = monster.Monster(os.path.join(self.config.get_sprite_dir(),
+                monster_layer = self.layer_manager['hidden_monsters']
+                if "visible" not in cell.properties or cell.properties['visible']:
+                    monster_layer = self.layer_manager['monster']
+                m = monster.Monster(cell.name,
+                                    os.path.join(self.config.get_sprite_dir(),
                                                  "sprite-Ennemi.png"),
-                                   (cell.px, cell.py), self.layer_manager['monster'])
+                                    (cell.px, cell.py), monster_layer)
                 monstres.append(m)
         except KeyError:
             pass
@@ -139,7 +145,8 @@ class Game(object):
         return monstres
 
     def charge_player(self):
-        return player.Player(os.path.join(self.config.get_sprite_dir(),
+        return player.Player("player",
+                             os.path.join(self.config.get_sprite_dir(),
                                           "sprite-Hero.png"),
                              (0, 0), self.layer_manager['player'])
 
