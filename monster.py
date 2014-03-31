@@ -23,6 +23,7 @@ import actors
 class Monster(actors.Actor):
     def __init__(self, name, image, position, *groups):
         super(Monster, self).__init__(name, image, 4, position, *groups)
+        self.health = {"hp": 100, "max": 100}
 
     def update(self, dt, game):
         pass

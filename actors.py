@@ -58,11 +58,13 @@ class Actor(pygame.sprite.Sprite):
         #spec of perso
         self.dommage = 1
         self.protection = 0
-        self.life = 100
         self.speed = 8
         self.accel = 1
         self.is_doing = "nothing"
         self.arme_equipe = 'epe'
+        self.name = ""
+        self.level = 0
+        self.health = {"hp": 0, "max": 0}
 
     def save_x_pos(self):
         self.last_x = self.rect.x
@@ -139,7 +141,7 @@ class Actor(pygame.sprite.Sprite):
         return self.tools[self.arme_equipe].visible
 
     def take_dommage(self, dommage):
-        self.life -= (dommage - self.protectionTotal())
+        self.health['hp'] -= (dommage - self.protectionTotal())
         self.isBleeding()
 
     def block(self):
@@ -158,7 +160,7 @@ class Actor(pygame.sprite.Sprite):
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
-        if self.life == 0:
+        if self.health['hp'] == 0:
             self.kill()
 
     # this need the dt and game otherwise bug in tmx

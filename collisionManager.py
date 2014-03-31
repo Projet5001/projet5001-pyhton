@@ -44,7 +44,6 @@ class CollisionManager():
                 if collided is None:
                     for s in self.layer_manager['monster']:
                         if self.player.is_arme_active() and sprite.rect.colliderect(s.rect):
-                            print 'test'
                             return s
                 else:
                     for s in self.layer_manager['monster']:
@@ -74,7 +73,7 @@ class CollisionManager():
             #TODO: reset position...
             if e.block and e.attack:
                 e.take_dommage(self.player.calcul_dommage())
-                print e.life
+                print e.health['hp']
 
     def tmx_stackCollisionEvents(self):
 
@@ -116,7 +115,6 @@ class CollisionManager():
 
         while len(self.tmx_events) > 0:
             e = self.tmx_events.pop()
-            print e
 
             try:
                 if isinstance(e, tmx.Cell):
