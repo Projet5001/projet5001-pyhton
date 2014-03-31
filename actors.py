@@ -62,7 +62,6 @@ class Actor(pygame.sprite.Sprite):
         self.accel = 1
         self.is_doing = "nothing"
         self.arme_equipe = 'epe'
-        self.name = ""
         self.level = 0
         self.health = {"hp": 0, "max": 0}
 
