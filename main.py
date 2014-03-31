@@ -173,8 +173,12 @@ class Game(object):
         source_name = self.layer_manager.get_current_filename()
         if 'destination' in limite.properties:
             self.layer_manager.set_map(self, limite.properties['destination'])
-            source = \
-                self.layer_manager['boundaries'].find_source(source_name)
+            if 'dest_transition' in limite.properties:
+                source = \
+                    self.layer_manager['boundaries'].find_source(limite.properties['dest_transition'])
+            else:
+                source = \
+                    self.layer_manager['boundaries'].find_source(source_name)
             self.createHuds()
             self.perso.definir_position(source.px, source.py)
             self.charge_monstres()
