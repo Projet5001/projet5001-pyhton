@@ -86,7 +86,7 @@ class Game(object):
 
         #hub
         self.createHuds()
-        self.story_manager.read_story(self.config.get_start_map())
+        self.story_manager.read_stories(self.config.get_start_map())
         self.mainloop()
 
     def mainloop(self):
@@ -151,6 +151,9 @@ class Game(object):
                                           "sprite-Hero.png"),
                              (0, 0), self.layer_manager['player'])
 
+    def do_trigger(self, trigger):
+        self.story_manager.read_story(trigger)
+
     def effectuer_transition(self, limite):
         if not isinstance(limite, tmx.Object):
             pass
@@ -176,6 +179,7 @@ class Game(object):
             self.perso.definir_position(source.px, source.py)
             self.charge_monstres()
             self.layer_manager.set_focus(source.px, source.py, True)
+            self.story_manager.read_stories(limite.properties['destination'])
 
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud",
