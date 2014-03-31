@@ -25,19 +25,20 @@ import actors_actions
 
 
 class Actor(pygame.sprite.Sprite):
-    def __init__(self, image,nombre_lignes, position, *groups):
+    def __init__(self, name, image, nombre_lignes, position, *groups):
         super(Actor, self).__init__(*groups)
         # self.image = pygame.image.load(image)
-        self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image,nombre_lignes)
+        self.name = name
+        self.charger_Images_Sprite = chargerImagesSprite.Charger_Images_Sprite(image, nombre_lignes)
 
         self.personnage = self.charger_Images_Sprite.personnage
         self.image = self.personnage[4]
 
         self.rect = pygame.rect.Rect(position, self.image.get_size())
-        self.collision_rect = pygame.rect.Rect(position[0] + 2,
-                                               position[1] + 30,
+        self.collision_rect = pygame.rect.Rect(position[0] - 20,
+                                               position[1] - 100,
                                                25,
-                                               20)
+                                               25)
 
         self.actors_actions = actors_actions.ActorActions(self.image, self.personnage, self)
         self.tools = {}
@@ -92,8 +93,8 @@ class Actor(pygame.sprite.Sprite):
         self.resetY()
 
     def definir_position(self, x, y):
-        self.rect.x = x - 2
-        self.rect.y = y - 30
+        self.rect.x = x - 32
+        self.rect.y = y - 75
         self.collision_rect.x = x
         self.collision_rect.y = y
         self.saveLastPos()

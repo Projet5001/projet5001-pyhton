@@ -73,9 +73,26 @@ class LayerManager(object):
                                self.config.read_global('screen_size'))
 
         for layer in self.layers.keys():
-            new_tilemap.layers.add_named(self.layers[layer], layer)
+            if "hidden" not in layer:
+                new_tilemap.layers.add_named(self.layers[layer], layer)
 
         self.tilemap = new_tilemap
+
+    def find_layer(self, lam):
+        layers = []
+        for layer in self.layers:
+            if lam(self.layers[layer]):
+                layers.append(self.layers[layer])
+        return layers
+
+    def get_sprite(self, name):
+        x = lambda y: isinstance(y, tmx.SpriteLayer)
+        layers = self.find_layer(x)
+        for layer in layers:
+            sprites = layer.sprites()
+            for spr in sprites:
+                if spr.name == name:
+                    return spr
 
     def get_current_filename(self):
         return self.tilemap.filename

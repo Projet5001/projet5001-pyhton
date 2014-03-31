@@ -24,8 +24,8 @@ import tools
 
 
 class Player(actors.Actor):
-    def __init__(self, image, position, *groups):
-        super(Player, self).__init__(image, 12, position, *groups)
+    def __init__(self, name, image, position, *groups):
+        super(Player, self).__init__(name, image, 12, position, *groups)
         self.speed = 10
 
         #pour les test du HUD
