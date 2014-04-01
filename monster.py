@@ -17,6 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import random
+
 import actors
 
 
@@ -24,6 +26,38 @@ class Monster(actors.Actor):
     def __init__(self, name, image, position, *groups):
         super(Monster, self).__init__(name, image, 4, position, *groups)
         self.health = {"hp": 100, "max": 100}
+        self.collision_events = []
 
     def update(self, dt, game):
-        pass
+
+        if random.randrange(10) / 2:
+            self.try_to_get_to_player(game.get_sprite("Max Power").collision_rect)
+
+    def try_to_get_to_player(self, rect):
+        delta_x = self.collision_rect.x - rect.x
+        delta_y = self.collision_rect.y - rect.y
+        deplacement_x = 0
+        deplacement_y = 0
+        direction = "down"
+
+        self.saveLastPos()
+
+        # delta_x positif: le perso est vers la gauche.
+        # delta_x négatif: le perso est vers la droite.
+        if delta_x < 0:
+            deplacement_x = 1
+            direction = "right"
+        elif delta_x > 0:
+            deplacement_x = -1
+            direction = "left"
+
+        # delta_y positif: le perso est vers le haut.
+        # delta_y négatif: le perso est vers le bas.
+        if delta_y < 0:
+            deplacement_y = 1
+            direction = "bottom"
+        elif delta_y > 0:
+            deplacement_y = -1
+            direction = "up"
+
+        self.move(deplacement_x, deplacement_y, direction)
