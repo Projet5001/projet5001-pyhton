@@ -56,6 +56,27 @@ class CollisionManager():
                 e.take_dommage(self.player.calcul_dommage())
                 print e.health['hp']
 
+    def monster_stackEvents(self):
+
+        boundaries = self.layer_manager['boundaries']
+        walls = self.layer_manager['walls']
+
+        for monstre in self.layer_manager['monster']:
+            for cell in walls.collideLayer(monstre.collision_rect):
+                monstre.collision_events.append(cell)
+            for objet in boundaries.collide(monstre.collision_rect, 'block'):
+                monstre.collision_events.append(objet)
+            for s in self.layer_manager['npcs']:
+                if monstre.collision_rect.colliderect(s.collision_rect):
+                    monstre.collision_events.append(s)
+
+    def monster_manageCollisionEvents(self):
+
+        for monstre in self.layer_manager['monster']:
+            while len(monstre.collision_events) > 0:
+                e = monstre.collision_events.pop()
+                monstre.resetPos()
+
     def tmx_stackCollisionEvents(self):
 
         boundaries = self.layer_manager['boundaries']

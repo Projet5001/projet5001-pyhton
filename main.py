@@ -55,7 +55,6 @@ class Game(object):
         self.layer_manager.new_layer('player', tmx.SpriteLayer)
         self.layer_manager.new_layer('npcs', tmx.SpriteLayer)
         self.layer_manager.new_layer('monster', tmx.SpriteLayer)
-        self.layer_manager.new_layer('hidden_monsters', tmx.SpriteLayer)
 
         self.FPS = 30
         self.clocks = {"playerHud": 0}
@@ -113,11 +112,15 @@ class Game(object):
             #stack les collision de monstre
             self.collision_manager.player_stackEvents()
 
+            self.collision_manager.monster_stackEvents()
+
             #gère les évenement crée par le joureur
             self.collision_manager.player_manageCollisionEvents()
 
             #Gère les colisions selon leur nature
             self.collision_manager.tmx_manageCollisionEvents()
+
+            self.collision_manager.monster_manageCollisionEvents()
 
             self.layer_manager.update()
             self.layer_manager.draw()
@@ -131,7 +134,7 @@ class Game(object):
 
         try:
             for cell in self.layer_manager['pnjs'].find('monstre'):
-                monster_layer = self.layer_manager['hidden_monsters']
+                monster_layer = []
                 if "visible" not in cell.properties or cell.properties['visible']:
                     monster_layer = self.layer_manager['monster']
                 m = monster.Monster(cell.name,
