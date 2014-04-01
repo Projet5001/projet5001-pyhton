@@ -14,7 +14,7 @@
                 "type": "timer",
                 "delay": 1,
                 "action": "speech",
-                "text": "Il y a une épidémie de zombies!",
+                "text": [ "Il y a une épidémie de zombies!" ],
                 "position": "top"
         },
         "move-npc": {
