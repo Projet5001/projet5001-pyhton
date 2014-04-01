@@ -1,5 +1,5 @@
 {
-        "ordre": [ "npc", "move-npc", "npc-discuss" ],
+        "ordre": [ "npc", "move-npc1", "move-npc2", "npc-discuss" ],
         "npc": {
                 "type": "timer",
                 "delay": 200,
@@ -8,7 +8,7 @@
                 "name": "npc1",
                 "sprite": "npc1",
                 "sprite_img": "sprite-NPC.png",
-                "destination": [ 590, 430 ]
+                "destination": [ 780, 450 ]
         },
         "npc-discuss": {
                 "type": "timer",
@@ -17,12 +17,19 @@
                 "text": [ "Il y a une épidémie de zombies!" ],
                 "position": "top"
         },
-        "move-npc": {
+        "move-npc1": {
                 "type": "timer",
                 "delay": 50,
                 "action": "move",
                 "sprite": "npc1",
-                "destination": [ 594, 458 ]
+                "destination": [ 776, 118 ]
+        },
+        "move-npc2": {
+                "type": "timer",
+                "delay": 50,
+                "action": "move",
+                "sprite": "npc1",
+                "destination": [ 464, 118 ]
         },
         "zombie": {
                 "type": "timer",
@@ -32,7 +39,7 @@
                 "name": "monstre3",
                 "sprite": "monstre3",
                 "sprite_img": "sprite-Hero.png",
-                "destination": [ 560, 400 ]
+                "destination": [ 780, 450 ]
         },
         "zombie-move": {
                 "type": "timer",
@@ -40,6 +47,20 @@
                 "action": "move",
                 "sprite": "monstre3",
                 "destination": [ 591, 466 ]
+        },
+        "zombie-move1": {
+                "type": "timer",
+                "delay": 50,
+                "action": "move",
+                "sprite": "monstre3",
+                "destination": [ 776, 118 ]
+        },
+        "zombie-move2": {
+                "type": "timer",
+                "delay": 50,
+                "action": "move",
+                "sprite": "monstre3",
+                "destination": [ 464, 118 ]
         },
         "npc-dead": {
                 "type": "timer",
