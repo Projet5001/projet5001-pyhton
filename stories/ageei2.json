@@ -1,0 +1,50 @@
+{
+        "ordre": [ "npc", "move-npc", "npc-discuss" ],
+        "npc": {
+                "type": "timer",
+                "delay": 200,
+                "action": "spawn",
+                "spawn_type": "npc",
+                "name": "npc1",
+                "sprite": "npc1",
+                "sprite_img": "sprite-NPC.png",
+                "destination": [ 590, 430 ]
+        },
+        "npc-discuss": {
+                "type": "timer",
+                "delay": 1,
+                "action": "speech",
+                "text": [ "Il y a une épidémie de zombies!" ],
+                "position": "top"
+        },
+        "move-npc": {
+                "type": "timer",
+                "delay": 50,
+                "action": "move",
+                "sprite": "npc1",
+                "destination": [ 594, 458 ]
+        },
+        "zombie": {
+                "type": "timer",
+                "delay": 200,
+                "action": "spawn",
+                "spawn_type": "monster",
+                "name": "monstre3",
+                "sprite": "monstre3",
+                "sprite_img": "sprite-Hero.png",
+                "destination": [ 560, 400 ]
+        },
+        "zombie-move": {
+                "type": "timer",
+                "delay": 50,
+                "action": "move",
+                "sprite": "monstre3",
+                "destination": [ 591, 466 ]
+        },
+        "npc-dead": {
+                "type": "timer",
+                "delay": 250,
+                "action": "death",
+                "sprite": "npc1"
+        }
+}

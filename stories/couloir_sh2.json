@@ -1,0 +1,10 @@
+{
+        "ordre": [ ],
+        "fractal-ferme": {
+                "type": "timer",
+                "delay": 1,
+                "action": "speech",
+                "text": [ "Un papier est dans la porte. On peut y lire:", "Le Café Fractal est fermé jusqu'à nouvel ordre." ],
+                "position": "top"
+        }
+}

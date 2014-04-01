@@ -574,7 +574,11 @@ class ObjectLayer(object):
     def find_source(self, source):
         r = None
         for objet in self.objects:
-            if 'source' in objet.properties and \
+            if 'source_transition' in objet.properties and \
+                        objet.properties['source_transition'] == source:
+                r = objet
+                break
+            elif 'source' in objet.properties and \
                         objet.properties['source'] == source:
                 r = objet
                 break
