@@ -38,6 +38,7 @@ class StoryManager(object):
         self.story_file = ""
 
         self.stories = None
+        self.stories_done = []
 
         self.blocking = False
         self.unblockable = True
@@ -47,7 +48,24 @@ class StoryManager(object):
         self.events = []
         self.blocked_events = []
 
-    def read_story(self, source):
+    def read_story(self, story):
+        if not self.stories:
+            return
+
+        if self.stories[story]['type'] == "speech":
+            self.display_speech(self.stories[story]['text'],
+                                self.stories[story]['position'])
+        elif self.stories[story]['type'] == "timer":
+            if not self.events:
+                pygame.time.set_timer(EventEnum.STORY,
+                                      self.stories[story]['delay'])
+            delay = self.stories[story]['delay']
+            self.events.append(StoryEvent(story,
+                                          self.stories[story],
+                                          self.game,
+                                          delay))
+
+    def read_stories(self, source):
         try:
             self.source = "%s.json" % source.split('.')[0]
             self.story_file = open(os.path.join(os.path.dirname(__file__),
@@ -55,19 +73,13 @@ class StoryManager(object):
                                    "r")
             self.stories = json.load(self.story_file)
 
+            if self.source in self.stories_done:
+                return
+
             for story in self.stories['ordre']:
-                if self.stories[story]['type'] == "speech":
-                    self.display_speech(self.stories[story]['text'],
-                                        self.stories[story]['position'])
-                elif self.stories[story]['type'] == "timer":
-                    if not self.events:
-                        pygame.time.set_timer(EventEnum.STORY,
-                                              self.stories[story]['delay'])
-                    delay = self.stories[story]['delay']
-                    self.events.append(StoryEvent(story,
-                                                  self.stories[story],
-                                                  self.game,
-                                                  delay))
+                self.read_story(story)
+
+            self.stories_done.append(self.source)
         except IOError:
             print "attention: impossible de charger le fichier d'histoire"
             pass
@@ -88,6 +100,9 @@ class StoryManager(object):
             self.unblockable = True
             self.remove_speech()
             pass
+
+    def trigger_event(self, event_name):
+        self.read_story(event_name)
 
     def set_unblockable(self, unblockable):
         self.unblockable = unblockable
