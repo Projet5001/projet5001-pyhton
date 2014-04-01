@@ -184,6 +184,8 @@ class StoryEvent(object):
                                        self.story["sprite_img"]),
                           self.story["destination"],
                           self.game.layer_manager["npcs"])
+                npc.definir_position(self.story["destination"][0],
+                                     self.story["destination"][1])
             else:
                 sprite = self.game.layer_manager.get_sprite(self.story["sprite"])
                 sprite.kill()

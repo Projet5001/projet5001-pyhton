@@ -138,6 +138,7 @@ class Game(object):
                                     os.path.join(self.config.get_sprite_dir(),
                                                  "sprite-Ennemi.png"),
                                     (cell.px, cell.py), monster_layer)
+                m.definir_position(cell.px, cell.py)
                 monstres.append(m)
         except KeyError:
             pass
