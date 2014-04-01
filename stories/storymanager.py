@@ -19,6 +19,7 @@
 
 import os
 import json
+import time
 
 import pygame
 from pygame import Rect
@@ -27,6 +28,7 @@ from lib import tmx
 
 from eventManager import EventEnum
 from npc import Npc
+from monster import Monster
 
 
 class StoryManager(object):
@@ -176,6 +178,7 @@ class StoryEvent(object):
             elif self.story["sprite"]:
                 sprite_name = self.story["sprite"]
                 sprite = self.game.layer_manager.get_sprite(sprite_name)
+                time.sleep(2)
                 sprite.kill()
         elif self.story["action"] == "spawn":
             if self.story["spawn_type"] == "npc":
@@ -187,9 +190,13 @@ class StoryEvent(object):
                 npc.definir_position(self.story["destination"][0],
                                      self.story["destination"][1])
             else:
-                sprite = self.game.layer_manager.get_sprite(self.story["sprite"])
-                sprite.kill()
-                sprite.add(self.game.layer_manager['monster'])
+                monster = Monster(self.story["name"],
+                                  os.path.join(self.game.config.get_sprite_dir(),
+                                               self.story["sprite_img"]),
+                                  self.story["destination"],
+                                  self.game.layer_manager["monster"])
+                monster.definir_position(self.story["destination"][0],
+                                         self.story["destination"][1])
         elif self.story["action"] == "speech":
             self.game.story_manager.display_speech(self.story['text'],
                                                    self.story['position'])
@@ -200,6 +207,7 @@ class StoryEvent(object):
             dest = self.story["destination"]
             print dest
             print sprite.collision_rect
+            sprite.saveLastPos()
             if sprite.collision_rect.x != dest[0]:
                 if sprite.collision_rect.x < dest[0]:
                     sprite.move(sprite.speed * sprite.accel, 0, "right")
