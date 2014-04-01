@@ -27,6 +27,7 @@ class EventEnum():
     MOVE = pygame.USEREVENT + 4
     ACTION = pygame.USEREVENT + 5
     STORY = pygame.USEREVENT + 6
+    TRIGGER = pygame.USEREVENT + 7
     LAST_EVENT = pygame.NUMEVENTS - 1
 
 
@@ -51,6 +52,9 @@ class EventManager():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return True
 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                game.story_manager.next_speech()
+
             if event.type == EventEnum.JUMP:
                 game.perso.actors_actions.update_frame_jump(event)
 
@@ -60,8 +64,12 @@ class EventManager():
             if event.type == EventEnum.TRANSITION:
                 game.effectuer_transition(event.transition)
 
+            if event.type == EventEnum.TRIGGER:
+                game.do_trigger(event.trigger)
+
             if event.type == EventEnum.ACTION:
                 pass
+
             if event.type == EventEnum.STORY:
                 game.story_manager.story_event()
 

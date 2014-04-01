@@ -1,5 +1,5 @@
 {
-        "ordre": [ "npc", "move-npc", "npc-discuss", "zombie", "zombie-move", "npc-dead" ],
+        "ordre": [ "npc", "move-npc", "npc-discuss" ],
         "npc": {
                 "type": "timer",
                 "delay": 200,
