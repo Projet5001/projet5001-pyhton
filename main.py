@@ -122,7 +122,7 @@ class Game(object):
 
             self.collision_manager.monster_manageCollisionEvents()
 
-            self.layer_manager.update()
+            self.layer_manager.update(self.story_manager.blocking)
             self.layer_manager.draw()
 
             pygame.display.update()

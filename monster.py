@@ -29,7 +29,8 @@ class Monster(actors.Actor):
         self.collision_events = []
 
     def update(self, dt, game):
-
+        if game.blocking:
+            return
         if random.randrange(10) / 2:
             self.try_to_get_to_player(game.get_sprite("Max Power").collision_rect)
 
