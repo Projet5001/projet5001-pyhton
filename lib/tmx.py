@@ -574,7 +574,11 @@ class ObjectLayer(object):
     def find_source(self, source):
         r = None
         for objet in self.objects:
-            if 'source' in objet.properties and \
+            if 'source_transition' in objet.properties and \
+                        objet.properties['source_transition'] == source:
+                r = objet
+                break
+            elif 'source' in objet.properties and \
                         objet.properties['source'] == source:
                 r = objet
                 break
@@ -675,6 +679,10 @@ class Layers(list):
 
     def add_named(self, layer, name):
         self.append(layer)
+        self.by_name[name] = layer
+
+    def insert_named(self, index, layer, name):
+        self.insert(index, layer)
         self.by_name[name] = layer
 
     def __getitem__(self, item):

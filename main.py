@@ -81,7 +81,7 @@ class Game(object):
 
         #hub
         self.createHuds()
-        self.story_manager.read_story(self.config.get_start_map())
+        self.story_manager.read_stories(self.config.get_start_map())
         self.mainloop()
 
     def mainloop(self):
@@ -94,8 +94,6 @@ class Game(object):
 
             if not self.story_manager.blocking:
                 self.userInput.updateKey(dt)
-            elif 1 in pygame.key.get_pressed():
-                self.story_manager.remove_speech()
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
@@ -154,6 +152,9 @@ class Game(object):
                                           "sprite-Hero.png"),
                              (0, 0), self.layer_manager['player'])
 
+    def do_trigger(self, trigger):
+        self.story_manager.read_story(trigger)
+
     def effectuer_transition(self, limite):
         if not isinstance(limite, tmx.Object):
             pass
@@ -162,6 +163,7 @@ class Game(object):
             if limite.properties['barree']:
                 clef_requise = limite.properties['clef']
                 if not clef_requise in self.perso.tools:
+                    self.story_manager.display_speech([u"La porte est barrée... Il serait certainement possible de", u"l'ouvrir si tu avais une clé."], "top")
                     return
         except KeyError:
             # la porte n'est probablement pas barrée...
@@ -172,12 +174,17 @@ class Game(object):
         source_name = self.layer_manager.get_current_filename()
         if 'destination' in limite.properties:
             self.layer_manager.set_map(self, limite.properties['destination'])
-            source = \
-                self.layer_manager['boundaries'].find_source(source_name)
+            if 'dest_transition' in limite.properties:
+                source = \
+                    self.layer_manager['boundaries'].find_source(limite.properties['dest_transition'])
+            else:
+                source = \
+                    self.layer_manager['boundaries'].find_source(source_name)
             self.createHuds()
             self.perso.definir_position(source.px, source.py)
             self.charge_monstres()
             self.layer_manager.set_focus(source.px, source.py, True)
+            self.story_manager.read_stories(limite.properties['destination'])
 
     def createHuds(self):
         hud = playerHud.PlayerHud("playerHud",
