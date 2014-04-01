@@ -87,7 +87,11 @@ class CollisionManager():
 
         for cell in walls.collideLayer(self.player.collision_rect):
             self.tmx_events.append(cell)
+
         for objet in boundaries.collide(self.player.collision_rect, 'block'):
+            self.tmx_events.append(objet)
+
+        for objet in boundaries.collide(self.player.collision_rect, 'basetool'):
             tool = None
             if objet not in self.object_reference:
                 self.object_reference[objet] = \
@@ -118,6 +122,8 @@ class CollisionManager():
 
             try:
                 if isinstance(e, tmx.Cell):
+                    self.player.resetPos()
+                elif isinstance(e, tmx.Object):
                     self.player.resetPos()
                 elif isinstance(e, BaseTool):
                     e.handle_collision()
