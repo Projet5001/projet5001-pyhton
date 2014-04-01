@@ -73,7 +73,10 @@ class LayerManager(object):
                                self.config.read_global('screen_size'))
 
         for layer in self.layers.keys():
-            if "hidden" not in layer:
+            player_stack_index = new_tilemap.layers.index(new_tilemap.layers['hint'])
+            if layer == "player":
+                new_tilemap.layers.insert_named(player_stack_index, self.layers[layer], layer)
+            elif "hidden" not in layer:
                 new_tilemap.layers.add_named(self.layers[layer], layer)
 
         self.tilemap = new_tilemap
@@ -114,7 +117,8 @@ class LayerManager(object):
 
     def add_layer(self, name, layer):
         if name == "player":
-            self.tilemap.layers.insert_named(5, layer, name)
+            player_stack_index = self.tilemap.layers.index(self.tilemap.layers['hint'])
+            self.tilemap.layers.insert_named(player_stack_index, layer, name)
         else:
             self.tilemap.layers.add_named(layer, name)
         self.layers[name] = layer
