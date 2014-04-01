@@ -95,8 +95,9 @@ class Game(object):
 
             if not self.story_manager.blocking:
                 self.userInput.updateKey(dt)
-            elif 1 in pygame.key.get_pressed():
+            elif pygame.key.get_pressed()[pygame.K_RETURN]:
                 self.story_manager.remove_speech()
+                continue
 
             for key, value in self.clocks.iteritems():
                 if value >= 0:
@@ -158,6 +159,7 @@ class Game(object):
             if limite.properties['barree']:
                 clef_requise = limite.properties['clef']
                 if not clef_requise in self.perso.tools:
+                    self.story_manager.display_speech([u"La porte est barrée... Il serait certainement possible de", u"l'ouvrir si tu avais une clé."], "top")
                     return
         except KeyError:
             # la porte n'est probablement pas barrée...
