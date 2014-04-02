@@ -761,16 +761,15 @@ class TileMap(object):
         tilemap.px_width = tilemap.width * tilemap.tile_width
         tilemap.px_height = tilemap.height * tilemap.tile_height
 
-        for tag in map.findall('tileset'):
-            tilemap.tilesets.add(Tileset.fromxml(tag))
-
-        for tag in map.findall('layer'):
-            layer = Layer.fromxml(tag, tilemap)
-            tilemap.layers.add_named(layer, layer.name)
-
-        for tag in map.findall('objectgroup'):
-            layer = ObjectLayer.fromxml(tag, tilemap)
-            tilemap.layers.add_named(layer, layer.name)
+        for tag in list(map):
+            if tag.tag == 'tileset':
+                tilemap.tilesets.add(Tileset.fromxml(tag))
+            elif tag.tag == "layer":
+                layer = Layer.fromxml(tag, tilemap)
+                tilemap.layers.add_named(layer, layer.name)
+            elif tag.tag == "objectgroup":
+                layer = ObjectLayer.fromxml(tag, tilemap)
+                tilemap.layers.add_named(layer, layer.name)
 
         return tilemap
 
