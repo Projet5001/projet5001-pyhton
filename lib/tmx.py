@@ -141,6 +141,8 @@ class Cell(object):
         self.top = py
         self.bottom = py + tile.tile_height
         self.center = (px + tile.tile_width // 2, py + tile.tile_height // 2)
+        self.width = tile.tile_width
+        self.height = tile.tile_height
         self._added_properties = {}
         self._deleted_properties = set()
 
