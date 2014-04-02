@@ -36,6 +36,8 @@ class LayerManager(object):
 
         self.tilemap = None
 
+        self.blocking = False
+
         self.layers = {}
         self.attr_source = {
             "screen_height": ["screen", methodcaller('get_height')],
@@ -103,7 +105,8 @@ class LayerManager(object):
     def set_focus(self, px, py, boolean):
         self.tilemap.set_focus(px, py, boolean)
 
-    def update(self):
+    def update(self, blocking):
+        self.blocking = blocking
         dt = self.clock.tick()
         self.tilemap.update(dt, self)
 

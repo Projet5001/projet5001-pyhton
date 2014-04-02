@@ -8,7 +8,7 @@
                 "name": "npc1",
                 "sprite": "npc1",
                 "sprite_img": "sprite-NPC.png",
-                "destination": [ 780, 450 ]
+                "destination": [ 780, 520 ]
         },
         "npc-discuss": {
                 "type": "timer",
@@ -22,14 +22,14 @@
                 "delay": 50,
                 "action": "move",
                 "sprite": "npc1",
-                "destination": [ 776, 118 ]
+                "destination": [ 780, 296 ]
         },
         "move-npc2": {
                 "type": "timer",
                 "delay": 50,
                 "action": "move",
                 "sprite": "npc1",
-                "destination": [ 464, 118 ]
+                "destination": [ 460, 296 ]
         },
         "zombie": {
                 "type": "timer",
@@ -38,29 +38,22 @@
                 "spawn_type": "monster",
                 "name": "monstre3",
                 "sprite": "monstre3",
-                "sprite_img": "sprite-Hero.png",
-                "destination": [ 780, 450 ]
-        },
-        "zombie-move": {
-                "type": "timer",
-                "delay": 50,
-                "action": "move",
-                "sprite": "monstre3",
-                "destination": [ 591, 466 ]
+                "sprite_img": "sprite-Ennemi.png",
+                "destination": [ 780, 520 ]
         },
         "zombie-move1": {
                 "type": "timer",
                 "delay": 50,
                 "action": "move",
                 "sprite": "monstre3",
-                "destination": [ 776, 118 ]
+                "destination": [ 780, 296 ]
         },
         "zombie-move2": {
                 "type": "timer",
                 "delay": 50,
                 "action": "move",
                 "sprite": "monstre3",
-                "destination": [ 464, 118 ]
+                "destination": [ 460, 296 ]
         },
         "npc-dead": {
                 "type": "timer",

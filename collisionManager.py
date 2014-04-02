@@ -35,31 +35,11 @@ class CollisionManager():
     def set_player(self, player):
         self.player = player
 
-    #overide
-    def spritecollideany(self, collided = None):
-        try:
-            for tool in self.player.tools.values():
-                sprite = tool
-
-                if collided is None:
-                    for s in self.layer_manager['monster']:
-                        if self.player.is_arme_active() and sprite.rect.colliderect(s.rect):
-                            return s
-                else:
-                    for s in self.layer_manager['monster']:
-                        if collided(sprite, s):
-                            return s
-        except KeyError:
-            pass
-
-        return None
-
     def player_stackEvents(self):
 
-        coll = self.spritecollideany()
-        if coll:
-            print 'collision'
-            self.player_events.append(coll)
+        for s in self.layer_manager['monster']:
+            if self.player.collision_rect.colliderect(s.collision_rect):
+                self.player_events.append(s)
 
         for s in self.layer_manager['npcs']:
             if self.player.collision_rect.colliderect(s.collision_rect):
@@ -69,11 +49,33 @@ class CollisionManager():
 
         while len(self.player_events) > 0:
             e = self.player_events.pop()
+            print e
 
-            #TODO: reset position...
+            self.player.resetPos()
             if e.block and e.attack:
                 e.take_dommage(self.player.calcul_dommage())
                 print e.health['hp']
+
+    def monster_stackEvents(self):
+
+        boundaries = self.layer_manager['boundaries']
+        walls = self.layer_manager['walls']
+
+        for monstre in self.layer_manager['monster']:
+            for cell in walls.collideLayer(monstre.collision_rect):
+                monstre.collision_events.append(cell)
+            for objet in boundaries.collide(monstre.collision_rect, 'block'):
+                monstre.collision_events.append(objet)
+            for s in self.layer_manager['npcs']:
+                if monstre.collision_rect.colliderect(s.collision_rect):
+                    monstre.collision_events.append(s)
+
+    def monster_manageCollisionEvents(self):
+
+        for monstre in self.layer_manager['monster']:
+            while len(monstre.collision_events) > 0:
+                e = monstre.collision_events.pop()
+                monstre.resetPos()
 
     def tmx_stackCollisionEvents(self):
 
