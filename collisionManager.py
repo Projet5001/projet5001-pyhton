@@ -17,6 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import pygame
+
 from lib import tmx
 
 from tools.basetool import BaseTool
@@ -115,20 +117,60 @@ class CollisionManager():
                 if tool:
                     self.tmx_events.append(tool)
 
+    def evaluate_collision_axis(self, e, sprite):
+        ''' Essaye de trouver en quel axe on est bloqués, question de pouvoir
+            continuer le mouvement dans l'autre axe. '''
+
+        axes = ""
+        sprite_rect = sprite.collision_rect
+        e_rect = pygame.Rect(e.left, e.top, e.width, e.height)
+
+        top = (
+             e_rect.collidepoint(sprite_rect.topleft),
+             e_rect.collidepoint(sprite_rect.midtop),
+             e_rect.collidepoint(sprite_rect.topright),
+        )
+        right = (
+             e_rect.collidepoint(sprite_rect.topright),
+             e_rect.collidepoint(sprite_rect.midright),
+             e_rect.collidepoint(sprite_rect.bottomright),
+        )
+        left = (
+             e_rect.collidepoint(sprite_rect.topleft),
+             e_rect.collidepoint(sprite_rect.midleft),
+             e_rect.collidepoint(sprite_rect.bottomleft),
+        )
+        bottom = (
+             e_rect.collidepoint(sprite_rect.bottomleft),
+             e_rect.collidepoint(sprite_rect.midbottom),
+             e_rect.collidepoint(sprite_rect.bottomright),
+        )
+
+        #print "--------"
+        #print "top %s" % top.__str__()
+        #print "right %s" % right.__str__()
+        #print "left %s" % left.__str__()
+        #print "bottom %s" % bottom.__str__()
+
+        if sum(v for v in left) >= 2 or sum(v for v in right) >= 2:
+            axes = axes + "x"
+        if sum(v for v in top) >= 2 or sum(v for v in bottom) >= 2:
+            axes = axes + "y"
+
+        return axes
+
     def tmx_manageCollisionEvents(self):
 
         while len(self.tmx_events) > 0:
             e = self.tmx_events.pop()
 
-            try:
-                if isinstance(e, tmx.Cell):
+            if isinstance(e, tmx.Cell) or isinstance(e, tmx.Object):
+                axis = self.evaluate_collision_axis(e, self.player)
+                if axis == "xy":
                     self.player.resetPos()
-                elif isinstance(e, tmx.Object):
-                    self.player.resetPos()
-                elif isinstance(e, BaseTool):
-                    e.handle_collision()
-
-            except KeyError:
-                # pas de clé block ici (e.g. pour un layer, où on ne peut pas
-                # mettre de propriété à la cellule... :(
-                self.player.resetPos()
+                elif axis == "x":
+                    self.player.resetX()
+                elif axis == "y":
+                    self.player.resetY()
+            elif isinstance(e, BaseTool):
+                e.handle_collision()
