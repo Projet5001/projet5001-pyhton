@@ -77,7 +77,13 @@ class CollisionManager():
         for monstre in self.layer_manager['monster']:
             while len(monstre.collision_events) > 0:
                 e = monstre.collision_events.pop()
-                monstre.resetPos()
+                axis = self.evaluate_collision_axis(e, monstre)
+                if axis == "xy":
+                    monstre.resetPos()
+                elif axis == "x":
+                    monstre.resetX()
+                elif axis == "y":
+                    monstre.resetY()
 
     def tmx_stackCollisionEvents(self):
 
