@@ -20,7 +20,7 @@
 import pygame
 from pygame import Rect
 from pygame.locals import *
-
+from eventManager import EventEnum
 from basetool import BaseTool
 
 
@@ -55,29 +55,25 @@ class Weapon(BaseTool):
         return self.equippable
 
     def draw(self, screen):
-        self.hub = self.__followPlayer__()
-        pygame.draw.rect(screen, (140, 240, 130), ((self.hub[0]+self.mod_left,
-                                                    self.hub[1]+self.mod_top),
-                                                   (self.size['y'], self.size['x'])))
-    """
-    def __update_rect__(self):
         if self.visible:
-            self.rect = Rect((self.player.collision_rect[0]+self.mod_left,
-                              self.player.collision_rect[1]+self.mod_top),
-                             (self.size['y'], self.size['x']))
-        else:
-            self.rect = None
-    """
+            self.hub = self.__followPlayer__()
+            pygame.draw.rect(screen, (140, 240, 130), ((self.hub[0]+self.mod_left,
+                                                        self.hub[1]+self.mod_top),
+                                                       (self.size['y'], self.size['x'])))
+
     def update(self, dt, *args):
-        if self.visible:
+        self.rect = Rect(0, 0, 0, 0)
+
+    def __update_rect__(self):
             self.rect = Rect((self.player.collision_rect[0]+self.mod_left,
                               self.player.collision_rect[1]+self.mod_top),
                              (self.size['y'], self.size['x']))
-        else:
-            pass
 
     def receive_event(self, event):
-        self.update_rect_box_direction(event)
+        if event.type == EventEnum.MOVE:
+            self.update_rect_box_direction(event)
+        elif event.type == EventEnum.ATTACK:
+            self.__update_rect__()
 
     def update_rect_box_direction(self, event):
         if event.m == "left":
