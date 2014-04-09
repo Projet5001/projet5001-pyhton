@@ -31,15 +31,15 @@ class Monster(actors.Actor):
     def update(self, dt, game):
         if game.blocking:
             return
-        if random.randrange(10) / 2:
-            self.try_to_get_to_player(game.get_sprite("Max Power").collision_rect)
+        self.try_to_get_to_player(game.get_sprite("Max Power").collision_rect)
 
     def try_to_get_to_player(self, rect):
         delta_x = self.collision_rect.x - rect.x
         delta_y = self.collision_rect.y - rect.y
         deplacement_x = 0
         deplacement_y = 0
-        direction = "down"
+        direction_x = ""
+        direction_y = ""
 
         self.saveLastPos()
 
@@ -47,18 +47,30 @@ class Monster(actors.Actor):
         # delta_x négatif: le perso est vers la droite.
         if delta_x < 0:
             deplacement_x = 1
-            direction = "right"
+            direction_x = "right"
         elif delta_x > 0:
             deplacement_x = -1
-            direction = "left"
+            direction_x = "left"
 
         # delta_y positif: le perso est vers le haut.
         # delta_y négatif: le perso est vers le bas.
         if delta_y < 0:
             deplacement_y = 1
-            direction = "bottom"
+            direction_y = "down"
         elif delta_y > 0:
             deplacement_y = -1
-            direction = "up"
+            direction_y = "up"
 
-        self.move(deplacement_x, deplacement_y, direction)
+        if deplacement_x != 0 and deplacement_y != 0:
+            if random.choice([0, 1]):
+                self.move(deplacement_x, 0, direction_x)
+            else:
+                self.move(0, deplacement_y, direction_x)
+        elif deplacement_x == 0 and deplacement_y != 0:
+            self.move(0, deplacement_y, direction_y)
+        elif deplacement_x != 0 and deplacement_y == 0:
+            self.move(deplacement_x, 0, direction_x)
+        else:
+            # aucun déplacement nécessaire?
+            return
+
