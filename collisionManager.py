@@ -18,7 +18,7 @@
 #
 
 import pygame
-
+from eventManager import EventEnum, EventManager
 from lib import tmx
 
 from tools.basetool import BaseTool
@@ -42,21 +42,21 @@ class CollisionManager():
         for s in self.layer_manager['monster']:
             if self.player.collision_rect.colliderect(s.collision_rect):
                 self.player_events.append(s)
-
+            elif self.player.get_tool().rect.colliderect(s.rect) and self.player.is_doing == "attack":
+                print "attack  and dommage"
+                s.take_dommage(self.player.calcul_dommage())
         for s in self.layer_manager['npcs']:
             if self.player.collision_rect.colliderect(s.collision_rect):
                 self.player_events.append(s)
+
+
 
     def player_manageCollisionEvents(self):
 
         while len(self.player_events) > 0:
             e = self.player_events.pop()
-            print e
-
-            self.player.resetPos()
-            if e.block and e.attack:
-                e.take_dommage(self.player.calcul_dommage())
-                print e.health['hp']
+            if e.not_ehteral:
+                self.player.resetPos()
 
     def monster_stackEvents(self):
 

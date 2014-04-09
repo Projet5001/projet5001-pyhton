@@ -54,6 +54,8 @@ class Actor(pygame.sprite.Sprite):
         self.compteur = 0
         self.wait_actors = False
 
+        #isetheral
+        self.not_ehteral = True
 
         #spec of perso
         self.dommage = 1
@@ -61,7 +63,7 @@ class Actor(pygame.sprite.Sprite):
         self.speed = 8
         self.accel = 1
         self.is_doing = "nothing"
-        self.arme_equipe = 'epe'
+        self.arme_equipe = 'clavier'
         self.level = 0
         self.health = {"hp": 0, "max": 0}
 
@@ -125,10 +127,8 @@ class Actor(pygame.sprite.Sprite):
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
-        if self.is_arme_active():
             return self.dommage * self.luck() * self.tools[self.arme_equipe].dommage
-        else:
-            return self.dommage * self.luck()
+
 
     def active_arme(self, active):
         self.tools[self.arme_equipe].visible = active
@@ -142,9 +142,10 @@ class Actor(pygame.sprite.Sprite):
     def take_dommage(self, dommage):
         self.health['hp'] -= (dommage - self.protectionTotal())
         self.isBleeding()
+        print self.health['hp']
 
     def block(self):
-        pass
+        return
 
     def luck(self):
         return 1
@@ -159,7 +160,7 @@ class Actor(pygame.sprite.Sprite):
 
     #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
-        if self.health['hp'] == 0:
+        if self.health['hp'] <= 0:
             self.kill()
 
     # this need the dt and game otherwise bug in tmx
