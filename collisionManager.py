@@ -45,7 +45,6 @@ class CollisionManager():
             elif self.player.get_tool().rect.colliderect(s.rect) and self.player.is_doing == "attack":
                 print "attack  and dommage"
                 s.take_dommage(self.player.calcul_dommage())
-                #EventManager.envois_event(EventEnum.COLLISION, "attack", s, self.player)
         for s in self.layer_manager['npcs']:
             if self.player.collision_rect.colliderect(s.collision_rect):
                 self.player_events.append(s)
