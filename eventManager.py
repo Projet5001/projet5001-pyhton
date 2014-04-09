@@ -37,7 +37,6 @@ class EventManager():
     @staticmethod
     def envois_event(e, *args):
         if len(args) > 1:
-            print e.type
             event = pygame.event.Event(e, m=args[0], o=args[1], u=args[2])
             pygame.event.post(event)
         else:
