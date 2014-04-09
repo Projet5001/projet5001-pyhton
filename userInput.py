@@ -58,9 +58,6 @@ class Keyboard():
 
     def attack(self):
         if self.actor.is_doing == "nothing":
-            #self.actor.attack()
-            #déclanche un event
-            #pygame.time.set_timer(self.actor.actors_actions.event_attack, 30)#1 second is 1000 milliseconds
             EventManager.delay_event(EventEnum.ATTACK, 40)
 
     def pause_actor(self):

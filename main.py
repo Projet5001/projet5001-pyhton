@@ -75,7 +75,7 @@ class Game(object):
         self.userInput = userInput.Keyboard(self)
 
 
-        epe = weapon.Weapon(self.layer_manager, self.perso, 'epe', 5, 100, 1)
+        epe = weapon.Weapon(self.layer_manager, self.perso, 'clavier', 20, 50, 10)
         self.perso.ajoute_outils(epe, self.layer_manager)
 
 

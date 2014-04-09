@@ -28,15 +28,21 @@ class EventEnum():
     ACTION = pygame.USEREVENT + 5
     STORY = pygame.USEREVENT + 6
     TRIGGER = pygame.USEREVENT + 7
+    COLLISION = pygame.USEREVENT + 8
     LAST_EVENT = pygame.NUMEVENTS - 1
 
 
 class EventManager():
 
     @staticmethod
-    def envois_event(e, content):
-        event = pygame.event.Event(e, m=content)
-        pygame.event.post(event)
+    def envois_event(e, *args):
+        if len(args) > 1:
+            print e.type
+            event = pygame.event.Event(e, m=args[0], o=args[1], u=args[2])
+            pygame.event.post(event)
+        else:
+            event = pygame.event.Event(e, m=args[0])
+            pygame.event.post(event)
 
     @staticmethod
     def delay_event(e, temps):
@@ -45,7 +51,6 @@ class EventManager():
     @staticmethod
     def update(game):
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 return True
 
@@ -59,16 +64,15 @@ class EventManager():
                 game.perso.actors_actions.update_frame_jump(event)
 
             if event.type == EventEnum.ATTACK:
+                event_copy = event
                 game.perso.actors_actions.update_frame_attack(event)
+                game.perso.get_tool().receive_event(event_copy)
 
             if event.type == EventEnum.TRANSITION:
                 game.effectuer_transition(event.transition)
 
             if event.type == EventEnum.TRIGGER:
                 game.do_trigger(event.trigger)
-
-            if event.type == EventEnum.ACTION:
-                pass
 
             if event.type == EventEnum.STORY:
                 game.story_manager.story_event()
