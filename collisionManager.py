@@ -73,6 +73,7 @@ class CollisionManager():
                     monstre.collision_events.append(s)
             if monstre.collision_rect.colliderect(self.player.collision_rect):
                 monstre.resetPos()
+                self.player.take_dommage(s.calcul_dommage())
                 
     def monster_manageCollisionEvents(self):
 
