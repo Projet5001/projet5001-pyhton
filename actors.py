@@ -63,7 +63,7 @@ class Actor(pygame.sprite.Sprite):
         self.speed = 8
         self.accel = 1
         self.is_doing = "nothing"
-        self.arme_equipe = 'clavier'
+        self.arme_equipe = ""
         self.level = 0
         self.health = {"hp": 0, "max": 0}
 
@@ -127,14 +127,17 @@ class Actor(pygame.sprite.Sprite):
         self.image = self.actors_actions.image
 
     def calcul_dommage(self):
-            return self.dommage * self.luck() * self.tools[self.arme_equipe].dommage
+        return self.dommage * self.luck() * self.get_tool().dommage
 
 
     def active_arme(self, active):
         self.tools[self.arme_equipe].visible = active
 
     def get_tool(self):
-        return self.tools[self.arme_equipe]
+        if self.arme_equipe != "":
+            return self.tools[self.arme_equipe]
+        else:
+            return self
 
     def is_arme_active(self):
         return self.tools[self.arme_equipe].visible
@@ -157,8 +160,9 @@ class Actor(pygame.sprite.Sprite):
         self.tools[tool.name] = tool
         tool.definir_position(self.rect.x, self.rect.y)
         tilemap.add_layer(type(tool).__name__, tool)
+        if type(tool).__name__ == 'Weapon':
+            self.arme_equipe = tool.name
 
-    #fake death juste pour le moment en enleve le sprit de la map
     def isBleeding(self):
         if self.health['hp'] <= 0:
             self.kill()
