@@ -90,7 +90,7 @@ class BaseTool(sprite.Sprite):
 
         if playery > centery:
             huby += playery - centery
-            hubx += self.layer_manager.tile_width / 2
-            huby += self.layer_manager.tile_height / 2
+            hubx += (self.layer_manager.tile_width/10)-5
+            huby += (self.layer_manager.tile_height/10)-5
 
         return hubx, huby
