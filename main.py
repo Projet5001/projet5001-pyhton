@@ -120,7 +120,12 @@ class Game(object):
 
             self.collision_manager.monster_manageCollisionEvents()
 
-            self.layer_manager.update(self.story_manager.blocking)
+            if self.perso.alive():
+                self.layer_manager.update(self.story_manager.blocking)
+            else:
+                self.story_manager.display_speech(["GAME OVER"], "bottom")
+                self.story_manager.set_unblockable(False)
+
             self.layer_manager.draw()
 
             pygame.display.update()

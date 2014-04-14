@@ -31,7 +31,9 @@ class Monster(actors.Actor):
     def update(self, dt, game):
         if game.blocking:
             return
-        self.try_to_get_to_player(game.get_sprite("Max Power").collision_rect)
+        player = game.get_sprite("Max Power")
+        if player:
+            self.try_to_get_to_player(player.collision_rect)
 
     def try_to_get_to_player(self, rect):
         delta_x = self.collision_rect.x - rect.x
