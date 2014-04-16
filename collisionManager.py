@@ -71,9 +71,9 @@ class CollisionManager():
             for s in self.layer_manager['npcs']:
                 if monstre.collision_rect.colliderect(s.collision_rect):
                     monstre.collision_events.append(s)
-            if monstre.collision_rect.colliderect(self.player.collision_rect):
-                monstre.resetPos()
-                self.player.take_dommage(s.calcul_dommage())
+                if monstre.collision_rect.colliderect(self.player.collision_rect):
+                    monstre.resetPos()
+                    self.player.take_dommage(s.calcul_dommage())
                 
     def monster_manageCollisionEvents(self):
 
