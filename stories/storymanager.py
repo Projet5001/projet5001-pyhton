@@ -113,9 +113,7 @@ class StoryManager(object):
         pygame.time.set_timer(EventEnum.STORY, 0)
         if self.events:
             event = self.events.pop(0)
-            #print "story event: %s" % event
             event.handle_event()
-            #print "events left: %s" % self.events
             if self.events:
                 pygame.time.set_timer(EventEnum.STORY, self.events[0].delay)
 
@@ -289,8 +287,6 @@ class StoryEvent(object):
             self.game.story_manager.set_unblockable(False)
             sprite = self.game.layer_manager.get_sprite(self.story["sprite"])
             dest = self.story["destination"]
-            print dest
-            print sprite.collision_rect
             sprite.saveLastPos()
             if sprite.collision_rect.x != dest[0]:
                 if sprite.collision_rect.x < dest[0]:

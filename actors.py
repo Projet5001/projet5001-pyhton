@@ -102,7 +102,6 @@ class Actor(pygame.sprite.Sprite):
 
 
     def move(self, x, y,laDirection, define_frame = "none"):
-        #print "dans la class Actor la direction recu ===  "+str(laDirection)
         self.coord_to_move["posX"] = x
         self.coord_to_move["posY"] = y
         self.coord_to_move["side"] = laDirection
@@ -145,7 +144,6 @@ class Actor(pygame.sprite.Sprite):
     def take_dommage(self, dommage):
         self.health['hp'] -= (dommage - self.protectionTotal())
         self.isBleeding()
-        print self.health['hp']
 
     def block(self):
         return
