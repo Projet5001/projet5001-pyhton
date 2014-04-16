@@ -74,9 +74,15 @@ class LayerManager(object):
         new_tilemap = tmx.load(map_path,
                                self.config.read_global('screen_size'))
 
+        # Empty the monster and NPC layers.
+        if "monster" in self.layers:
+            self.layers["monster"].empty()
+        if "npcs" in self.layers:
+            self.layers["npcs"].empty()
+
         for layer in self.layers.keys():
-            player_stack_index = new_tilemap.layers.index(new_tilemap.layers['hint'])
             if layer == "player":
+                player_stack_index = new_tilemap.layers.index(new_tilemap.layers['hint'])
                 new_tilemap.layers.insert_named(player_stack_index, self.layers[layer], layer)
             elif "hidden" not in layer:
                 new_tilemap.layers.add_named(self.layers[layer], layer)
