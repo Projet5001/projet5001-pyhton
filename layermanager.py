@@ -74,6 +74,13 @@ class LayerManager(object):
         new_tilemap = tmx.load(map_path,
                                self.config.read_global('screen_size'))
 
+        # some NPC/boundary layers should not show ever.
+        new_tilemap.layers["boundaries"].visible = False
+        try:
+            new_tilemap.layers["pnjs"].visible = False
+        except KeyError:
+            pass
+
         # Empty the monster and NPC layers.
         if "monster" in self.layers:
             self.layers["monster"].empty()
