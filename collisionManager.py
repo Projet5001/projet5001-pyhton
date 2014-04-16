@@ -43,7 +43,6 @@ class CollisionManager():
             if self.player.collision_rect.colliderect(s.collision_rect):
                 self.player_events.append(s)
             elif self.player.get_tool().rect.colliderect(s.rect) and self.player.is_doing == "attack":
-                print "attack  and dommage"
                 s.take_dommage(self.player.calcul_dommage())
         for s in self.layer_manager['npcs']:
             if self.player.collision_rect.colliderect(s.collision_rect):
@@ -156,12 +155,6 @@ class CollisionManager():
              e_rect.collidepoint(sprite_rect.midbottom),
              e_rect.collidepoint(sprite_rect.bottomright),
         )
-
-        #print "--------"
-        #print "top %s" % top.__str__()
-        #print "right %s" % right.__str__()
-        #print "left %s" % left.__str__()
-        #print "bottom %s" % bottom.__str__()
 
         if sum(v for v in left) >= 2 or sum(v for v in right) >= 2:
             axes = axes + "x"
